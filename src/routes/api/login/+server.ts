@@ -1,21 +1,49 @@
-import { hash, verify } from '@node-rs/argon2';
-import { encodeBase32LowerCase } from '@oslojs/encoding';
-import { fail, redirect } from '@sveltejs/kit';
-import { eq } from 'drizzle-orm';
+import { verify } from '@node-rs/argon2';
 import * as auth from '$lib/server/auth';
 import { db } from '$lib/server/db';
 import * as table from '$lib/server/db/schema';
-import type { Actions, PageServerLoad } from './$types';
+import { eq } from 'drizzle-orm';
+import type { RequestHandler } from './$types';
+import { encodeBase32LowerCase } from '@oslojs/encoding';
 
-export const load: PageServerLoad = async (event) => {
-	if (event.locals.user) {
-		return redirect(302, '/demo/lucia');
-	}
-	return {};
+
+
+export const POST: RequestHandler = async ({ request, cookies }) => {
+	const { username, password } = await request.json();
+  const results = await db.select().from(table.user).where(eq(table.user.username, username));
+  const existingUser = results.at(0);
+  if (!existingUser) {
+	return new Response(
+		JSON.stringify({ message: 'Incorrect username or password' }), 
+		{status: 400}
+	)
+  }
+
+  // Verificar la contraseña
+  const validPassword = await verify(existingUser.passwordHash, password);
+  if (!validPassword) {
+	return new Response(
+		JSON.stringify({ message: 'Incorrect username or password' }), 
+		{status: 400}
+	)
+  }
+
+  // Crear la sesión
+  const sessionToken = auth.generateSessionToken();
+  const session = await auth.createSession(sessionToken, existingUser.id);
+  cookies.set(auth.sessionCookieName, sessionToken, {
+		path: '/',
+		httpOnly: true,
+		sameSite: 'lax',
+		secure: Bun.env.NODE_ENV === 'production',
+		expires: session.expiresAt
+  })
+	return new Response(JSON.stringify({ message: 'Login successful' }), 
+	{status: 200});
 };
-
+/*
 export const actions: Actions = {
-	login: async (event) => {
+	post: async (event) => {
 		const formData = await event.request.formData();
 		const username = formData.get('username');
 		const password = formData.get('password');
@@ -85,6 +113,8 @@ export const actions: Actions = {
 		return redirect(302, '/demo/lucia');
 	}
 };
+*/
+
 
 function generateUserId() {
 	// ID with 120 bits of entropy, or about the same as UUID v4.
