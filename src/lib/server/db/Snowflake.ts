@@ -9,7 +9,7 @@ class Snowflake {
      * @param num The number to encode.
      * @returns The Base62-encoded string representation of the number.
      */
-    private static base62Encode(num: number): string {
+     static base62Encode(num: number): string {
       const chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
       let result = '';
       while (num > 0) {
@@ -24,7 +24,7 @@ class Snowflake {
      * @param str The Base62-encoded string to decode.
      * @returns The original number.
      */
-    private static base62Decode(str: string): number {
+     static base62Decode(str: string): number {
       const chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
       let num = 0;
       for (const char of str) {
