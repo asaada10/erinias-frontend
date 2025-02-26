@@ -1,10 +1,23 @@
-import { pgTable, serial, text, integer, timestamp } from 'drizzle-orm/pg-core';
+import { pgTable, text, timestamp, date, boolean } from 'drizzle-orm/pg-core';
+import Snowflake from './Snowflake';
 
 export const user = pgTable('user', {
-	id: text('id').primaryKey(),
-	age: integer('age'),
+	id: text('id').primaryKey().default(Snowflake.generate(new Date())),
+	dateOfBirth: date('date_of_birth'),
 	username: text('username').notNull().unique(),
-	passwordHash: text('password_hash').notNull()
+	email: text('email').notNull().unique(),
+	avatar: text('avatar'),
+	passwordHash: text('password_hash').notNull(),
+	createdAt: timestamp('created_at').defaultNow(),
+	updatedAt: timestamp('updated_at').defaultNow().$onUpdate(() => new Date()),
+	isActive: boolean('is_active').default(true),
+	resetToken: text('reset_token'),
+	emailVerified: boolean('email_verified').default(false),
+	role: text('role').default('user'),
+	twoFactorEnabled: boolean('two_factor_enabled').default(false),
+
+
+
 });
 
 export const session = pgTable('session', {
