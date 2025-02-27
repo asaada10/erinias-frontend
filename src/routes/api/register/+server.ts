@@ -8,7 +8,7 @@ import type { RequestHandler } from './$types';
 
 
 export const POST: RequestHandler = async ({ request, cookies }) => {
-    const { email, username, password } = await request.json();
+    const { email, username, password, passwordConfirm } = await request.json();
   const results = await db.select().from(table.user).where(eq(table.user.email, email));
   const existingUser = results.at(0);
   if (existingUser) {
@@ -38,6 +38,13 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
         {status: 400}
     )
   } 
+
+  if(password !== passwordConfirm) {
+    return new Response(
+        JSON.stringify({ message: 'Passwords do not match' }), 
+        {status: 400}
+    )
+  }
 
   const passwordHash = await Bun.password.hash(password, 
     {
