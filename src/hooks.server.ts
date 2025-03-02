@@ -1,8 +1,8 @@
-import { i18n } from '$lib/i18n'
 import { sequence } from '@sveltejs/kit/hooks'
 import type { Handle } from '@sveltejs/kit';
 import * as auth from '$lib/server/auth.js';
 import { redirect } from '@sveltejs/kit';
+import { paraglideMiddleware } from '$lib/paraglide/server';
 
 const handleAuth: Handle = async ({ event, resolve }) => {
     const sessionToken = event.cookies.get(auth.sessionCookieName);
@@ -35,4 +35,12 @@ const handleAuth: Handle = async ({ event, resolve }) => {
     return resolve(event);
 };
 
-export const handle: Handle = sequence(i18n.handle(), handleAuth);
+const paraglideHandle: Handle = ({ event, resolve }) =>
+	paraglideMiddleware(event.request, ({ locale }) => {
+		return resolve(event, {
+			transformPageChunk: ({ html }) => html.replace('%lang%', locale)
+		});
+	});
+
+
+export const handle: Handle = sequence(paraglideHandle, handleAuth);
