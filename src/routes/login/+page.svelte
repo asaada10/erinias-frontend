@@ -16,7 +16,7 @@
 	  } else {
 		// Redirigir al usuario si el login es exitoso
 		const data = await response.json();
-		window.location.href = '/demo/lucia';
+		window.location.href = '/';
 	  }
 	};
   </script>

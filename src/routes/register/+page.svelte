@@ -6,11 +6,14 @@ let username: string,
     errorMessage: string;
 
   
-	const login = async () => {
-	  const response = await fetch('/api/login', {
+	const register = async () => {
+	  if (password !== passwordConfirm) {
+		errorMessage = 'Passwords do not match';
+	  }
+	  const response = await fetch('/api/register', {
 		method: 'POST',
 		headers: { 'Content-Type': 'application/json' },
-		body: JSON.stringify({ username, password })
+		body: JSON.stringify({ username, email, password })
 	  });
   
 	  if (!response.ok) {
@@ -29,7 +32,7 @@ let username: string,
 	<input type="text" bind:value={username} placeholder="Username" />
 	<input type="password" bind:value={password} placeholder="Password" />
 	<input type="password" bind:value={passwordConfirm} placeholder="Confirm Password" />
-	<button on:click={login}>Login</button>
+	<button on:click={register}>Login</button>
 	{#if errorMessage}
 	  <p style="color: red">{errorMessage}</p>
 	{/if}
