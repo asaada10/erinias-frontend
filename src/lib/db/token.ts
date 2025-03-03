@@ -13,7 +13,7 @@ class Token {
 	// Claves y configuraciones
 	private static readonly JWT_SECRET: string = Bun.env.JWT_SECRET!;
 	private static readonly REFRESH_SECRET: string = Bun.env.REFRESH_SECRET!;
-	private static readonly ISSUER: string = 'tu-app'; // Ajusta según tu dominio o app
+	private static readonly ISSUER: string = 'erinias'; // Ajusta según tu dominio o app
 	static readonly ACCESS_EXPIRY: string = '15m'; // 15 minutos
 	static readonly REFRESH_EXPIRY: string = '30d'; // 30 días
 

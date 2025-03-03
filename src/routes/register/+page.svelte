@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { accessToken } from '$lib/stores/auth';
 	import { goto } from '$app/navigation';
 	import { Input, Button, Icon } from '$lib/components/ui/';
 	let username = '';
@@ -12,7 +13,7 @@
 		if (password !== passwordConfirm) {
 			errorMessage = 'Passwords do not match';
 		}
-		const response = await fetch('/api/register', {
+		const response = await fetch('/api/auth/register', {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify({ username, email, password })
@@ -22,8 +23,8 @@
 			const data = await response.json();
 			errorMessage = data.message || 'An error occurred';
 		} else {
-			// Redirigir al usuario si el login es exitoso
-			// const data = await response.json();
+			const data = await response.json();
+			accessToken.set(data.accessToken);
 			goto('/');
 		}
 	};
