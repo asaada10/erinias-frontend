@@ -13,10 +13,7 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
 	const existingUser = results.at(0);
 	if (existingUser) {
 		console.log('Existing user', existingUser);
-		return new Response(
-			JSON.stringify({ message: 'User already exists' }),
-			{ status: 400 }
-		);
+		return new Response(JSON.stringify({ message: 'User already exists' }), { status: 400 });
 	}
 
 	// Validaciones
@@ -42,7 +39,8 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
 	});
 
 	// Crear el usuario
-	const newUser = await db.insert(table.user)
+	const newUser = await db
+		.insert(table.user)
 		.values({ username, email, passwordHash })
 		.returning({ id: table.user.id });
 
@@ -56,14 +54,13 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
 		httpOnly: true,
 		sameSite: 'lax',
 		secure: Bun.env.NODE_ENV === 'production',
-		expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30) 
+		expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30)
 	});
 
 	// Enviar access token al cliente
-	return new Response(
-		JSON.stringify({ message: 'Registration successful', accessToken }),
-		{ status: 200 }
-	);
+	return new Response(JSON.stringify({ message: 'Registration successful', accessToken }), {
+		status: 200
+	});
 };
 
 // Validaciones

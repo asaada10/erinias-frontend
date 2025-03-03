@@ -11,19 +11,17 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
 	const existingUser = results.at(0);
 
 	if (!existingUser) {
-		return new Response(
-			JSON.stringify({ message: 'Incorrect username or password' }),
-			{ status: 400 }
-		);
+		return new Response(JSON.stringify({ message: 'Incorrect username or password' }), {
+			status: 400
+		});
 	}
 
 	// Verificar la contraseña
 	const validPassword = await verify(existingUser.passwordHash, password);
 	if (!validPassword) {
-		return new Response(
-			JSON.stringify({ message: 'Incorrect username or password' }),
-			{ status: 400 }
-		);
+		return new Response(JSON.stringify({ message: 'Incorrect username or password' }), {
+			status: 400
+		});
 	}
 
 	// Generar tokens
@@ -39,8 +37,7 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
 	});
 
 	// Enviar access token al cliente
-	return new Response(
-		JSON.stringify({ message: 'Login successful', accessToken }),
-		{ status: 200 }
-	);
+	return new Response(JSON.stringify({ message: 'Login successful', accessToken }), {
+		status: 200
+	});
 };
