@@ -57,6 +57,7 @@
     "@oslojs/encoding": "^1.1.0",
     "animejs": "^3.2.2",
     "drizzle-orm": "^0.38.4",
+    "jose": "^6.0.8",
     "postgres": "^3.4.5",
     "scrollmagic": "^2.0.8"
   }

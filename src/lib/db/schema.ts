@@ -1,5 +1,5 @@
-import { pgTable, text, timestamp, integer, date, boolean, index } from 'drizzle-orm/pg-core';
-import Snowflake from './Snowflake';
+import { pgTable, text, timestamp, integer, date, boolean, index, serial } from 'drizzle-orm/pg-core';
+import Snowflake from '$lib/utils/Snowflake';
 enum PermissionFlags {
 	SendMessages = 1 << 0,
 	ViewChannels = 1 << 1,  
@@ -61,13 +61,21 @@ export const channel = pgTable('channel', {
 		.references(() => guild.id, { onDelete: 'cascade' }),
 })
 
-export const session = pgTable('session', {
-	id: text('id').primaryKey(),
-	userId: text('user_id')
-		.notNull()
-		.references(() => user.id, { onDelete: 'cascade' }),
-	expiresAt: timestamp('expires_at', { withTimezone: true, mode: 'date' }).notNull()
-});
+export const refreshTokens = pgTable("refresh_tokens", {
+	id: serial("id").primaryKey(),
+	userId: text("user_id").notNull(),
+	token: text("token").notNull(),
+	deviceId: text("device_id").notNull(),
+	revoked: boolean("revoked").notNull().default(false),
+	expiresAt: timestamp("expires_at", { mode: "date" }).notNull(),
+	createdAt: timestamp("created_at", { mode: "date" })
+	  .defaultNow()
+	  .notNull(),
+	updatedAt: timestamp("updated_at", { mode: "date" })
+	  .defaultNow()
+	  .notNull(),
+  });
+  
 
 export const message = pgTable('message', {
 	id: text('id').primaryKey().default(Snowflake.generate(new Date())),
@@ -108,7 +116,7 @@ export const permissions = pgTable('permissions', {
 	permission: integer('permission').notNull().default(PermissionFlags.ViewChannels),
 })
 
-export type Session = typeof session.$inferSelect;
+export type RefreshToken = typeof refreshTokens.$inferInsert;
 export type User = typeof user.$inferSelect;
 export type Guild = typeof guild.$inferInsert;
 export type Channel = typeof channel.$inferInsert;

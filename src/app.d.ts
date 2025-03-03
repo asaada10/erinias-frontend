@@ -7,8 +7,8 @@ declare global {
 		interface Locals {
     paraglide: ParaglideLocals<AvailableLanguageTag>,
 
-			user: import('$lib/server/auth').SessionValidationResult['user'];
-			session: import('$lib/server/auth').SessionValidationResult['session'];
+			user: import('$lib/db/auth').SessionValidationResult['user'];
+			session: import('$lib/db/auth').SessionValidationResult['session'];
 		}
 	}
 }

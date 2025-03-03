@@ -1,41 +1,50 @@
 import { sequence } from '@sveltejs/kit/hooks';
 import type { Handle } from '@sveltejs/kit';
-import * as auth from '$lib/server/auth.js';
+import Token from '$lib/db/token';
 import { redirect } from '@sveltejs/kit';
 import { paraglideMiddleware } from '$lib/paraglide/server';
 
 const handleAuth: Handle = async ({ event, resolve }) => {
-    const sessionToken = event.cookies.get(auth.sessionCookieName);
+    const refreshToken = event.cookies.get('refresh_token');
 
-    if (!sessionToken) {
+    // No hay token → usuario no autenticado
+    if (!refreshToken) {
         event.locals.user = null;
-        event.locals.session = null;
 
+        // Redirigir si intenta acceder a rutas protegidas
         if (!['/login', '/register'].includes(event.url.pathname) 
-            && !event.url.pathname.startsWith('/api') 
-            && !event.locals.user) {
+            && !event.url.pathname.startsWith('/api')) {
             return redirect(302, '/login');
         }
 
         return resolve(event);
     }
 
-    const { session, user } = await auth.validateSessionToken(sessionToken);
-    if (session) {
-        auth.setSessionTokenCookie(event, sessionToken, session.expiresAt);
-    } else {
-        auth.deleteSessionTokenCookie(event);
+    // Intentar renovar el access token
+    const accessToken = await Token.renewAccessToken(refreshToken, event.request);
+
+    if (!accessToken) {
+        // Si no se puede renovar, eliminar la cookie y redirigir
+        event.cookies.delete('refresh_token', { path: '/' });
         return redirect(302, '/login');
     }
 
-    event.locals.user = user;
-    event.locals.session = session;
+    // Obtener datos del usuario desde el access token
+    const userData = await Token.validateAccessToken(accessToken);
+    if (!userData) {
+        event.cookies.delete('refresh_token', { path: '/' });
+        return redirect(302, '/login');
+    }
+
+    // Guardar el usuario en `locals`
+    event.locals.user = {
+        id: userData.userId
+    };
 
     return resolve(event);
 };
 
 const paraglideHandle: Handle = ({ event, resolve }) => {
-    // Clonar el request para que el middleware no consuma el cuerpo original
     const clonedRequest = event.request.clone();
     
     return paraglideMiddleware(clonedRequest, ({ locale }) => {

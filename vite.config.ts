@@ -7,7 +7,6 @@ import { defineConfig } from 'vite';
 
 export default defineConfig({
 	plugins: [paraglideVitePlugin({ project: './project.inlang', outdir: './src/paraglide' }),paraglide({ project: './project.inlang', outdir: './src/lib/paraglide' }),sveltekit(), tailwindcss()],
-
 	test: {
 		workspace: [
 			{
@@ -31,5 +30,10 @@ export default defineConfig({
 				}
 			}
 		]
-	}
+	},
+	resolve: {
+		alias: {
+		  '@': '/src',
+		}
+	  }
 });
