@@ -1,4 +1,7 @@
 <script lang="ts">
+  import { goto } from '$app/navigation';
+  import Input from '$lib/components/ui/Input.svelte';
+  import Button from '$lib/components/ui/Button.svelte';
 	let username = '';
 	let password = '';
 	let errorMessage = '';
@@ -17,7 +20,7 @@
 	  } else {
 		// Redirigir al usuario si el login es exitoso
 		const data = await response.json();
-		// this.$goto('/');
+		goto('/');
 	  }
 	};
   </script>
@@ -33,21 +36,11 @@
 
 		<form class="w-full space-y-4">
 		  <div>
-			<input
-			  type="email"
-			  placeholder="Email"
-			  bind:value={username}
-			  class="w-full rounded-lg bg-gray-800/60 px-4 py-3 text-white placeholder-gray-400 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-white/20"
-			/>
+			<Input type="email" placeholder="Email" value={username} />
 		  </div>
 
 		  <div class="relative">
-			<input
-			  type={showPassword ? 'text' : 'password'}
-			  placeholder="Password"
-			  bind:value={password}
-			  class="w-full rounded-lg bg-gray-800/60 px-4 py-3 text-white placeholder-gray-400 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-white/20"
-			/>
+			<Input type={showPassword ? 'text' : 'password'} placeholder="Password" value={password} />
 			<button
 			  type="button"
 			  on:click={() => showPassword = !showPassword}
@@ -57,13 +50,7 @@
 			</button>
 		  </div>
 
-		  <button
-			type="submit"
-			on:click={login}
-			class="w-full rounded-full bg-gray-700/80 py-3 text-white transition-colors hover:bg-gray-600/80"
-		  >
-			Sign In
-		  </button>
+		  <Button type="submit" onclick={login}>Sign In</Button>
 		</form>
 
 		<p class="mt-6 text-center text-sm text-gray-300">

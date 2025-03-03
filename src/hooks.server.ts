@@ -9,8 +9,6 @@ const handleAuth: Handle = async ({ event, resolve }) => {
 
     // No hay token → usuario no autenticado
     if (!refreshToken) {
-        event.locals.user = null;
-
         // Redirigir si intenta acceder a rutas protegidas
         if (!['/login', '/register'].includes(event.url.pathname) 
             && !event.url.pathname.startsWith('/api')) {
@@ -36,10 +34,6 @@ const handleAuth: Handle = async ({ event, resolve }) => {
         return redirect(302, '/login');
     }
 
-    // Guardar el usuario en `locals`
-    event.locals.user = {
-        id: userData.userId
-    };
 
     return resolve(event);
 };
@@ -55,3 +49,4 @@ const paraglideHandle: Handle = ({ event, resolve }) => {
 };
 
 export const handle: Handle = sequence(handleAuth, paraglideHandle);
+
