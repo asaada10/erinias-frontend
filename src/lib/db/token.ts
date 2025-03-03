@@ -1,6 +1,5 @@
 import { SignJWT, jwtVerify } from "jose";
 import { Auth } from "$lib/db/auth"; // Ajusta según tu implementación de ORM
-
 export interface TokenPayload {
   userId: string;
   deviceId?: string;
