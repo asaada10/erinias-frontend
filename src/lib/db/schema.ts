@@ -1,5 +1,5 @@
 import { pgTable, text, timestamp, integer, date, boolean, index, serial } from 'drizzle-orm/pg-core';
-import Snowflake from '$lib/utils/Snowflake';
+import Snowflake from '../utils/Snowflake';
 enum PermissionFlags {
 	SendMessages = 1 << 0,
 	ViewChannels = 1 << 1,  
