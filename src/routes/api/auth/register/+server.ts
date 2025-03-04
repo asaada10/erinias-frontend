@@ -5,8 +5,8 @@ import { eq } from 'drizzle-orm';
 import type { RequestHandler } from './$types';
 
 export const POST: RequestHandler = async ({ request, cookies }) => {
-	const { email, username, password } = await request.json();
-	console.log('register', { email, username, password });
+	const { email, username, password, date } = await request.json();
+	console.log('register', { email, username, password, date });
 
 	// Verificar si el usuario ya existe
 	const results = await db.select().from(table.user).where(eq(table.user.email, email));
@@ -32,16 +32,18 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
 		return new Response(JSON.stringify({ message: 'Invalid password' }), { status: 400 });
 	}
 
+	if (!validateDateOfBirth(date)) {
+		console.log('Invalid date', date);
+		return new Response(JSON.stringify({ message: 'Invalid date' }), { status: 400 });
+	}
+
 	// Hashear la contraseña
-	const passwordHash = await Bun.password.hash(password, {
-		algorithm: 'bcrypt',
-		cost: 4
-	});
+	const passwordHash = await Bun.password.hash(password);
 
 	// Crear el usuario
 	const newUser = await db
 		.insert(table.user)
-		.values({ username, email, passwordHash })
+		.values({ username, email, passwordHash, dateOfBirth: date })
 		.returning({ id: table.user.id });
 
 	console.log('New user', newUser);
@@ -69,7 +71,7 @@ function validateUsername(username: unknown): username is string {
 		typeof username === 'string' &&
 		username.length >= 3 &&
 		username.length <= 31 &&
-		/^[a-z0-9_-]+$/.test(username)
+		/^[a-z0-9_-]+$/gi.test(username)
 	);
 }
 
@@ -84,4 +86,10 @@ function validateEmail(email: unknown): email is string {
 
 function validatePassword(password: unknown): password is string {
 	return typeof password === 'string' && password.length >= 6 && password.length <= 255;
+}
+
+function validateDateOfBirth(date: unknown): date is string {
+	console.log('date', date);
+	return typeof date === 'string' && date.length === 10 && /^\d{4}-\d{2}-\d{2}$/.test(date);
+	
 }

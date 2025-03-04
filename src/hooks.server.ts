@@ -9,14 +9,18 @@ const handleAuth: Handle = async ({ event, resolve }) => {
 
 	// No hay token → usuario no autenticado
 	if (!refreshToken) {
-		// Redirigir si intenta acceder a rutas protegidas
-		if (
-			!['/login', '/register'].includes(event.url.pathname) &&
-			!event.url.pathname.startsWith('/api')
-		) {
+		const publicRoutes = ['/login', '/register'];
+		const isApiRoute = event.url.pathname.startsWith('/api/');
+		const isAuthRoute = ['/api/auth/login', '/api/auth/register'].includes(event.url.pathname);
+
+		if (isApiRoute && !isAuthRoute) {
+			return new Response(JSON.stringify({ message: 'Unauthorized' }), { status: 401 });
+		}
+		
+		if (!isApiRoute && !publicRoutes.includes(event.url.pathname)) {
 			return redirect(302, '/login');
 		}
-
+		
 		return resolve(event);
 	}
 

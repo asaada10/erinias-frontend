@@ -7,6 +7,7 @@
 	let password = '';
 	let passwordConfirm = '';
 	let errorMessage = '';
+	let date = '';
 	let showPassword = false;
 
 	const register = async () => {
@@ -16,7 +17,7 @@
 		const response = await fetch('/api/auth/register', {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({ username, email, password })
+			body: JSON.stringify({ username, email, password, date })
 		});
 
 		if (!response.ok) {
@@ -42,16 +43,19 @@
 				<h1 class="mb-8 text-center text-2xl font-medium text-white">Sign up</h1>
 				<form class="w-full space-y-4">
 					<div>
-						<Input type="email" placeholder="Email" value={email} />
+						<Input type="email" placeholder="Email" bind:value={email} />
 					</div>
 					<div>
-						<Input type="text" placeholder="Username" value={username} />
+						<Input type="text" placeholder="Username" bind:value={username} />
+					</div>
+					<div>
+						<Input type="date" placeholder="Date of Birth" bind:value={date} />
 					</div>
 					<div class="relative">
 						<Input
 							type={showPassword ? 'text' : 'password'}
 							placeholder="Password"
-							value={password}
+							bind:value={password}
 						/>
 						<button
 							type="button"
@@ -65,7 +69,7 @@
 						<Input
 							type={showPassword ? 'text' : 'password'}
 							placeholder="Confirm Password"
-							value={passwordConfirm}
+							bind:value={passwordConfirm}
 						/>
 						<button
 							type="button"

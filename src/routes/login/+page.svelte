@@ -2,7 +2,7 @@
 	import { accessToken } from '$lib/stores/auth';
 	import { goto } from '$app/navigation';
 	import { Input, Button, Icon } from '$lib/components/ui/';
-	let username = '';
+	let email = '';
 	let password = '';
 	let errorMessage = '';
 	let showPassword = false;
@@ -11,7 +11,7 @@
 		const response = await fetch('/api/auth/login', {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({ username, password })
+			body: JSON.stringify({ email, password })
 		});
 
 		if (!response.ok) {
@@ -35,14 +35,14 @@
 
 			<form class="w-full space-y-4">
 				<div>
-					<Input type="email" placeholder="Email" value={username} />
+					<Input type="email" placeholder="Email" bind:value={email} />
 				</div>
 
 				<div class="relative">
 					<Input
 						type={showPassword ? 'text' : 'password'}
 						placeholder="Password"
-						value={password}
+						bind:value={password}
 					/>
 					<button
 						type="button"

@@ -8,7 +8,7 @@ export async function fetchAuth(url: string, options: RequestInit = {}): Promise
 		...options,
 		headers: {
 			...(options.headers || {}),
-			'Authorization': `Bearer ${token}`
+			Authorization: `Bearer ${token}`
 		}
 	});
 
@@ -24,7 +24,7 @@ export async function fetchAuth(url: string, options: RequestInit = {}): Promise
 				...options,
 				headers: {
 					...(options.headers || {}),
-					'Authorization': `Bearer ${token}`
+					Authorization: `Bearer ${token}`
 				}
 			});
 		}

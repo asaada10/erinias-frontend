@@ -52,11 +52,13 @@
 	},
 	"dependencies": {
 		"@node-rs/argon2": "^2.0.2",
+		"@node-rs/argon2-wasm32-wasi": "^2.0.2",
 		"@oslojs/crypto": "^1.0.1",
 		"@oslojs/encoding": "^1.1.0",
 		"animejs": "^3.2.2",
 		"drizzle-orm": "^0.38.4",
 		"jose": "^6.0.8",
+		"lucide-svelte": "^0.477.0",
 		"postgres": "^3.4.5",
 		"scrollmagic": "^2.0.8"
 	}
