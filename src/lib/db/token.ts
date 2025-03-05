@@ -1,14 +1,6 @@
 import { SignJWT, jwtVerify } from 'jose';
 import { Auth } from '$lib/db/auth'; // Ajusta según tu implementación de ORM
-export interface TokenPayload {
-	userId: string;
-	deviceId?: string;
-	iss?: string;
-	iat?: number;
-	exp?: number;
-	[key: string]: unknown;
-}
-
+import type { TokenPayload } from '$lib/types';
 class Token {
 	// Claves y configuraciones
 	private static readonly JWT_SECRET: string = Bun.env.JWT_SECRET!;
