@@ -36,7 +36,6 @@ class Snowflake {
 		const timestamp = Base62.decode(timestampEncoded) + this.CUSTOM_EPOCH;
 		return new Date(timestamp);
 	}
-
 }
 
 export default Snowflake;

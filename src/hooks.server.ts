@@ -1,27 +1,33 @@
 import { sequence } from '@sveltejs/kit/hooks';
 import type { Handle } from '@sveltejs/kit';
 import Token from '$lib/db/token';
-import { redirect } from '@sveltejs/kit';
+import { json, redirect } from '@sveltejs/kit';
 import { paraglideMiddleware } from '$lib/paraglide/server';
 
 const handleAuth: Handle = async ({ event, resolve }) => {
 	const refreshToken = event.cookies.get('refresh_token');
 
 	// No hay token → usuario no autenticado
+	const publicRoutes = ['/login', '/register'];
+	const isApiRoute = event.url.pathname.startsWith('/api/');
+	const isAuthRoute = ['/api/auth/login', '/api/auth/register'].includes(event.url.pathname);
 	if (!refreshToken) {
-		const publicRoutes = ['/login', '/register'];
-		const isApiRoute = event.url.pathname.startsWith('/api/');
-		const isAuthRoute = ['/api/auth/login', '/api/auth/register'].includes(event.url.pathname);
-
 		if (isApiRoute && !isAuthRoute) {
-			return new Response(JSON.stringify({ message: 'Unauthorized' }), { status: 401 });
+			return json({ message: 'Unauthorized' }, { status: 401 });
 		}
-		
+
 		if (!isApiRoute && !publicRoutes.includes(event.url.pathname)) {
 			return redirect(302, '/login');
 		}
-		
+
 		return resolve(event);
+	} else {
+		if (isAuthRoute) {
+			return json({ message: 'The user is already logged in' }, { status: 401 });
+		}
+		if (!isApiRoute && publicRoutes.includes(event.url.pathname)) {
+			return redirect(302, '/chat');
+		}
 	}
 
 	// Intentar renovar el access token

@@ -2,39 +2,34 @@ import Token from '$lib/db/token';
 import { db } from '$lib/db';
 import * as table from '$lib/db/schema';
 import { eq } from 'drizzle-orm';
+import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 
 export const POST: RequestHandler = async ({ request, cookies }) => {
 	const { email, username, password, date } = await request.json();
-	console.log('register', { email, username, password, date });
 
 	// Verificar si el usuario ya existe
 	const results = await db.select().from(table.user).where(eq(table.user.email, email));
 	const existingUser = results.at(0);
 	if (existingUser) {
-		console.log('Existing user', existingUser);
-		return new Response(JSON.stringify({ message: 'User already exists' }), { status: 400 });
+		return json({ message: 'User already exists' }, { status: 400 });
 	}
 
 	// Validaciones
 	if (!validateEmail(email)) {
-		console.log('Invalid email', email);
-		return new Response(JSON.stringify({ message: 'Invalid email' }), { status: 400 });
+		return json({ message: 'Invalid email' }, { status: 400 });
 	}
 
 	if (!validateUsername(username)) {
-		console.log('Invalid username', username);
-		return new Response(JSON.stringify({ message: 'Invalid username' }), { status: 400 });
+		return json({ message: 'Invalid username' }, { status: 400 });
 	}
 
 	if (!validatePassword(password)) {
-		console.log('Invalid password', password);
-		return new Response(JSON.stringify({ message: 'Invalid password' }), { status: 400 });
+		return json({ message: 'Invalid password' }, { status: 400 });
 	}
 
 	if (!validateDateOfBirth(date)) {
-		console.log('Invalid date', date);
-		return new Response(JSON.stringify({ message: 'Invalid date' }), { status: 400 });
+		return json({ message: 'Invalid date' }, { status: 400 });
 	}
 
 	// Hashear la contraseña
@@ -60,9 +55,7 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
 	});
 
 	// Enviar access token al cliente
-	return new Response(JSON.stringify({ message: 'Registration successful', accessToken }), {
-		status: 200
-	});
+	return json({ message: 'Registration successful', accessToken }, { status: 200 });
 };
 
 // Validaciones
@@ -91,5 +84,4 @@ function validatePassword(password: unknown): password is string {
 function validateDateOfBirth(date: unknown): date is string {
 	console.log('date', date);
 	return typeof date === 'string' && date.length === 10 && /^\d{4}-\d{2}-\d{2}$/.test(date);
-	
 }
