@@ -22,6 +22,7 @@ interface Message {
 	time: string;
 	sent: boolean;
 	date: string;
+
 }
 
 interface MessagesByDate {
