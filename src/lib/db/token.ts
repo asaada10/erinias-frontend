@@ -48,7 +48,7 @@ class Token {
 	}
 
 	// Valida un access token JWT
-	static async validateAccessToken(token: string): Promise<TokenPayload | null> {
+	static async validate(token: string): Promise<TokenPayload | null> {
 		try {
 			const { payload } = await jwtVerify(token, new TextEncoder().encode(this.JWT_SECRET));
 			return payload as TokenPayload;

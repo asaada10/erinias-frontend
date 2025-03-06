@@ -1,4 +1,4 @@
-type SnowflakeType = string & { length: 6 };
+export type SnowflakeType = string & { length: 6 };
 import Base62 from './Base62';
 class Snowflake {
 	private static lastTimestamp = 0;

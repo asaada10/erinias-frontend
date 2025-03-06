@@ -6,7 +6,8 @@ import {
 	date,
 	boolean,
 	index,
-	serial
+	serial,
+	primaryKey
 } from 'drizzle-orm/pg-core';
 import Snowflake from '../utils/Snowflake';
 import { PermissionFlags } from '../types/index.d';
@@ -28,12 +29,23 @@ export const user = pgTable('user', {
 	role: text('role').default('user'),
 	twoFactorEnabled: boolean('two_factor_enabled').default(false)
 });
+export const friends = pgTable('friends', {
+  userId: text('user_id')
+    .notNull()
+    .references(() => user.id, { onDelete: 'cascade' }),
+  friendId: text('friend_id')
+    .notNull()
+    .references(() => user.id, { onDelete: 'cascade' }),
+  createdAt: timestamp('created_at').defaultNow(),
+}, (table) => [
+	primaryKey({ columns: [table.userId, table.friendId] })
+]);
 
-export const zoneMember = pgTable('zone_member', {
+export const domainMember = pgTable('domain_member', {
 	id: text('id').primaryKey().default(Snowflake.generate(new Date())),
 	guildId: text('guild_id')
 		.notNull()
-		.references(() => zone.id, { onDelete: 'cascade' }),
+		.references(() => domain.id, { onDelete: 'cascade' }),
 	userId: text('user_id')
 		.notNull()
 		.references(() => user.id, { onDelete: 'cascade' }),
@@ -41,7 +53,7 @@ export const zoneMember = pgTable('zone_member', {
 	joinedAt: timestamp('joined_at').defaultNow()
 });
 
-export const zone = pgTable('zone', {
+export const domain = pgTable('domain', {
 	id: text('id').primaryKey().default(Snowflake.generate(new Date())),
 	name: text('name').notNull(),
 	createdAt: timestamp('created_at').defaultNow(),
@@ -62,7 +74,7 @@ export const room = pgTable('room', {
 		.$onUpdate(() => new Date()),
 	guildId: text('guild_id')
 		.notNull()
-		.references(() => zone.id, { onDelete: 'cascade' })
+		.references(() => domain.id, { onDelete: 'cascade' })
 });
 
 export const refreshTokens = pgTable('refresh_tokens', {
@@ -114,18 +126,18 @@ export const permissions = pgTable('permissions', {
 	id: text('id').primaryKey().default(Snowflake.generate(new Date())),
 	guildId: text('guild_id')
 		.notNull()
-		.references(() => zone.id, { onDelete: 'cascade' }),
+		.references(() => domain.id, { onDelete: 'cascade' }),
 	guildMemberId: text('guild_member_id')
 		.notNull()
-		.references(() => zoneMember.id, { onDelete: 'cascade' }),
+		.references(() => domainMember.id, { onDelete: 'cascade' }),
 	permission: integer('permission').notNull().default(PermissionFlags.ViewChannels)
 });
 
 export type RefreshToken = typeof refreshTokens.$inferInsert;
 export type User = typeof user.$inferSelect;
-export type Guild = typeof zone.$inferInsert;
+export type Guild = typeof domain.$inferInsert;
 export type Channel = typeof room.$inferInsert;
 export type Message = typeof message.$inferInsert;
 export type MessageRead = typeof messageRead.$inferInsert;
-export type GuildMember = typeof zoneMember.$inferInsert;
+export type GuildMember = typeof domainMember.$inferInsert;
 export type Permission = typeof permissions.$inferInsert;

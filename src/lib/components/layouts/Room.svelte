@@ -1,19 +1,7 @@
 <script lang="ts">
 	import type { Room } from '$lib/types';
 	let { sidebarOpen } = $props();
-    let activeRoom: Room = 		{
-			name: 'John Doe',
-			message: 'How you doing?',
-			time: '10 mins ago',
-			active: false,
-			avatar: 'https://randomuser.me/api/portraits/men/1.jpg'
-		};
-	function selectRoom(contact: Room): void {
-		activeRoom = contact;
-		if (window.innerWidth < 768) {
-			sidebarOpen = false;
-		}
-	}
+    
 
 	let rooms: Room[] = [
 		{
@@ -73,7 +61,6 @@
 		class={`flex w-full items-center p-3 text-left ${
 			room.active ? 'bg-gray-100 dark:bg-gray-800' : 'hover:bg-gray-100 dark:hover:bg-gray-800'
 		} cursor-pointer`}
-		onclick={() => selectRoom(room)}
 		type="button"
 	>
 		<div class="mr-3 h-10 w-10 flex-shrink-0 overflow-hidden rounded-full">

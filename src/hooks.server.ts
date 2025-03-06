@@ -4,6 +4,7 @@ import Token from '$lib/db/token';
 import { json, redirect } from '@sveltejs/kit';
 import { paraglideMiddleware } from '$lib/paraglide/server';
 
+import "$lib/server/ws";
 const handleAuth: Handle = async ({ event, resolve }) => {
 	const refreshToken = event.cookies.get('refresh_token');
 
