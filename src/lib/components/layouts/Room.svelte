@@ -1,7 +1,7 @@
 <script lang="ts">
-    import type { Hub } from '$lib/types';
+    import type { Room } from '$lib/types';
     let { hub, activeHub, sidebarOpen } = $props();
-    function selectHub(contact: Hub): void {
+    function selectHub(contact: Room): void {
 		activeHub = contact;
 		if (window.innerWidth < 768) {
 			sidebarOpen = false;

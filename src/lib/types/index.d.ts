@@ -9,7 +9,7 @@ interface Team {
     plan: string;
 }
 
-interface Hub {
+interface Room {
     name: string;
     message: string;
     time: string;
@@ -48,4 +48,4 @@ enum PermissionFlags {
 	ManageGuild = 1 << 7
 }
 
-export { User, Team, Hub, Message, MessagesByDate, TokenPayload, PermissionFlags };
+export { User, Team, Room, Message, MessagesByDate, TokenPayload, PermissionFlags };
