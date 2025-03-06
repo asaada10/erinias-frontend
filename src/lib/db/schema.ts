@@ -29,11 +29,11 @@ export const user = pgTable('user', {
 	twoFactorEnabled: boolean('two_factor_enabled').default(false)
 });
 
-export const guildMember = pgTable('guild_member', {
+export const zoneMember = pgTable('zone_member', {
 	id: text('id').primaryKey().default(Snowflake.generate(new Date())),
 	guildId: text('guild_id')
 		.notNull()
-		.references(() => guild.id, { onDelete: 'cascade' }),
+		.references(() => zone.id, { onDelete: 'cascade' }),
 	userId: text('user_id')
 		.notNull()
 		.references(() => user.id, { onDelete: 'cascade' }),
@@ -41,7 +41,7 @@ export const guildMember = pgTable('guild_member', {
 	joinedAt: timestamp('joined_at').defaultNow()
 });
 
-export const guild = pgTable('guild', {
+export const zone = pgTable('zone', {
 	id: text('id').primaryKey().default(Snowflake.generate(new Date())),
 	name: text('name').notNull(),
 	createdAt: timestamp('created_at').defaultNow(),
@@ -53,7 +53,7 @@ export const guild = pgTable('guild', {
 		.references(() => user.id)
 });
 
-export const channel = pgTable('channel', {
+export const room = pgTable('room', {
 	id: text('id').primaryKey().default(Snowflake.generate(new Date())),
 	name: text('name').notNull(),
 	createdAt: timestamp('created_at').defaultNow(),
@@ -62,7 +62,7 @@ export const channel = pgTable('channel', {
 		.$onUpdate(() => new Date()),
 	guildId: text('guild_id')
 		.notNull()
-		.references(() => guild.id, { onDelete: 'cascade' })
+		.references(() => zone.id, { onDelete: 'cascade' })
 });
 
 export const refreshTokens = pgTable('refresh_tokens', {
@@ -86,7 +86,7 @@ export const message = pgTable(
 			.references(() => user.id, { onDelete: 'cascade' }),
 		channelId: text('channel_id')
 			.notNull()
-			.references(() => channel.id, { onDelete: 'cascade' }),
+			.references(() => room.id, { onDelete: 'cascade' }),
 		createdAt: timestamp('created_at').defaultNow(),
 		updatedAt: timestamp('updated_at')
 			.defaultNow()
@@ -114,18 +114,18 @@ export const permissions = pgTable('permissions', {
 	id: text('id').primaryKey().default(Snowflake.generate(new Date())),
 	guildId: text('guild_id')
 		.notNull()
-		.references(() => guild.id, { onDelete: 'cascade' }),
+		.references(() => zone.id, { onDelete: 'cascade' }),
 	guildMemberId: text('guild_member_id')
 		.notNull()
-		.references(() => guildMember.id, { onDelete: 'cascade' }),
+		.references(() => zoneMember.id, { onDelete: 'cascade' }),
 	permission: integer('permission').notNull().default(PermissionFlags.ViewChannels)
 });
 
 export type RefreshToken = typeof refreshTokens.$inferInsert;
 export type User = typeof user.$inferSelect;
-export type Guild = typeof guild.$inferInsert;
-export type Channel = typeof channel.$inferInsert;
+export type Guild = typeof zone.$inferInsert;
+export type Channel = typeof room.$inferInsert;
 export type Message = typeof message.$inferInsert;
 export type MessageRead = typeof messageRead.$inferInsert;
-export type GuildMember = typeof guildMember.$inferInsert;
+export type GuildMember = typeof zoneMember.$inferInsert;
 export type Permission = typeof permissions.$inferInsert;
