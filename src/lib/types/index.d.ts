@@ -1,31 +1,31 @@
 interface User {
-    name: string;
-    email: string;
-    avatar: string;
+	name: string;
+	email: string;
+	avatar: string;
 }
 
 interface Team {
-    name: string;
-    plan: string;
+	name: string;
+	plan: string;
 }
 
 interface Room {
-    name: string;
-    message: string;
-    time: string;
-    active: boolean;
-    avatar: string;
+	name: string;
+	message: string;
+	time: string;
+	active: boolean;
+	avatar: string;
 }
 
 interface Message {
-    text: string;
-    time: string;
-    sent: boolean;
-    date: string;
+	text: string;
+	time: string;
+	sent: boolean;
+	date: string;
 }
 
 interface MessagesByDate {
-    [key: string]: Message[];
+	[key: string]: Message[];
 }
 
 interface TokenPayload {
