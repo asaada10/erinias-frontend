@@ -12,9 +12,9 @@
 
 
 	// Estado reactivo para el modo oscuro
-	let darkMode: boolean = true;
+	let darkMode: boolean = $state(true);
 	// Estado para controlar la visibilidad del sidebar en móvil
-	let sidebarOpen: boolean = false;
+	let sidebarOpen: boolean = $state(false);
 
 	// Función para alternar el modo oscuro
 	function toggleDarkMode(): void {
@@ -24,6 +24,7 @@
 	function toggleSidebar(): void {
 		sidebarOpen = !sidebarOpen;
 	}
+	
 </script>
 
 <div
@@ -39,7 +40,7 @@
 			<!-- Back button for mobile -->
 			{#if sidebarOpen}
 				<div class="flex items-center border-b border-gray-200 p-3 md:hidden dark:border-gray-700">
-					<button class="mr-2 p-1" on:click={toggleSidebar}>
+					<button class="mr-2 p-1" onclick={toggleSidebar}>
 						<ArrowLeft class="h-5 w-5 text-gray-500 dark:text-gray-400" />
 					</button>
 					<span class="font-medium text-gray-800 dark:text-gray-200">Back to Chat</span>

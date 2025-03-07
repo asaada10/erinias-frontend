@@ -2,10 +2,11 @@
 	import { accessToken } from '$lib/stores/auth';
 	import { goto } from '$app/navigation';
 	import { Input, Button, Icon } from '$lib/components/ui/';
-	let email = '';
-	let password = '';
-	let errorMessage = '';
-	let showPassword = false;
+	import { get } from 'svelte/store';
+	let email = $state('');
+	let password = $state('');
+	let errorMessage = $state('');
+	let showPassword = $state(false);
 
 	const login = async () => {
 		const response = await fetch('/api/auth/login', {
@@ -19,7 +20,7 @@
 			errorMessage = data.message || 'An error occurred';
 		} else {
 			const data = await response.json();
-			accessToken.set(data.accessToken);
+			$accessToken = data.accessToken;
 			goto('/');
 		}
 	};
@@ -46,7 +47,7 @@
 					/>
 					<button
 						type="button"
-						on:click={() => (showPassword = !showPassword)}
+						onclick={() => (showPassword = !showPassword)}
 						class="absolute top-1/2 right-3 -translate-y-1/2 text-gray-400"
 					>
 						{showPassword ? 'Hide' : 'Show'}

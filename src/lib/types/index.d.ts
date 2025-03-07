@@ -1,14 +1,3 @@
-interface User {
-	name: string;
-	email: string;
-	avatar: string;
-}
-
-interface Team {
-	name: string;
-	plan: string;
-}
-
 interface Room {
 	name: string;
 	message: string;
@@ -17,16 +6,12 @@ interface Room {
 	avatar: string;
 }
 
-interface Message {
-	text: string;
-	time: string;
-	sent: boolean;
-	date: string;
-
-}
-
-interface MessagesByDate {
-	[key: string]: Message[];
+interface WSData {
+	type: string;
+	content: string;
+	domain: string;
+	room: string;
+	user: string;
 }
 
 interface TokenPayload {
@@ -49,4 +34,4 @@ enum PermissionFlags {
 	ManageGuild = 1 << 7
 }
 
-export { User, Team, Room, Message, MessagesByDate, TokenPayload, PermissionFlags };
+export { Room, WSData, TokenPayload, PermissionFlags };
