@@ -41,7 +41,7 @@ const handleAuth: Handle = async ({ event, resolve }) => {
 	}
 
 	// Obtener datos del usuario desde el access token
-	const userData = await Token.validateAccessToken(accessToken);
+	const userData = await Token.validate(accessToken);
 	if (!userData) {
 		event.cookies.delete('refresh_token', { path: '/' });
 		return redirect(302, '/login');
