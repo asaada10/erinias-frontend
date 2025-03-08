@@ -10,7 +10,6 @@
 
 	import { Search, ArrowLeft } from 'lucide-svelte';
 
-
 	// Estado reactivo para el modo oscuro
 	let darkMode: boolean = $state(true);
 	// Estado para controlar la visibilidad del sidebar en móvil
@@ -24,7 +23,6 @@
 	function toggleSidebar(): void {
 		sidebarOpen = !sidebarOpen;
 	}
-	
 </script>
 
 <div
@@ -66,14 +64,14 @@
 
 			<!-- Contacts List -->
 			<div class="flex-1 overflow-y-auto">
-				<Room  {sidebarOpen} />
+				<Room  />
 			</div>
 		</div>
 
 		<!-- Chat Area -->
 		<div class="flex flex-1 flex-col">
 			<!-- Chat Header -->
-			<ChatHeader  {toggleSidebar} />
+			<ChatHeader  />
 
 			<!-- Messages -->
 			<div class="flex-1 overflow-y-auto p-4">

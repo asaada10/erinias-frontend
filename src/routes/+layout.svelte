@@ -1,22 +1,28 @@
 <script lang="ts">
-		import '../app.css';
-		let { children } = $props();
-		import { onMount } from 'svelte';
-  import { accessToken } from '$lib/stores/auth';
-  import { connectWebSocket } from "$lib/stores/ws";
+	import '../app.css';
+	let { children } = $props();
+	import { accessToken } from '$lib/stores/auth';
+	import { connectWebSocket } from '$lib/stores/ws';
 
-  let token: string | null = null;
+	let token: string | null = null;
+	async function refreshToken() {
+		const response = await fetch('/api/auth/refresh', { method: 'POST', credentials: 'include' });
+		const data = await response.json();
+		return data.accessToken;
+	}
+	$effect(() => {
+		if (!$accessToken) {
+			refreshToken().then((token) => {
+				$accessToken = token;
+			});
+		}
 
-  onMount(() => {
-    // Usamos la reactividad de Svelte para obtener el valor de la store
-    token = $accessToken; // Reactivamente se actualiza el valor cuando cambia la store
-
-    console.log($accessToken); // Verifica el token
-
-    if (token) {
-      connectWebSocket(token); // Llama a la función si existe el token
-    }
-  });
+		console.log($accessToken);
+		token = $accessToken;
+		if (token) {
+			connectWebSocket(token);
+		}
+	});
 </script>
 
 {@render children()}

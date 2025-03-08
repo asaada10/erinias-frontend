@@ -29,17 +29,19 @@ export const user = pgTable('user', {
 	role: text('role').default('user'),
 	twoFactorEnabled: boolean('two_factor_enabled').default(false)
 });
-export const friends = pgTable('friends', {
-  userId: text('user_id')
-    .notNull()
-    .references(() => user.id, { onDelete: 'cascade' }),
-  friendId: text('friend_id')
-    .notNull()
-    .references(() => user.id, { onDelete: 'cascade' }),
-  createdAt: timestamp('created_at').defaultNow(),
-}, (table) => [
-	primaryKey({ columns: [table.userId, table.friendId] })
-]);
+export const friends = pgTable(
+	'friends',
+	{
+		userId: text('user_id')
+			.notNull()
+			.references(() => user.id, { onDelete: 'cascade' }),
+		friendId: text('friend_id')
+			.notNull()
+			.references(() => user.id, { onDelete: 'cascade' }),
+		createdAt: timestamp('created_at').defaultNow()
+	},
+	(table) => [primaryKey({ columns: [table.userId, table.friendId] })]
+);
 
 export const domainMember = pgTable('domain_member', {
 	id: text('id').primaryKey().default(Snowflake.generate(new Date())),

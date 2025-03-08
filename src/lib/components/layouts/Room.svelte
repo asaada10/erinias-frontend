@@ -1,7 +1,6 @@
 <script lang="ts">
 	import type { Room } from '$lib/types';
-	let { sidebarOpen } = $props();
-    
+	// let { sidebarOpen } = $props();
 
 	let rooms: Room[] = [
 		{
@@ -57,7 +56,8 @@
 </script>
 
 {#each rooms as room}
-	<a href="#test"
+	<a
+		href="#test"
 		class={`flex w-full items-center p-3 text-left ${
 			room.active ? 'bg-gray-100 dark:bg-gray-800' : 'hover:bg-gray-100 dark:hover:bg-gray-800'
 		} cursor-pointer`}

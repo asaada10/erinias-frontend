@@ -4,7 +4,7 @@ import Token from '$lib/db/token';
 import { json, redirect } from '@sveltejs/kit';
 import { paraglideMiddleware } from '$lib/paraglide/server';
 
-import "$lib/server/ws";
+import '$lib/server/ws';
 const handleAuth: Handle = async ({ event, resolve }) => {
 	const refreshToken = event.cookies.get('refresh_token');
 
@@ -41,7 +41,7 @@ const handleAuth: Handle = async ({ event, resolve }) => {
 	}
 
 	// Obtener datos del usuario desde el access token
-	const userData = await Token.validate(accessToken);
+	const userData = await Token.validate(accessToken, 'access');
 	if (!userData) {
 		event.cookies.delete('refresh_token', { path: '/' });
 		return redirect(302, '/login');

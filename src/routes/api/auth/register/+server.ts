@@ -1,60 +1,60 @@
 import Token from '$lib/db/token';
 import { db } from '$lib/db';
+import { redis } from '$lib/db/redis'; // Importamos Redis
 import * as table from '$lib/db/schema';
 import { eq } from 'drizzle-orm';
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
-
 export const POST: RequestHandler = async ({ request, cookies }) => {
 	const { email, username, password, date } = await request.json();
 
 	// Verificar si el usuario ya existe
 	const results = await db.select().from(table.user).where(eq(table.user.email, email));
-	const existingUser = results.at(0);
-	if (existingUser) {
+	if (results.length > 0) {
 		return json({ message: 'User already exists' }, { status: 400 });
 	}
 
 	// Validaciones
-	if (!validateEmail(email)) {
-		return json({ message: 'Invalid email' }, { status: 400 });
-	}
-
-	if (!validateUsername(username)) {
-		return json({ message: 'Invalid username' }, { status: 400 });
-	}
-
-	if (!validatePassword(password)) {
-		return json({ message: 'Invalid password' }, { status: 400 });
-	}
-
-	if (!validateDateOfBirth(date)) {
-		return json({ message: 'Invalid date' }, { status: 400 });
-	}
+	if (!validateEmail(email)) return json({ message: 'Invalid email' }, { status: 400 });
+	if (!validateUsername(username)) return json({ message: 'Invalid username' }, { status: 400 });
+	if (!validatePassword(password)) return json({ message: 'Invalid password' }, { status: 400 });
+	if (!validateDateOfBirth(date)) return json({ message: 'Invalid date' }, { status: 400 });
 
 	// Hashear la contraseña
 	const passwordHash = await Bun.password.hash(password);
 
-	// Crear el usuario
+	// Crear el usuario en la base de datos
 	const newUser = await db
 		.insert(table.user)
 		.values({ username, email, passwordHash, dateOfBirth: date })
 		.returning({ id: table.user.id });
 
+	const userId = newUser[0]?.id;
+	if (!userId) return json({ message: 'Error creating user' }, { status: 500 });
+
 	console.log('New user', newUser);
 
 	// Generar tokens
-	const { accessToken, refreshToken } = await Token.generate(newUser[0]?.id, request);
+	const { accessToken, refreshToken } = await Token.generate(userId, request);
 
-	cookies.set('refresh_token', refreshToken, {
-		path: '/',
-		httpOnly: true,
-		sameSite: 'lax',
-		secure: Bun.env.NODE_ENV === 'production',
-		expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30)
+	// Guardar el refresh token en Redis con expiración de 1 día
+	await redis.set(
+		`refresh_token:${userId}`,
+		refreshToken,
+		'EX',
+		Token.getExpiryInMs(Token.REFRESH_EXPIRY)
+	); // 24 horas
+
+	// Establecer la cookie con el accessToken
+	cookies.set('accessToken', accessToken, {
+		httpOnly: true, // Protege contra ataques XSS
+		secure: process.env.NODE_ENV === 'production', // Solo en HTTPS
+		sameSite: 'strict', // Previene ataques CSRF
+		maxAge: Token.getExpiryInMs(Token.REFRESH_EXPIRY),
+		path: '/'
 	});
 
-	// Enviar access token al cliente
+	// Devolver un mensaje de éxito sin incluir el accessToken
 	return json({ message: 'Registration successful', accessToken }, { status: 200 });
 };
 

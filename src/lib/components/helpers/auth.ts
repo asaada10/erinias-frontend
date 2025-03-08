@@ -2,7 +2,7 @@
 import { get } from 'svelte/store';
 import { accessToken } from '$lib/stores/auth';
 
-export async function fetchAuth(url: string, options: RequestInit = {}): Promise<Response> {
+export async function fetchRefresh(url: string, options: RequestInit = {}): Promise<Response> {
 	let token = get(accessToken);
 	let res = await fetch(url, {
 		...options,

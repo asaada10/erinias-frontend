@@ -1,19 +1,18 @@
 <script lang="ts">
-	import { sendMessage } from "$lib/stores/ws";
-	import { Paperclip, Send, Smile } from "lucide-svelte";
-  
-	let message = $state("");
-	let domain = "chat"; // Podrías pasarlo como prop
-	let room = "general"; // Podrías pasarlo como prop
-  
+	import { sendMessage } from '$lib/stores/ws';
+	import { Paperclip, Send, Smile } from 'lucide-svelte';
+
+	let message = $state('');
+	let domain = 'chat'; // Podrías pasarlo como prop
+	let room = 'general'; // Podrías pasarlo como prop
 
 	function send() {
-	  if (message.trim() !== "") {
-		sendMessage(message, domain, room);
-		message = "";
-	  }
+		if (message.trim() !== '') {
+			sendMessage(message, domain, room);
+			message = '';
+		}
 	}
-  </script>
+</script>
 
 <div class="flex items-center border-t border-gray-200 p-3 dark:border-gray-700">
 	<button class="p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">

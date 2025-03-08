@@ -3,6 +3,7 @@ import { db } from '$lib/db';
 import * as table from '$lib/db/schema';
 import { eq } from 'drizzle-orm';
 import Token from '$lib/db/token';
+import { redis } from '$lib/db/redis';
 
 export const POST: RequestHandler = async ({ request, cookies }) => {
 	const { email, password } = await request.json();
@@ -33,18 +34,26 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
 	// Generar tokens
 	const { accessToken, refreshToken } = await Token.generate(existingUser.id, request);
 
+	// Guardar refresh token en Redis con un tiempo de expiración (30 días)
+	await redis.set(
+		`refresh_token:${existingUser.id}`,
+		refreshToken,
+		'EX',
+		Token.getExpiryInMs(Token.REFRESH_EXPIRY)
+	); // 30 días
+
 	// Guardar refresh token en una cookie segura
 	cookies.set('refresh_token', refreshToken, {
 		path: '/',
 		httpOnly: true,
 		sameSite: 'lax',
 		secure: Bun.env.NODE_ENV === 'production',
-		expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30) // 30 días
+		maxAge: Token.getExpiryInMs(Token.REFRESH_EXPIRY)
 	});
 
 	// Enviar access token al cliente
 	return json(
-		{ message: 'Login successful', accessToken },
+		{ accessToken, message: 'Login successful' }, // Enviar el access token en la respuesta
 		{
 			status: 200
 		}

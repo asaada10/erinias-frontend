@@ -1,12 +1,11 @@
 <script lang="ts">
-	import { accessToken } from '$lib/stores/auth';
 	import { goto } from '$app/navigation';
 	import { Input, Button, Icon } from '$lib/components/ui/';
-	import { get } from 'svelte/store';
-	let email = $state('');
-	let password = $state('');
-	let errorMessage = $state('');
-	let showPassword = $state(false);
+	import { accessToken } from '$lib/stores/auth';
+	let email = '';
+	let password = '';
+	let errorMessage = '';
+	let showPassword = false;
 
 	const login = async () => {
 		const response = await fetch('/api/auth/login', {
@@ -19,9 +18,8 @@
 			const data = await response.json();
 			errorMessage = data.message || 'An error occurred';
 		} else {
-			const data = await response.json();
-			$accessToken = data.accessToken;
-			goto('/');
+			$accessToken = (await response.json()).accessToken;
+			goto('/chat');
 		}
 	};
 </script>
