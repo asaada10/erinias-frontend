@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { Message } from '$lib/db/schema';
 	import { ws } from '$lib/stores/ws';
-	import { onDestroy } from 'svelte';
+	// import { onDestroy } from 'svelte';
 	import { writable } from 'svelte/store';
 
 	let messages = writable<Message[]>([]);
@@ -30,9 +30,9 @@
 
 		socket.addEventListener('message', handleMessage);
 
-		onDestroy(() => {
-			socket.removeEventListener('message', handleMessage);
-		});
+		// onDestroy(() => {
+		// 	socket.removeEventListener('message', handleMessage);
+		// });
 	});
 
 	// Función para formatear la hora
