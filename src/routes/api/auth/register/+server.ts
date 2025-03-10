@@ -3,8 +3,7 @@ import { db } from '$lib/db';
 import { redis } from '$lib/db/redis'; // Importamos Redis
 import * as table from '$lib/db/schema';
 import { eq } from 'drizzle-orm';
-import { json } from '@sveltejs/kit';
-import type { RequestHandler } from './$types';
+import { json, type RequestHandler } from '@sveltejs/kit';
 export const POST: RequestHandler = async ({ request, cookies }) => {
 	const { email, username, password, date } = await request.json();
 
@@ -54,8 +53,15 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
 		path: '/'
 	});
 
+		cookies.set('access_token', accessToken, {
+		path: '/',
+		httpOnly: true,
+		sameSite: 'strict',
+		secure: Bun.env.NODE_ENV === 'production',
+	});
+
 	// Devolver un mensaje de éxito sin incluir el accessToken
-	return json({ message: 'Registration successful', accessToken }, { status: 200 });
+	return json({ message: 'Registration successful' }, { status: 200 });
 };
 
 // Validaciones

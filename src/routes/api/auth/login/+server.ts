@@ -46,14 +46,21 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
 	cookies.set('refresh_token', refreshToken, {
 		path: '/',
 		httpOnly: true,
-		sameSite: 'lax',
+		sameSite: 'strict',
 		secure: Bun.env.NODE_ENV === 'production',
 		maxAge: Token.getExpiryInMs(Token.REFRESH_EXPIRY)
 	});
 
+	cookies.set('access_token', accessToken, {
+		path: '/',
+		httpOnly: true,
+		sameSite: 'strict',
+		secure: Bun.env.NODE_ENV === 'production',
+	});
+
 	// Enviar access token al cliente
 	return json(
-		{ accessToken, message: 'Login successful' }, // Enviar el access token en la respuesta
+		{  message: 'Login successful' }, // Enviar el access token en la respuesta
 		{
 			status: 200
 		}

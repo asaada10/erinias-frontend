@@ -26,7 +26,7 @@ const server = serve({
 
 			// Manejo de autenticación
 			if (data.type === 'authenticate') {
-				await authenticateUser(ws, data.token);
+				await authenticateUser(ws, data.otk);
 			}
 
 			// Manejo de salas y mensajes

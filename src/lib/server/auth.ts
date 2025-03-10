@@ -4,24 +4,31 @@ import * as table from '$lib/db/schema';
 import type { WSData } from '$lib/types';
 import type { ServerWebSocket } from 'bun';
 import { eq } from 'drizzle-orm';
+import { redis } from '$lib/db/redis';
 
-export async function authenticateUser(ws: ServerWebSocket<WSData>, token: string) {
-	const validatedToken = await Token.validate(token, 'access');
+export async function authenticateUser(ws: ServerWebSocket<WSData>, otk: string) {
+	const token = await redis.get(otk);
+	if(!token) {
+		ws.send(JSON.stringify({ type: 'error', message: 'Token no válido' }));
+		return 
+	}
+	const validateOtk = await Token.validate(token, 'access');
 
-	if (!validatedToken || !validatedToken.userId) {
+	if (!validateOtk || !validateOtk.userId) {
 		ws.send(JSON.stringify({ type: 'error', message: 'Token no válido' }));
 		ws.close();
 		return;
 	}
 
-	const user = await db.select().from(table.user).where(eq(table.user.id, validatedToken.userId));
+	const user = await db.select().from(table.user).where(eq(table.user.id, validateOtk.userId));
 
 	if (!user) {
 		ws.send(JSON.stringify({ type: 'error', message: 'Usuario no encontrado' }));
 		ws.close();
 		return;
 	}
-
-	ws.data.user = validatedToken.userId;
+	
+	redis.del(otk);
+	ws.data.user = validateOtk.userId;
 	console.log(`Usuario ${ws.data.user} autenticado`);
 }
