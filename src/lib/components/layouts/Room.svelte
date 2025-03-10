@@ -2,57 +2,7 @@
 	import type { Room } from '$lib/types';
 	// let { sidebarOpen } = $props();
 
-	let rooms: Room[] = [
-		{
-			name: 'John Doe',
-			message: 'How you doing?',
-			time: '10 mins ago',
-			active: true,
-			avatar: 'https://randomuser.me/api/portraits/men/1.jpg'
-		},
-		{
-			name: 'Jane Doe',
-			message: 'Hey, how are you?',
-			time: '10 mins ago',
-			active: false,
-			avatar: 'https://randomuser.me/api/portraits/women/2.jpg'
-		},
-		{
-			name: 'Bob Johnson',
-			message: 'I need your help',
-			time: '1 day ago',
-			active: false,
-			avatar: 'https://randomuser.me/api/portraits/men/3.jpg'
-		},
-		{
-			name: 'Linda Smith',
-			message: 'I am good',
-			time: '1 day ago',
-			active: false,
-			avatar: 'https://randomuser.me/api/portraits/women/4.jpg'
-		},
-		{
-			name: 'David Lee',
-			message: 'How you doing?',
-			time: '1 day ago',
-			active: false,
-			avatar: 'https://randomuser.me/api/portraits/men/5.jpg'
-		},
-		{
-			name: 'Sarah Taylor',
-			message: 'I am good',
-			time: '2 days ago',
-			active: false,
-			avatar: 'https://randomuser.me/api/portraits/women/6.jpg'
-		},
-		{
-			name: 'Michael Davis',
-			message: 'I need your help',
-			time: '2 days ago',
-			active: false,
-			avatar: 'https://randomuser.me/api/portraits/men/7.jpg'
-		}
-	];
+	let rooms: Room[] = [];
 </script>
 
 {#each rooms as room}
