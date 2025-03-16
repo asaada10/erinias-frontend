@@ -2,11 +2,12 @@
 	import type { Room } from '$lib/types';
 	// let { toggleSidebar } = $props();
 	let activeRoom: Room = {
+		id: 'room-1',
 		name: 'John Doe',
 		message: 'How you doing?',
-		time: '10 mins ago',
-		active: false,
-		avatar: 'https://randomuser.me/api/portraits/men/1.jpg'
+		createdAt: '10 mins ago',
+		// active: false,
+		image: 'https://randomuser.me/api/portraits/men/1.jpg'
 	};
 	import { MoreVertical } from 'lucide-svelte';
 </script>
@@ -20,7 +21,7 @@
 
 		<div class="mr-3 h-10 w-10 overflow-hidden rounded-full">
 			<img
-				src={activeRoom.avatar || '/placeholder.svg'}
+				src={activeRoom.image || '/placeholder.svg'}
 				alt={activeRoom.name}
 				class="h-full w-full object-cover"
 			/>

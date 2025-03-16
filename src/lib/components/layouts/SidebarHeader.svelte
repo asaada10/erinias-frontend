@@ -1,10 +1,11 @@
 <script lang="ts">
 	import { Plus, MoreVertical } from 'lucide-svelte';
+	let { title } = $props();
 </script>
 
 <div class="flex items-center justify-between border-b border-gray-200 p-3 dark:border-gray-700">
 	<div class="flex items-center">
-		<span class="font-medium text-gray-800 dark:text-gray-200">All Messages</span>
+		<span class="font-medium text-gray-800 dark:text-gray-200">{title}</span>
 		<svg
 			class="ml-1 h-4 w-4 text-gray-500 dark:text-gray-400"
 			viewBox="0 0 24 24"

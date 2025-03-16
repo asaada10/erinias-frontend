@@ -137,9 +137,9 @@ export const permissions = pgTable('permissions', {
 
 export type RefreshToken = typeof refreshTokens.$inferInsert;
 export type User = typeof user.$inferSelect;
-export type Guild = typeof domain.$inferInsert;
-export type Channel = typeof room.$inferInsert;
+export type Domain = typeof domain.$inferInsert;
+export type Room = typeof room.$inferInsert;
 export type Message = typeof message.$inferInsert;
 export type MessageRead = typeof messageRead.$inferInsert;
-export type GuildMember = typeof domainMember.$inferInsert;
+export type DomainMember = typeof domainMember.$inferInsert;
 export type Permission = typeof permissions.$inferInsert;

@@ -1,21 +1,18 @@
 <script lang="ts">
-	import type { Room } from '$lib/types';
-	// let { sidebarOpen } = $props();
-
-	let rooms: Room[] = [];
+	let { rooms } = $props();
 </script>
 
 {#each rooms as room}
 	<a
 		href="#test"
 		class={`flex w-full items-center p-3 text-left ${
-			room.active ? 'bg-gray-100 dark:bg-gray-800' : 'hover:bg-gray-100 dark:hover:bg-gray-800'
+			true /* Activo */ ? 'bg-gray-100 dark:bg-gray-800' : 'hover:bg-gray-100 dark:hover:bg-gray-800'
 		} cursor-pointer`}
 		type="button"
 	>
 		<div class="mr-3 h-10 w-10 flex-shrink-0 overflow-hidden rounded-full">
 			<img
-				src={room.avatar || '/placeholder.svg'}
+				src={room.image || '/placeholder.svg'}
 				alt={room.name}
 				class="h-full w-full object-cover"
 			/>
@@ -23,7 +20,7 @@
 		<div class="flex-1">
 			<div class="flex justify-between">
 				<h3 class="font-medium text-gray-800 dark:text-gray-200">{room.name}</h3>
-				<span class="text-xs text-gray-500 dark:text-gray-400">{room.time}</span>
+				<span class="text-xs text-gray-500 dark:text-gray-400">{room.createdAt}</span>
 			</div>
 			<p class="truncate text-sm text-gray-500 dark:text-gray-400">{room.message}</p>
 		</div>

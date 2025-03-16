@@ -1,20 +1,29 @@
-interface Room {
+export interface User {
+	id: string;
 	name: string;
-	message: string;
-	time: string;
-	active: boolean;
-	avatar: string;
-}
-
-interface WSData {
-	type: string;
+	image?: string;
+	online?: boolean;
+  }
+  
+  export interface Message {
+	id: string;
 	content: string;
-	domain: string;
-	room: string;
-	user: string;
-}
+	authorId: string;
+	roomId: string;
+	createdAt: string;
+  }
+  
+  export interface Room {
+	id: string;
+	name: string;
+	message?: string;
+	createdAt?: string;
+	image?: string;
+	participants?: User[];
+	unreadCount?: number;
+  }
 
-interface TokenPayload {
+ export interface TokenPayload {
 	userId: string;
 	deviceId?: string;
 	iss?: string;
@@ -23,7 +32,7 @@ interface TokenPayload {
 	[key: string]: unknown;
 }
 
-enum PermissionFlags {
+export enum PermissionFlags {
 	SendMessages = 1 << 0,
 	ViewChannels = 1 << 1,
 	ManageMessages = 1 << 2,
@@ -34,4 +43,10 @@ enum PermissionFlags {
 	ManageGuild = 1 << 7
 }
 
-export { Room, WSData, TokenPayload, PermissionFlags };
+export interface WSData {
+	type: string;
+	content: string;
+	domain: string;
+	room: string;
+	user: string;
+}
