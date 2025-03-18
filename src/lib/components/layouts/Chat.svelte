@@ -9,31 +9,6 @@
 	// Agrupar mensajes por fecha
 	let messagesByDate = writable<{ [date: string]: Message[] }>({});
 
-	// Suscribirse al WebSocket
-	let unsubscribe = ws.subscribe((socket) => {
-		if (!socket) return;
-
-		const handleMessage = (event: MessageEvent) => {
-			const data = JSON.parse(event.data);
-			if (data.type === 'message') {
-				messages.update((msgs) => [...msgs, data]);
-
-				// Actualizar agrupación de mensajes por fecha
-				messagesByDate.update((grouped) => {
-					const date = new Date(data.createdAt).toDateString();
-					if (!grouped[date]) grouped[date] = [];
-					grouped[date].push(data);
-					return grouped;
-				});
-			}
-		};
-
-		socket.addEventListener('message', handleMessage);
-
-		// onDestroy(() => {
-		// 	socket.removeEventListener('message', handleMessage);
-		// });
-	});
 
 	// Función para formatear la hora
 	function formatTime(date: Date) {
