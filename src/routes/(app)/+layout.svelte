@@ -37,9 +37,8 @@
         </div>
     
         <!-- Search -->
-        <div>
           {@render layout.search?.()}
-        </div>
+
     
         <!-- Room List -->
         <div class="flex-1 overflow-y-auto">
@@ -50,19 +49,16 @@
       <!-- Chat Area -->
       <div class="flex flex-1 flex-col">
         <!-- Chat Header -->
-        <div class="border-b">
           {@render layout.chatHeader?.()}
-        </div>
     
         <!-- Messages -->
-        <div class="flex-1 overflow-y-auto">
+        <div class="flex-1 overflow-y-auto p-4">
           {@render layout.chat?.()}
         </div>
     
         <!-- Chat Input -->
-        <div class="border-t">
+
           {@render layout.chatInput?.()}
-        </div>
       </div>
     </div>
   </div>
