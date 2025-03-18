@@ -55,12 +55,12 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
 		path: '/',
 		httpOnly: true,
 		sameSite: 'strict',
-		secure: Bun.env.NODE_ENV === 'production',
+		secure: Bun.env.NODE_ENV === 'production'
 	});
 
 	// Enviar access token al cliente
 	return json(
-		{  message: 'Login successful' }, // Enviar el access token en la respuesta
+		{ message: 'Login successful' }, // Enviar el access token en la respuesta
 		{
 			status: 200
 		}

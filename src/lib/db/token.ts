@@ -48,9 +48,12 @@ class Token {
 	}
 
 	// Valida un access token JWT
-	static async validate(token: string, type: "access" | "refresh"): Promise<TokenPayload | null> {
+	static async validate(token: string, type: 'access' | 'refresh'): Promise<TokenPayload | null> {
 		try {
-			const { payload } = await jwtVerify(token, new TextEncoder().encode(type === "access" ? this.JWT_SECRET : this.REFRESH_SECRET));
+			const { payload } = await jwtVerify(
+				token,
+				new TextEncoder().encode(type === 'access' ? this.JWT_SECRET : this.REFRESH_SECRET)
+			);
 			return payload as TokenPayload;
 		} catch (error) {
 			console.error('Access token inválido:', error);

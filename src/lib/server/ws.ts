@@ -33,7 +33,7 @@ const server = serve({
 			if (data.type === 'join' || data.type === 'message') {
 				await handleConnection(ws, data);
 			}
-		},
+		}
 		// close(ws) {
 		// 	// Handle WebSocket close
 		// }

@@ -3,17 +3,17 @@ export interface User {
 	name: string;
 	image?: string;
 	online?: boolean;
-  }
-  
-  export interface Message {
+}
+
+export interface Message {
 	id: string;
 	content: string;
 	authorId: string;
 	roomId: string;
 	createdAt: string;
-  }
-  
-  export interface Room {
+}
+
+export interface Room {
 	id: string;
 	name: string;
 	message?: string;
@@ -21,9 +21,9 @@ export interface User {
 	image?: string;
 	participants?: User[];
 	unreadCount?: number;
-  }
+}
 
- export interface TokenPayload {
+export interface TokenPayload {
 	userId: string;
 	deviceId?: string;
 	iss?: string;

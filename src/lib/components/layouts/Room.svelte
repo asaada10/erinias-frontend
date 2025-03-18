@@ -1,12 +1,13 @@
 <script lang="ts">
 	let { rooms } = $props();
+	const active = true;
 </script>
 
 {#each rooms as room}
 	<a
 		href="#test"
 		class={`flex w-full items-center p-3 text-left ${
-			true /* Activo */ ? 'bg-gray-100 dark:bg-gray-800' : 'hover:bg-gray-100 dark:hover:bg-gray-800'
+			active ? 'bg-gray-100 dark:bg-gray-800' : 'hover:bg-gray-100 dark:hover:bg-gray-800'
 		} cursor-pointer`}
 		type="button"
 	>

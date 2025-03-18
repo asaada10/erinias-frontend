@@ -1,14 +1,13 @@
 <script lang="ts">
 	import type { Message } from '$lib/db/schema';
-	import { ws } from '$lib/stores/ws';
+	// import { ws } from '$lib/stores/ws';
 	// import { onDestroy } from 'svelte';
 	import { writable } from 'svelte/store';
 
-	let messages = writable<Message[]>([]);
+	// let messages = writable<Message[]>([]);
 
 	// Agrupar mensajes por fecha
 	let messagesByDate = writable<{ [date: string]: Message[] }>({});
-
 
 	// Función para formatear la hora
 	function formatTime(date: Date) {

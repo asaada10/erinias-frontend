@@ -53,11 +53,11 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
 		path: '/'
 	});
 
-		cookies.set('access_token', accessToken, {
+	cookies.set('access_token', accessToken, {
 		path: '/',
 		httpOnly: true,
 		sameSite: 'strict',
-		secure: Bun.env.NODE_ENV === 'production',
+		secure: Bun.env.NODE_ENV === 'production'
 	});
 
 	// Devolver un mensaje de éxito sin incluir el accessToken

@@ -5,9 +5,9 @@ import Token from '$lib/db/token';
 
 export const POST: RequestHandler = async ({ request, cookies }) => {
 	const refreshToken = cookies.get('refresh_token');
-	let accessToken = cookies.get("access_token");
-	if(!accessToken || !(await Token.validate(accessToken, "access"))) {
-		console.log("¿Culpa del access?", accessToken)
+	const accessToken = cookies.get('access_token');
+	if (!accessToken || !(await Token.validate(accessToken, 'access'))) {
+		console.log('¿Culpa del access?', accessToken);
 		return json({ message: 'Invalid or expired accesss token' }, { status: 401 });
 	}
 	if (!refreshToken) {
@@ -33,7 +33,7 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
 
 	const otk = await Token.generate(token.userId, request);
 
-	await redis.set(otk.accessToken, accessToken, 'EX', Token.getExpiryInMs("1m"));
+	await redis.set(otk.accessToken, accessToken, 'EX', Token.getExpiryInMs('1m'));
 
 	return json({ message: 'Token refreshed', otk: otk.accessToken }, { status: 200 });
 };

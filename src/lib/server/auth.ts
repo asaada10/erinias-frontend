@@ -8,9 +8,9 @@ import { redis } from '$lib/db/redis';
 
 export async function authenticateUser(ws: ServerWebSocket<WSData>, otk: string) {
 	const token = await redis.get(otk);
-	if(!token) {
+	if (!token) {
 		ws.send(JSON.stringify({ type: 'error', message: 'Token no válido' }));
-		return 
+		return;
 	}
 	const validateOtk = await Token.validate(token, 'access');
 
@@ -27,7 +27,7 @@ export async function authenticateUser(ws: ServerWebSocket<WSData>, otk: string)
 		ws.close();
 		return;
 	}
-	
+
 	redis.del(otk);
 	ws.data.user = validateOtk.userId;
 	console.log(`Usuario ${ws.data.user} autenticado`);

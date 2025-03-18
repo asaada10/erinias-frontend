@@ -11,7 +11,7 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
 	}
 
 	// Validar la estructura del token
-    console.log('refreshToken', refreshToken);
+	console.log('refreshToken', refreshToken);
 	const token = await Token.validate(refreshToken, 'refresh');
 	if (!token) {
 		return json({ message: 'Invalid or expired refresh token' }, { status: 401 });
@@ -53,12 +53,12 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
 		sameSite: 'strict',
 		maxAge: Token.getExpiryInMs(Token.REFRESH_EXPIRY)
 	});
-    cookies.set('access_token', accessToken, {
-        path: '/',
-        httpOnly: true,
-        secure: true,
-        sameSite: 'strict',
-    })
+	cookies.set('access_token', accessToken, {
+		path: '/',
+		httpOnly: true,
+		secure: true,
+		sameSite: 'strict'
+	});
 
 	return json({ message: 'Token refreshed' }, { status: 200 });
 };

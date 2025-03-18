@@ -30,60 +30,60 @@
 	import { connect } from '$lib/stores/ws';
 	import { fetchRefresh } from '$lib/components/helpers/auth';
 	import type { Room as RoomType } from '$lib/types';
-  
+
 	// State for sidebar visibility on mobile
 	let sidebarOpen = $state(false);
-	
+
 	// Toggle sidebar function
 	function toggleSidebar(): void {
-	  sidebarOpen = !sidebarOpen;
+		sidebarOpen = !sidebarOpen;
 	}
-  
+
 	// Search state
 	let inputSearch = $state('');
 	let rooms: RoomType[] = $state([]);
 	let isSearching = $state(false);
 	let searchError = $state<string | null>(null);
-  
+
 	// Connect to WebSocket on mount
 	onMount(() => {
-	connect('ws://localhost:4343');
+		connect('ws://localhost:4343');
 	});
-  
-function handleSearch() {
-	  if (!search) {
-		rooms = [];
-		return;
-	  }
-	  
-	  async function fetchRooms() {
-		isSearching = true;
-		searchError = null;
-		
-		try {
-		  const result = await fetchRefresh('/api/users', {
-			method: 'POST',
-			credentials: 'include',
-			body: JSON.stringify({ search })
-		  }).then((res) => res.json());
-		  
-		  if (result && result.rooms) {
-			rooms = result.rooms;
-		  } else {
+
+	function handleSearch() {
+		if (!search) {
 			rooms = [];
-		  }
-		} catch (error) {
-		  console.error('Error fetching rooms:', error);
-		  searchError = 'Failed to fetch rooms. Please try again.';
-		} finally {
-		  isSearching = false;
+			return;
 		}
-	  }
-	  
-	  // Debounce search
-	  const timer = setTimeout(fetchRooms, 300);
-	  return () => clearTimeout(timer);
-	};
+
+		async function fetchRooms() {
+			isSearching = true;
+			searchError = null;
+
+			try {
+				const result = await fetchRefresh('/api/users', {
+					method: 'POST',
+					credentials: 'include',
+					body: JSON.stringify({ search })
+				}).then((res) => res.json());
+
+				if (result && result.rooms) {
+					rooms = result.rooms;
+				} else {
+					rooms = [];
+				}
+			} catch (error) {
+				console.error('Error fetching rooms:', error);
+				searchError = 'Failed to fetch rooms. Please try again.';
+			} finally {
+				isSearching = false;
+			}
+		}
+
+		// Debounce search
+		const timer = setTimeout(fetchRooms, 300);
+		return () => clearTimeout(timer);
+	}
 </script>
 
 {#snippet header()}
