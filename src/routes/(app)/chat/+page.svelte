@@ -12,7 +12,6 @@
 
 	// Asigna los componentes al contexto
 	setLayoutComponent({
-		header,
 		sidebarHeader,
 		room,
 		chatHeader,
@@ -26,18 +25,12 @@
 	});
 
 	import { onMount } from 'svelte';
-	import { darkMode, toggleDarkMode } from '$lib/stores/theme';
+	// import { darkMode, toggleDarkMode } from '$lib/stores/theme';
 	import { connect } from '$lib/stores/ws';
 	import { fetchRefresh } from '$lib/components/helpers/auth';
 	import type { Room as RoomType } from '$lib/types';
 
-	// State for sidebar visibility on mobile
-	let sidebarOpen = $state(false);
 
-	// Toggle sidebar function
-	function toggleSidebar(): void {
-		sidebarOpen = !sidebarOpen;
-	}
 
 	// Search state
 	let inputSearch = $state('');
@@ -51,7 +44,7 @@
 	});
 
 	function handleSearch() {
-		if (!search) {
+		if (!inputSearch) {
 			rooms = [];
 			return;
 		}
@@ -64,7 +57,7 @@
 				const result = await fetchRefresh('/api/users', {
 					method: 'POST',
 					credentials: 'include',
-					body: JSON.stringify({ search })
+					body: JSON.stringify({ inputSearch })
 				}).then((res) => res.json());
 
 				if (result && result.rooms) {
@@ -86,9 +79,7 @@
 	}
 </script>
 
-{#snippet header()}
-	<Header {sidebarOpen} darkMode={$darkMode} {toggleSidebar} {toggleDarkMode} />
-{/snippet}
+
 
 {#snippet sidebarHeader()}
 	<SidebarHeader title="All Chats" />

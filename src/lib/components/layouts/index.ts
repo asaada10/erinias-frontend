@@ -5,3 +5,4 @@ export { default as ChatHeader } from './ChatHeader.svelte';
 export { default as Chat } from './Chat.svelte';
 export { default as ChatInput } from './ChatInput.svelte';
 export { default as Search } from './Search.svelte';
+export { default as Sidebar } from './Sidebar.svelte';

@@ -3,7 +3,6 @@ import { getContext, setContext, type Snippet } from 'svelte';
 const key = Symbol('layout-context');
 
 interface LayoutContext {
-	header: Snippet | undefined;
 	sidebarHeader: Snippet | undefined;
 	room: Snippet | undefined;
 	chatHeader: Snippet | undefined;
@@ -14,7 +13,6 @@ interface LayoutContext {
 
 export function initLayoutContext() {
 	const layout: LayoutContext = $state({
-		header: undefined,
 		sidebarHeader: undefined,
 		room: undefined,
 		chatHeader: undefined,
