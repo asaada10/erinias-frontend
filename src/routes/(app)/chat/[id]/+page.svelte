@@ -1,11 +1,19 @@
 <script lang="ts">
 	import { setLayoutComponent, cleanLayoutContext } from '$lib/components/helpers/layout.svelte';
-	import { Room, SidebarHeader, Chat, ChatInput, Search } from '$lib/components/layouts';
+	import {
+		Room,
+		SidebarHeader,
+		ChatHeader,
+		Chat,
+		ChatInput,
+		Search
+	} from '$lib/components/layouts';
 
 	// Asigna los componentes al contexto
 	setLayoutComponent({
 		sidebarHeader,
 		room,
+		chatHeader,
 		chat,
 		chatInput,
 		search
@@ -76,9 +84,9 @@
 	<Room {rooms} />
 {/snippet}
 
-<!-- {#snippet chatHeader()}
+{#snippet chatHeader()}
 	<ChatHeader />
-{/snippet} -->
+{/snippet}
 
 {#snippet chat()}
 	<Chat />

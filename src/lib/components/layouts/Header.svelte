@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Menu, X } from 'lucide-svelte';
-	let { sidebarOpen, toggleSidebar} = $props();
+	let { sidebarOpen, toggleSidebar } = $props();
 </script>
 
 <header class="flex items-center justify-between bg-[#db324d] p-3 text-white">
