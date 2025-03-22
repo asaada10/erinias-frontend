@@ -6,7 +6,6 @@
 	setLayoutComponent({
 		sidebarHeader,
 		room,
-		chat,
 		chatInput,
 		search
 	});
@@ -80,9 +79,9 @@
 	<ChatHeader />
 {/snippet} -->
 
-{#snippet chat()}
+<!-- {#snippet chat()}
 	<Chat />
-{/snippet}
+{/snippet} -->
 
 {#snippet chatInput()}
 	<ChatInput />

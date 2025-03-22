@@ -1,14 +1,7 @@
 <script lang="ts">
 	import type { Room } from '$lib/types';
 	// let { toggleSidebar } = $props();
-	let activeRoom: Room = {
-		id: 'room-1',
-		name: 'John Doe',
-		message: 'How you doing?',
-		createdAt: '10 mins ago',
-		// active: false,
-		image: 'https://randomuser.me/api/portraits/men/1.jpg'
-	};
+	let { activeRoom }: { activeRoom: Room } = $props();
 	import { MoreVertical } from 'lucide-svelte';
 </script>
 

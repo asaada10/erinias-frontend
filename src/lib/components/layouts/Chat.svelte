@@ -1,10 +1,8 @@
 <script lang="ts">
 	import type { Message } from '$lib/db/schema';
-	// import { ws } from '$lib/stores/ws';
-	// import { onDestroy } from 'svelte';
 	import { writable } from 'svelte/store';
 
-	// let messages = writable<Message[]>([]);
+	let { messages }: { messages: Message[] } = $props();
 
 	// Agrupar mensajes por fecha
 	let messagesByDate = writable<{ [date: string]: Message[] }>({});
@@ -13,6 +11,14 @@
 	function formatTime(date: Date) {
 		return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 	}
+
+	// Agrupar mensajes cuando cambian
+	$messagesByDate = messages.reduce((acc, msg) => {
+		const date = new Date(msg.createdAt!).toLocaleDateString();
+		if (!acc[date]) acc[date] = [];
+		acc[date].push(msg);
+		return acc;
+	}, {} as { [date: string]: Message[] });
 </script>
 
 {#each Object.entries($messagesByDate) as [date, messages]}
