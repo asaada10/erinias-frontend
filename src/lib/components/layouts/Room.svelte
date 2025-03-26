@@ -5,7 +5,7 @@
 
 {#each rooms as room}
 	<a
-		href="#test"
+		href={`/chat/${room.id}`}
 		class={`flex w-full items-center p-3 text-left ${
 			active ? 'bg-gray-100 dark:bg-gray-800' : 'hover:bg-gray-100 dark:hover:bg-gray-800'
 		} cursor-pointer`}

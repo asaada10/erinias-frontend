@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { Search } from 'lucide-svelte';
-	let { search = $bindable(), isSearching, searchError, handleSearch, placeholder } = $props();
+	import { handleSearch, getIsSearching, getSearchError } from '../helpers/search.svelte';
+
+	let { placeholder } = $props();
 </script>
 
 <div class="border-b border-gray-200 p-3 dark:border-gray-700">
@@ -10,17 +12,16 @@
 			type="text"
 			{placeholder}
 			class="w-full rounded-lg bg-gray-100 py-2 pr-4 pl-10 text-sm text-gray-800 focus:outline-none dark:bg-gray-800 dark:text-gray-200"
-			bind:value={search}
-			onkeydown={() => handleSearch()}
+			onkeydown={(e) => handleSearch(e)}
 		/>
 	</div>
 
 	<!-- Search status -->
-	{#if isSearching}
-		<div class="mt-2 text-xs text-gray-500 dark:text-gray-400">Searching...</div>
+	{#if getIsSearching()}
+		<div class="mt-2 text-xs text-gray-500 dark:text-gray-400">Buscando...</div>
 	{/if}
 
-	{#if searchError}
-		<div class="mt-2 text-xs text-red-500">{searchError}</div>
+	{#if getSearchError()}
+		<div class="mt-2 text-xs text-red-500">{getSearchError()}</div>
 	{/if}
 </div>

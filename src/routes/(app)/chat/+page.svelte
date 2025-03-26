@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { setLayoutComponent, cleanLayoutContext } from '$lib/components/helpers/layout.svelte';
 	import { Room, SidebarHeader, Chat, ChatInput, Search } from '$lib/components/layouts';
+	import { getRooms } from '$lib/components/helpers/search.svelte';
 
 	// Asigna los componentes al contexto
 	setLayoutComponent({
@@ -17,54 +18,17 @@
 	import { onMount } from 'svelte';
 	// import { darkMode, toggleDarkMode } from '$lib/stores/theme';
 	import { connect } from '$lib/stores/ws';
-	import { fetchRefresh } from '$lib/components/helpers/auth';
-	import type { Room as RoomType } from '$lib/types';
+
 
 	// Search state
-	let inputSearch = $state('');
-	let rooms: RoomType[] = $state([]);
-	let isSearching = $state(false);
-	let searchError = $state<string | null>(null);
+
 
 	// Connect to WebSocket on mount
 	onMount(() => {
 		connect('ws://localhost:4343');
 	});
 
-	function handleSearch() {
-		if (!inputSearch) {
-			rooms = [];
-			return;
-		}
 
-		async function fetchRooms() {
-			isSearching = true;
-			searchError = null;
-
-			try {
-				const result = await fetchRefresh('/api/users', {
-					method: 'POST',
-					credentials: 'include',
-					body: JSON.stringify({ inputSearch })
-				}).then((res) => res.json());
-
-				if (result && result.rooms) {
-					rooms = result.rooms;
-				} else {
-					rooms = [];
-				}
-			} catch (error) {
-				console.error('Error fetching rooms:', error);
-				searchError = 'Failed to fetch rooms. Please try again.';
-			} finally {
-				isSearching = false;
-			}
-		}
-
-		// Debounce search
-		const timer = setTimeout(fetchRooms, 300);
-		return () => clearTimeout(timer);
-	}
 </script>
 
 {#snippet sidebarHeader()}
@@ -72,7 +36,7 @@
 {/snippet}
 
 {#snippet room()}
-	<Room {rooms} />
+	<Room rooms={getRooms()} />
 {/snippet}
 
 <!-- {#snippet chatHeader()}
@@ -88,5 +52,5 @@
 {/snippet}
 
 {#snippet search()}
-	<Search placeholder="Search..." search={inputSearch} {handleSearch} {isSearching} {searchError} />
+	<Search placeholder="Search..." />
 {/snippet}
