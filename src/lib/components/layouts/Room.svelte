@@ -1,11 +1,21 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
 	let { rooms } = $props();
 	const active = true;
+	import { selectedRoom } from '$lib/stores/chat';
+
+	// Incluir una función para dar clic a una sala.
+
+
+	function goToRoom(room: any) {
+		$selectedRoom = room;
+		goto(`/chat/${room.id}`);
+	}
 </script>
 
 {#each rooms as room}
-	<a
-		href={`/chat/${room.id}`}
+	<button
+		onclick={() => goToRoom(room)}
 		class={`flex w-full items-center p-3 text-left ${
 			active ? 'bg-gray-100 dark:bg-gray-800' : 'hover:bg-gray-100 dark:hover:bg-gray-800'
 		} cursor-pointer`}
@@ -25,5 +35,5 @@
 			</div>
 			<p class="truncate text-sm text-gray-500 dark:text-gray-400">{room.message}</p>
 		</div>
-	</a>
+	</button>
 {/each}

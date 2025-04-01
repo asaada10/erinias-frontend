@@ -2,7 +2,6 @@
 	import { setLayoutComponent, cleanLayoutContext } from '$lib/components/helpers/layout.svelte';
 	import { Room, SidebarHeader, Chat, ChatInput, Search } from '$lib/components/layouts';
 	import { getRooms } from '$lib/components/helpers/search.svelte';
-
 	// Asigna los componentes al contexto
 	setLayoutComponent({
 		sidebarHeader,

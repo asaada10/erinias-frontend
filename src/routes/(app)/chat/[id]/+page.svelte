@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { fetchRefresh } from '$lib/components/helpers/auth';
 	import { setLayoutComponent, cleanLayoutContext } from '$lib/components/helpers/layout.svelte';
+	import { getRooms } from '$lib/components/helpers/search.svelte';
 	import {
 		Room,
 		SidebarHeader,
@@ -9,7 +10,7 @@
 		ChatInput,
 		Search
 	} from '$lib/components/layouts';
-	import { messages } from '$lib/stores/chat';
+	import { messages, selectedRoom } from '$lib/stores/chat';
 	import { connect } from '$lib/stores/ws';
 	import { onMount } from 'svelte';
 
@@ -27,12 +28,6 @@
 		return cleanLayoutContext;
 	});
 
-	// Search state
-	let inputSearch = $state('');
-	let rooms: Room[] = $state([]);
-	let isSearching = $state(false);
-	let searchError = $state<string | null>(null);
-
 	// Obtener el ID de la sala del chat actual
 	let roomId: string | null = null;
 
@@ -49,6 +44,7 @@
 		}
 	});
 
+
 	// Obtener los mensajes del chat
 	async function fetchChatMessages(roomId: string) {
 		try {
@@ -64,47 +60,7 @@
 		}
 	}
 
-	function handleSearch() {
-		if (!inputSearch) {
-			rooms = [];
-			return;
-		}
 
-		async function fetchRooms() {
-			isSearching = true;
-			searchError = null;
-
-			try {
-				const result = await fetchRefresh('/api/users', {
-					method: 'POST',
-					credentials: 'include',
-					body: JSON.stringify({ inputSearch })
-				}).then((res) => res.json());
-
-				if (result && result.rooms) {
-					rooms = result.rooms;
-				} else {
-					rooms = [];
-				}
-			} catch (error) {
-				console.error('Error fetching rooms:', error);
-				searchError = 'Failed to fetch rooms. Please try again.';
-			} finally {
-				isSearching = false;
-			}
-		}
-
-		// Debounce search
-		const timer = setTimeout(fetchRooms, 300);
-		return () => clearTimeout(timer);
-	}
-	let activeRoom = {
-			id: 'room-1',
-		name: 'John Doe',
-		message: 'How you doing?',
-		createdAt: '10 mins ago',
-		image: 'https://randomuser.me/api/portraits/men/1.jpg'
-		}
 </script>
 
 {#snippet sidebarHeader()}
@@ -114,12 +70,12 @@
 
 {#snippet room()}
 <!-- Esto cambia según /chat (lista de chats) /party (lista de grupos) /domain (lista de dominios) -->
-	<Room {rooms} />
+	<Room rooms={getRooms()} />
 {/snippet}
 
 {#snippet chatHeader()}
 <!-- Esto cambia según /chat (cabecera de chat) /party (cabecera de grupo) /domain (cabecera de dominio) -->
-	<ChatHeader {activeRoom} />
+	<ChatHeader  />
 {/snippet}
 
 {#snippet chat()}
@@ -134,5 +90,5 @@
 
 {#snippet search()}
 <!-- Esto cambia según /chat (buscador) /party (buscador) /domain (buscador) -->
-	<Search placeholder="Search..." search={inputSearch} {handleSearch} {isSearching} {searchError} />
+	<Search placeholder="Search..."  />
 {/snippet}

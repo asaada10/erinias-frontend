@@ -1,7 +1,16 @@
 <script lang="ts">
+	import { selectedRoom } from '$lib/stores/chat';
 	import type { Room } from '$lib/types';
 	// let { toggleSidebar } = $props();
-	let { activeRoom }: { activeRoom: Room } = $props();
+	let exampleRoom = {
+			id: 'room-1',
+		name: 'John Doe',
+		message: 'How you doing?',
+		createdAt: '10 mins ago',
+		image: 'https://randomuser.me/api/portraits/men/1.jpg'
+		}
+	let activeRoom = $selectedRoom;
+	if(!activeRoom) activeRoom = exampleRoom;
 	import { MoreVertical } from 'lucide-svelte';
 </script>
 

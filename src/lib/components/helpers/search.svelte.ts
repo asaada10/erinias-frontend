@@ -4,15 +4,9 @@ let inputSearch = $state('');
 let rooms: Room[] = $state([]);
 let isSearching = $state(false);
 let searchError = $state<string | null>(null);
-export function handleSearch(e: KeyboardEvent & {currentTarget: EventTarget & HTMLInputElement}) {
-    const invalidKeys = ["Enter", "Tab", "Shift", "Control", "Alt", "CapsLock", "Escape", "ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"];
-
-    if (e.key === "Backspace") {
-      inputSearch = inputSearch.slice(0, -1);
-    } else if (!invalidKeys.includes(e.key)) {
-      inputSearch += e.key;
-    }
-    console.log('Search:', inputSearch);
+export function handleSearch(e: KeyboardEvent & { currentTarget: HTMLInputElement }) {
+    inputSearch = e.currentTarget.value;
+  
     if (!inputSearch) {
         rooms = [];
         return;
