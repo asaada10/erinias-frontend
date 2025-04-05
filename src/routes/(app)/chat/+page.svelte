@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { setLayoutComponent, cleanLayoutContext } from '$lib/components/helpers/layout.svelte';
 	import { Room, SidebarHeader, Chat, ChatInput, Search } from '$lib/components/layouts';
-	import { getRooms } from '$lib/components/helpers/search.svelte';
 	// Asigna los componentes al contexto
 	setLayoutComponent({
 		sidebarHeader,
@@ -17,6 +16,7 @@
 	import { onMount } from 'svelte';
 	// import { darkMode, toggleDarkMode } from '$lib/stores/theme';
 	import { connect } from '$lib/stores/ws';
+	import { searchRooms } from '$lib/stores/chat.svelte';
 
 
 	// Search state
@@ -35,7 +35,7 @@
 {/snippet}
 
 {#snippet room()}
-	<Room rooms={getRooms()} />
+	<Room rooms={searchRooms.results} />
 {/snippet}
 
 <!-- {#snippet chatHeader()}

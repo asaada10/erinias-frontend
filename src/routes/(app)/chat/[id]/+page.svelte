@@ -1,7 +1,8 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
 	import { fetchRefresh } from '$lib/components/helpers/auth';
 	import { setLayoutComponent, cleanLayoutContext } from '$lib/components/helpers/layout.svelte';
-	import { getRooms } from '$lib/components/helpers/search.svelte';
+	import { fetchRoomsbyId } from '$lib/components/helpers/search.svelte';
 	import {
 		Room,
 		SidebarHeader,
@@ -10,9 +11,11 @@
 		ChatInput,
 		Search
 	} from '$lib/components/layouts';
-	import { messages, selectedRoom } from '$lib/stores/chat';
+	import { messages, searchRooms, selectedRoom } from '$lib/stores/chat.svelte';
 	import { connect } from '$lib/stores/ws';
 	import { onMount } from 'svelte';
+	import { get } from 'svelte/store';
+
 
 	// Asigna los componentes al contexto
 	setLayoutComponent({
@@ -32,12 +35,21 @@
 	let roomId: string | null = null;
 
 	// Conectar WebSocket al montar el componente
-	onMount(() => {
+	onMount(async() => {
 		connect('ws://localhost:4343');
 
 		// Obtener el roomId desde la URL o contexto
 		const urlParams = new URLSearchParams(window.location.search);
 		roomId = urlParams.get('roomId');
+		if(!roomId) {
+			goto('/chat');
+			return;
+		}
+		if(!get(selectedRoom)) {
+			const fetchRoom = await fetchRoomsbyId(roomId);
+			selectedRoom.set(fetchRoom);
+	}
+
 
 		if (roomId) {
 			fetchChatMessages(roomId);
@@ -53,12 +65,13 @@
 			});
 			const data = await res.json();
 			if (data.messages) {
-				messages.set(data.messages);
+				messages.list = data.messages;
 			}
 		} catch (error) {
 			console.error('Error fetching messages:', error);
 		}
 	}
+
 
 
 </script>
@@ -70,17 +83,17 @@
 
 {#snippet room()}
 <!-- Esto cambia según /chat (lista de chats) /party (lista de grupos) /domain (lista de dominios) -->
-	<Room rooms={getRooms()} />
+	<Room rooms={searchRooms.results} />
 {/snippet}
 
 {#snippet chatHeader()}
 <!-- Esto cambia según /chat (cabecera de chat) /party (cabecera de grupo) /domain (cabecera de dominio) -->
-	<ChatHeader  />
+	<ChatHeader {selectedRoom} />
 {/snippet}
 
 {#snippet chat()}
 <!-- Esto cambia según /chat (chat) /party (grupo) /domain (dominio) -->
-	<Chat messages={$messages} />
+	<Chat messages={messages.list} />
 {/snippet}
 
 {#snippet chatInput()}

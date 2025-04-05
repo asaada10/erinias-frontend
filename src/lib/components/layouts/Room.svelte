@@ -2,10 +2,16 @@
 	import { goto } from '$app/navigation';
 	let { rooms } = $props();
 	const active = true;
-	import { selectedRoom } from '$lib/stores/chat';
+	import { selectedRoom } from '$lib/stores/chat.svelte';
 
 	// Incluir una función para dar clic a una sala.
+	let resultRooms = $derived.by(() => {
 
+console.log('state change detected', rooms);
+
+return rooms;
+
+});
 
 	function goToRoom(room: any) {
 		$selectedRoom = room;
@@ -13,7 +19,7 @@
 	}
 </script>
 
-{#each rooms as room}
+{#each resultRooms as room}
 	<button
 		onclick={() => goToRoom(room)}
 		class={`flex w-full items-center p-3 text-left ${

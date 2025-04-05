@@ -1,8 +1,11 @@
 import type { Room } from '$lib/types';
 import { writable } from 'svelte/store';
 
-export const messages = writable([]);
-export const selectedRoom = writable<Room|null>(null);
+export const messages = $state({list: []});
+export const selectedRoom = writable<Room|null>();
+export const searchRooms = $state<{ results: Room[] }>(
+	{results: []},
+);
 
 
 export async function fetchChat(roomId: string) {
@@ -13,7 +16,7 @@ export async function fetchChat(roomId: string) {
 		const data = await res.json();
 
 		if (res.ok) {
-			messages.set(data.messages);
+			messages.list = data.messages;
 			// room.set(data.otherUser);
 		} else {
 			console.error('Error fetching chat:', data.message);

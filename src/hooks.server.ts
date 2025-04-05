@@ -6,13 +6,15 @@ import { paraglideMiddleware } from '$lib/paraglide/server';
 
 import '$lib/server/ws';
 const handleAuth: Handle = async ({ event, resolve }) => {
-	const refreshToken = event.cookies.get('refresh_token');
+	const refreshToken = event.cookies.get('refresh_token') ?? "";
 
 	// No hay token → usuario no autenticado
 	const publicRoutes = ['/login', '/register'];
 	const isApiRoute = event.url.pathname.startsWith('/api/');
 	const isAuthRoute = ['/api/auth/login', '/api/auth/register'].includes(event.url.pathname);
-	if (!refreshToken) {
+	const checkRefreshToken = await Token.validate(refreshToken, 'refresh');
+	console.log('checkRefreshToken', checkRefreshToken);
+	if (!checkRefreshToken) {
 		if (isApiRoute && !isAuthRoute) {
 			return json({ message: 'Unauthorized' }, { status: 401 });
 		}
@@ -20,7 +22,7 @@ const handleAuth: Handle = async ({ event, resolve }) => {
 		if (!isApiRoute && !publicRoutes.includes(event.url.pathname)) {
 			return redirect(302, '/login');
 		}
-
+		console.log('No hay token');
 		return resolve(event);
 	} else {
 		if (isAuthRoute) {

@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { selectedRoom } from '$lib/stores/chat';
-	import type { Room } from '$lib/types';
 	// let { toggleSidebar } = $props();
 	let exampleRoom = {
 			id: 'room-1',
@@ -9,8 +7,7 @@
 		createdAt: '10 mins ago',
 		image: 'https://randomuser.me/api/portraits/men/1.jpg'
 		}
-	let activeRoom = $selectedRoom;
-	if(!activeRoom) activeRoom = exampleRoom;
+	let {selectedRoom} = $props();
 	import { MoreVertical } from 'lucide-svelte';
 </script>
 
@@ -23,13 +20,13 @@
 
 		<div class="mr-3 h-10 w-10 overflow-hidden rounded-full">
 			<img
-				src={activeRoom.image || '/placeholder.svg'}
-				alt={activeRoom.name}
+				src={selectedRoom.image || '/placeholder.svg'}
+				alt={selectedRoom.name}
 				class="h-full w-full object-cover"
 			/>
 		</div>
 		<div>
-			<h3 class="font-medium text-gray-800 dark:text-gray-200">{activeRoom.name}</h3>
+			<h3 class="font-medium text-gray-800 dark:text-gray-200">{selectedRoom.name}</h3>
 			<p class="text-xs text-gray-500 dark:text-gray-400">Online</p>
 		</div>
 	</div>

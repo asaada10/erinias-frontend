@@ -1,55 +1,34 @@
 import { fetchRefresh } from '$lib/components/helpers/auth';
+import { searchRooms, selectedRoom } from '$lib/stores/chat.svelte';
 import type { Room } from '$lib/types';
-let inputSearch = $state('');
-let rooms: Room[] = $state([]);
-let isSearching = $state(false);
-let searchError = $state<string | null>(null);
-export function handleSearch(e: KeyboardEvent & { currentTarget: HTMLInputElement }) {
-    inputSearch = e.currentTarget.value;
-  
-    if (!inputSearch) {
-        rooms = [];
-        return;
-    }
 
-    async function fetchRooms() {
-        isSearching = true;
-        searchError = null;
-
+export function handleSearch(inputSearch: string) {
+    const timer = setTimeout(async () => {
         try {
-            const result = await fetchRefresh('/api/users', {
-                method: 'POST',
-                credentials: 'include',
-                body: JSON.stringify({ search: inputSearch })
-            }).then((res) => res.json());
-
-            if (result && result.rooms) {
-                rooms = result.rooms;
-            } else {
-                rooms = [];
-            }
+            searchRooms.results = await fetchRooms(inputSearch);
         } catch (error) {
-            console.error('Error fetching rooms:', error);
-            searchError = 'Failed to fetch rooms. Please try again.';
+            console.error('Error al buscar salas:', error);
         } finally {
-            isSearching = false;
         }
-    }
-
-    // Debounce search
-    const timer = setTimeout(fetchRooms, 300);
+    }, 300);
     return () => clearTimeout(timer);
 }
 
-export function getIsSearching() {
-    return isSearching;
+export async function fetchRooms(input: String) {
+        const result = await fetchRefresh('/api/users', {
+            method: 'POST',
+            credentials: 'include',
+            body: JSON.stringify({ search: input })
+        }).then((res) => res.json());
+        return result.rooms ?? [];
 }
 
-export function getSearchError() {
-    return searchError;
-}
-
-export function getRooms() {
-    return rooms;
+export async function fetchRoomsbyId(id: String): Promise<Room> {
+    const result  = await fetchRefresh('/api/users', {
+        method: 'POST',
+        credentials: 'include',
+        body: JSON.stringify({ id })
+    }).then((res) => res.json());
+    return result.rooms[0]; 
 }
 

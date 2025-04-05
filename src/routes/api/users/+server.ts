@@ -5,8 +5,10 @@ import { like } from 'drizzle-orm';
 import Token from '$lib/db/token';
 export const POST: RequestHandler = async ({ request, cookies }) => {
 	const { search } = await request.json();
-	const accessToken = cookies.get('access_token');
-	if (!accessToken || !(await Token.validate(accessToken, 'access'))) {
+	const accessToken = cookies.get('access_token') || "";
+	const checkAccessToken = await Token.validate(accessToken, 'access');
+	console.log('checkAccessToken', checkAccessToken);
+	if (!checkAccessToken) {
 		return json({ message: 'Invalid or expired accesss token' }, { status: 401 });
 	}
 
