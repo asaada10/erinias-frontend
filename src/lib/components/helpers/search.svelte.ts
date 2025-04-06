@@ -1,18 +1,27 @@
 import { fetchRefresh } from '$lib/components/helpers/auth';
-import { searchRooms, selectedRoom } from '$lib/stores/chat.svelte';
+import { searchRooms } from '$lib/stores/chat.svelte';
 import type { Room } from '$lib/types';
 
+let debounceTimer: Timer;
+
 export function handleSearch(inputSearch: string) {
-    const timer = setTimeout(async () => {
+    clearTimeout(debounceTimer); // Limpiar el anterior
+    debounceTimer = setTimeout(async () => {
         try {
-            searchRooms.results = await fetchRooms(inputSearch);
+            if (!inputSearch.length) { 
+                searchRooms.results = [];
+                return;
+            }
+            
+            const results = await fetchRooms(inputSearch);
+            searchRooms.results = results;
+            return results;
         } catch (error) {
             console.error('Error al buscar salas:', error);
-        } finally {
         }
     }, 300);
-    return () => clearTimeout(timer);
 }
+
 
 export async function fetchRooms(input: String) {
         const result = await fetchRefresh('/api/users', {

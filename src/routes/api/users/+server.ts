@@ -1,10 +1,10 @@
 import { json, type RequestHandler } from '@sveltejs/kit';
 import { db } from '$lib/db';
 import * as table from '$lib/db/schema';
-import { like } from 'drizzle-orm';
+import { like, eq, and } from 'drizzle-orm';
 import Token from '$lib/db/token';
 export const POST: RequestHandler = async ({ request, cookies }) => {
-	const { search } = await request.json();
+	const { search, id } = await request.json();
 	const accessToken = cookies.get('access_token') || "";
 	const checkAccessToken = await Token.validate(accessToken, 'access');
 	console.log('checkAccessToken', checkAccessToken);
@@ -16,11 +16,19 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
 		table.User,
 		'passwordHash' | 'resetToken' | 'emailVerified' | 'role' | 'twoFactorEnabled'
 	>;
+	const conditions = [];
 
+	if (search) {
+		conditions.push(like(table.user.username, `%${search}%`));
+	}
+	
+	if (id) {
+		conditions.push(eq(table.user.id, id));
+	}
 	const results: User[] = await db
 		.select()
 		.from(table.user)
-		.where(like(table.user.username, `%${search}%`));
+		.where(and(...conditions));
 	const users = results.map((user) => ({
 		id: user.id,
 		name: user.username,

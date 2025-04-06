@@ -1,8 +1,7 @@
 import type { Room } from '$lib/types';
-import { writable } from 'svelte/store';
 
 export const messages = $state({list: []});
-export const selectedRoom = writable<Room|null>();
+export const selectedRoom = $state<{selected: Room | null}>({selected: null});
 export const searchRooms = $state<{ results: Room[] }>(
 	{results: []},
 );

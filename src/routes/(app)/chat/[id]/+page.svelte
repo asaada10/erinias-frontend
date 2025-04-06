@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
+	import { page } from '$app/state';
 	import { fetchRefresh } from '$lib/components/helpers/auth';
 	import { setLayoutComponent, cleanLayoutContext } from '$lib/components/helpers/layout.svelte';
 	import { fetchRoomsbyId } from '$lib/components/helpers/search.svelte';
@@ -14,7 +15,6 @@
 	import { messages, searchRooms, selectedRoom } from '$lib/stores/chat.svelte';
 	import { connect } from '$lib/stores/ws';
 	import { onMount } from 'svelte';
-	import { get } from 'svelte/store';
 
 
 	// Asigna los componentes al contexto
@@ -28,27 +28,25 @@
 	});
 
 	$effect(() => {
+
+
 		return cleanLayoutContext;
 	});
 
 	// Obtener el ID de la sala del chat actual
-	let roomId: string | null = null;
+	let roomId = $state<string>(page.params.id);
 
+		console.log(selectedRoom.selected);
 	// Conectar WebSocket al montar el componente
 	onMount(async() => {
 		connect('ws://localhost:4343');
-
-		// Obtener el roomId desde la URL o contexto
-		const urlParams = new URLSearchParams(window.location.search);
-		roomId = urlParams.get('roomId');
-		if(!roomId) {
-			goto('/chat');
-			return;
-		}
-		if(!get(selectedRoom)) {
+		console.log('selectedRoom', selectedRoom.selected);
+			if(!selectedRoom.selected) {
 			const fetchRoom = await fetchRoomsbyId(roomId);
-			selectedRoom.set(fetchRoom);
-	}
+			console.log('fetchRoom', fetchRoom);
+			selectedRoom.selected = fetchRoom;
+		}
+		// Obtener el roomId desde la URL o contexto
 
 
 		if (roomId) {
@@ -88,7 +86,17 @@
 
 {#snippet chatHeader()}
 <!-- Esto cambia según /chat (cabecera de chat) /party (cabecera de grupo) /domain (cabecera de dominio) -->
-	<ChatHeader {selectedRoom} />
+{#if selectedRoom.selected}
+<ChatHeader selectedRoom={selectedRoom.selected} />
+
+{:else}
+	<div class="flex items-center justify-center h-full">
+		<div class="text-center">
+			<h1 class="text-2xl font-bold mb-4">No hay chat seleccionado</h1>
+			<p class="text-gray-600">Selecciona una sala para comenzar a chatear.</p>
+		</div>
+	</div>
+{/if}
 {/snippet}
 
 {#snippet chat()}

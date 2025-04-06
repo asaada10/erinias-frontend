@@ -6,15 +6,12 @@
 
 	// Incluir una función para dar clic a una sala.
 	let resultRooms = $derived.by(() => {
-
-console.log('state change detected', rooms);
-
 return rooms;
 
 });
 
 	function goToRoom(room: any) {
-		$selectedRoom = room;
+		selectedRoom.selected = room;
 		goto(`/chat/${room.id}`);
 	}
 </script>

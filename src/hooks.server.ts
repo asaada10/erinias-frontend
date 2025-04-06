@@ -13,7 +13,6 @@ const handleAuth: Handle = async ({ event, resolve }) => {
 	const isApiRoute = event.url.pathname.startsWith('/api/');
 	const isAuthRoute = ['/api/auth/login', '/api/auth/register'].includes(event.url.pathname);
 	const checkRefreshToken = await Token.validate(refreshToken, 'refresh');
-	console.log('checkRefreshToken', checkRefreshToken);
 	if (!checkRefreshToken) {
 		if (isApiRoute && !isAuthRoute) {
 			return json({ message: 'Unauthorized' }, { status: 401 });
@@ -22,7 +21,6 @@ const handleAuth: Handle = async ({ event, resolve }) => {
 		if (!isApiRoute && !publicRoutes.includes(event.url.pathname)) {
 			return redirect(302, '/login');
 		}
-		console.log('No hay token');
 		return resolve(event);
 	} else {
 		if (isAuthRoute) {
