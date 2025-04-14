@@ -16,7 +16,6 @@
 	import { connect } from '$lib/stores/ws';
 	import { onMount } from 'svelte';
 
-
 	// Asigna los componentes al contexto
 	setLayoutComponent({
 		sidebarHeader,
@@ -28,32 +27,28 @@
 	});
 
 	$effect(() => {
-
-
 		return cleanLayoutContext;
 	});
 
 	// Obtener el ID de la sala del chat actual
 	let roomId = $state<string>(page.params.id);
 
-		console.log(selectedRoom.selected);
+	console.log(selectedRoom.selected);
 	// Conectar WebSocket al montar el componente
-	onMount(async() => {
+	onMount(async () => {
 		connect('ws://localhost:4343');
 		console.log('selectedRoom', selectedRoom.selected);
-			if(!selectedRoom.selected) {
+		if (!selectedRoom.selected) {
 			const fetchRoom = await fetchRoomsbyId(roomId);
 			console.log('fetchRoom', fetchRoom);
 			selectedRoom.selected = fetchRoom;
 		}
 		// Obtener el roomId desde la URL o contexto
 
-
 		if (roomId) {
 			fetchChatMessages(roomId);
 		}
 	});
-
 
 	// Obtener los mensajes del chat
 	async function fetchChatMessages(roomId: string) {
@@ -69,9 +64,6 @@
 			console.error('Error fetching messages:', error);
 		}
 	}
-
-
-
 </script>
 
 {#snippet sidebarHeader()}
@@ -80,36 +72,35 @@
 {/snippet}
 
 {#snippet room()}
-<!-- Esto cambia según /chat (lista de chats) /party (lista de grupos) /domain (lista de dominios) -->
+	<!-- Esto cambia según /chat (lista de chats) /party (lista de grupos) /domain (lista de dominios) -->
 	<Room rooms={searchRooms.results} />
 {/snippet}
 
 {#snippet chatHeader()}
-<!-- Esto cambia según /chat (cabecera de chat) /party (cabecera de grupo) /domain (cabecera de dominio) -->
-{#if selectedRoom.selected}
-<ChatHeader selectedRoom={selectedRoom.selected} />
-
-{:else}
-	<div class="flex items-center justify-center h-full">
-		<div class="text-center">
-			<h1 class="text-2xl font-bold mb-4">No hay chat seleccionado</h1>
-			<p class="text-gray-600">Selecciona una sala para comenzar a chatear.</p>
+	<!-- Esto cambia según /chat (cabecera de chat) /party (cabecera de grupo) /domain (cabecera de dominio) -->
+	{#if selectedRoom.selected}
+		<ChatHeader selectedRoom={selectedRoom.selected} />
+	{:else}
+		<div class="flex h-full items-center justify-center">
+			<div class="text-center">
+				<h1 class="mb-4 text-2xl font-bold">No hay chat seleccionado</h1>
+				<p class="text-gray-600">Selecciona una sala para comenzar a chatear.</p>
+			</div>
 		</div>
-	</div>
-{/if}
+	{/if}
 {/snippet}
 
 {#snippet chat()}
-<!-- Esto cambia según /chat (chat) /party (grupo) /domain (dominio) -->
+	<!-- Esto cambia según /chat (chat) /party (grupo) /domain (dominio) -->
 	<Chat messages={messages.list} />
 {/snippet}
 
 {#snippet chatInput()}
-<!-- Esto cambia según /chat (input de chat) /party (input de grupo) /domain (input de dominio) -->
+	<!-- Esto cambia según /chat (input de chat) /party (input de grupo) /domain (input de dominio) -->
 	<ChatInput />
 {/snippet}
 
 {#snippet search()}
-<!-- Esto cambia según /chat (buscador) /party (buscador) /domain (buscador) -->
-	<Search placeholder="Search..."  />
+	<!-- Esto cambia según /chat (buscador) /party (buscador) /domain (buscador) -->
+	<Search placeholder="Search..." />
 {/snippet}

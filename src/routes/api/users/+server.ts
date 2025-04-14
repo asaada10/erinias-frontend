@@ -5,7 +5,7 @@ import { like, eq, and } from 'drizzle-orm';
 import Token from '$lib/db/token';
 export const POST: RequestHandler = async ({ request, cookies }) => {
 	const { search, id } = await request.json();
-	const accessToken = cookies.get('access_token') || "";
+	const accessToken = cookies.get('access_token') || '';
 	const checkAccessToken = await Token.validate(accessToken, 'access');
 	console.log('checkAccessToken', checkAccessToken);
 	if (!checkAccessToken) {
@@ -21,7 +21,7 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
 	if (search) {
 		conditions.push(like(table.user.username, `%${search}%`));
 	}
-	
+
 	if (id) {
 		conditions.push(eq(table.user.id, id));
 	}

@@ -18,16 +18,12 @@
 	import { connect } from '$lib/stores/ws';
 	import { searchRooms } from '$lib/stores/chat.svelte';
 
-
 	// Search state
-
 
 	// Connect to WebSocket on mount
 	onMount(() => {
 		connect('ws://localhost:4343');
 	});
-
-
 </script>
 
 {#snippet sidebarHeader()}

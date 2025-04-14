@@ -6,7 +6,7 @@ import { paraglideMiddleware } from '$lib/paraglide/server';
 
 import '$lib/server/ws';
 const handleAuth: Handle = async ({ event, resolve }) => {
-	const refreshToken = event.cookies.get('refresh_token') ?? "";
+	const refreshToken = event.cookies.get('refresh_token') ?? '';
 
 	// No hay token → usuario no autenticado
 	const publicRoutes = ['/login', '/register'];

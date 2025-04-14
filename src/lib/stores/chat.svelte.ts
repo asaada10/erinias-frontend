@@ -1,11 +1,8 @@
 import type { Room } from '$lib/types';
 
-export const messages = $state({list: []});
-export const selectedRoom = $state<{selected: Room | null}>({selected: null});
-export const searchRooms = $state<{ results: Room[] }>(
-	{results: []},
-);
-
+export const messages = $state({ list: [] });
+export const selectedRoom = $state<{ selected: Room | null }>({ selected: null });
+export const searchRooms = $state<{ results: Room[] }>({ results: [] });
 
 export async function fetchChat(roomId: string) {
 	try {

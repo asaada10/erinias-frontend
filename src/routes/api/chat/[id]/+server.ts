@@ -13,13 +13,13 @@ export const GET: RequestHandler = async ({ params, cookies }) => {
 		return json({ message: 'Unauthorized' }, { status: 401 });
 	}
 
-	const tokenPayload = await Token.validate(accessToken, "access"); // Obtener ID del usuario autenticado
+	const tokenPayload = await Token.validate(accessToken, 'access'); // Obtener ID del usuario autenticado
 	if (!tokenPayload) {
 		return json({ message: 'Invalid token' }, { status: 401 });
 	}
-    let userId = tokenPayload.userId;
+	let userId = tokenPayload.userId;
 
-    const otherUserId = params.id ?? '';
+	const otherUserId = params.id ?? '';
 	// Verificar si los usuarios son amigos (opcional, si se requiere)
 	// const friendship = await db
 	// 	.select()

@@ -6,9 +6,8 @@
 
 	// Incluir una función para dar clic a una sala.
 	let resultRooms = $derived.by(() => {
-return rooms;
-
-});
+		return rooms;
+	});
 
 	function goToRoom(room: any) {
 		selectedRoom.selected = room;

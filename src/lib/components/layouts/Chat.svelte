@@ -13,12 +13,15 @@
 	}
 
 	// Agrupar mensajes cuando cambian
-	$messagesByDate = messages.reduce((acc, msg) => {
-		const date = new Date(msg.createdAt!).toLocaleDateString();
-		if (!acc[date]) acc[date] = [];
-		acc[date].push(msg);
-		return acc;
-	}, {} as { [date: string]: Message[] });
+	$messagesByDate = messages.reduce(
+		(acc, msg) => {
+			const date = new Date(msg.createdAt!).toLocaleDateString();
+			if (!acc[date]) acc[date] = [];
+			acc[date].push(msg);
+			return acc;
+		},
+		{} as { [date: string]: Message[] }
+	);
 </script>
 
 {#each Object.entries($messagesByDate) as [date, messages]}
