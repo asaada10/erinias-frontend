@@ -1,0 +1,53 @@
+import { Elysia } from "elysia";
+import { db } from "../../lib/db";
+import * as table from "../../lib/db/schema";
+import { like, eq, and } from "drizzle-orm";
+import Token from "../../lib/db/token";
+import { authHook } from "../../hooks/auth";
+
+export const users = new Elysia().post(
+  "/users",
+  async ({ body, cookie, error }) => {
+    const accessToken = cookie["access_token"].value;
+
+    if (!accessToken) {
+      return error(401, "No access token provided");
+    }
+
+    const isValid = await Token.validate(accessToken, "access");
+    if (!isValid) {
+      return error(401, "Invalid or expired access token");
+    }
+
+    const { search, id } = body as { search?: string; id?: string };
+
+    const conditions = [];
+
+    if (search) {
+      conditions.push(like(table.user.username, `%${search}%`));
+    }
+
+    if (id) {
+      conditions.push(eq(table.user.id, id));
+    }
+
+    const results = await db
+      .select()
+      .from(table.user)
+      .where(and(...conditions));
+
+    const users = results.map((user) => ({
+      id: user.id,
+      name: user.username,
+      image: user.avatar,
+    }));
+
+    return {
+      message: "Success",
+      rooms: users,
+    };
+  },
+  {
+    beforeHandle: authHook,
+  }
+);
