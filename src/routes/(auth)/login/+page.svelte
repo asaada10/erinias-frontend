@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { Input, Button, Icon } from '$lib/components/ui/';
-	import { accessToken } from '$lib/stores/auth';
+	import { access } from '$lib/stores/auth.svelte';
 	let email = '';
 	let password = '';
 	let errorMessage = '';
@@ -18,7 +18,7 @@
 			const data = await response.json();
 			errorMessage = data.message || 'An error occurred';
 		} else {
-			$accessToken = (await response.json()).accessToken;
+			access.token = (await response.json()).accessToken;
 			goto('/chat');
 		}
 	};

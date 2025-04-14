@@ -5,7 +5,6 @@
 	setLayoutComponent({
 		sidebarHeader,
 		room,
-		chatInput,
 		search
 	});
 
@@ -15,14 +14,14 @@
 
 	import { onMount } from 'svelte';
 	// import { darkMode, toggleDarkMode } from '$lib/stores/theme';
-	import { connect } from '$lib/stores/ws';
+	import { connect } from '$lib/stores/ws.svelte';
 	import { searchRooms } from '$lib/stores/chat.svelte';
 
 	// Search state
 
 	// Connect to WebSocket on mount
 	onMount(() => {
-		connect('ws://localhost:4343');
+		connect();
 	});
 </script>
 
@@ -42,9 +41,9 @@
 	<Chat />
 {/snippet} -->
 
-{#snippet chatInput()}
+<!-- {#snippet chatInput()}
 	<ChatInput />
-{/snippet}
+{/snippet} -->
 
 {#snippet search()}
 	<Search placeholder="Search..." />

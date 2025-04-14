@@ -13,7 +13,7 @@
 		Search
 	} from '$lib/components/layouts';
 	import { messages, searchRooms, selectedRoom } from '$lib/stores/chat.svelte';
-	import { connect } from '$lib/stores/ws';
+	import { connect } from '$lib/stores/ws.svelte';
 	import { onMount } from 'svelte';
 
 	// Asigna los componentes al contexto
@@ -33,11 +33,9 @@
 	// Obtener el ID de la sala del chat actual
 	let roomId = $state<string>(page.params.id);
 
-	console.log(selectedRoom.selected);
 	// Conectar WebSocket al montar el componente
 	onMount(async () => {
-		connect('ws://localhost:4343');
-		console.log('selectedRoom', selectedRoom.selected);
+		// connect();
 		if (!selectedRoom.selected) {
 			const fetchRoom = await fetchRoomsbyId(roomId);
 			console.log('fetchRoom', fetchRoom);
@@ -92,12 +90,12 @@
 
 {#snippet chat()}
 	<!-- Esto cambia según /chat (chat) /party (grupo) /domain (dominio) -->
-	<Chat messages={messages.list} />
+	<Chat />
 {/snippet}
 
 {#snippet chatInput()}
 	<!-- Esto cambia según /chat (input de chat) /party (input de grupo) /domain (input de dominio) -->
-	<ChatInput />
+	<ChatInput room={selectedRoom.selected?.id} domain="chat" />
 {/snippet}
 
 {#snippet search()}

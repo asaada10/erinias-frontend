@@ -1,13 +1,19 @@
 <script lang="ts">
-	import { sendMessage } from '$lib/stores/ws';
+	import { sendMessage } from '$lib/stores/ws.svelte';
 	import { Paperclip, Send, Smile } from 'lucide-svelte';
+	import { messages } from '$lib/stores/chat.svelte';
 
 	let message = $state('');
-	let domain = 'chat'; // Podrías pasarlo como prop
-	let room = 'general'; // Podrías pasarlo como prop
+	let { domain, room } = $props();
 
 	function send() {
 		if (message.trim() !== '') {
+			messages.list.push({
+				content: message,
+				authorId: '1',
+				channelId: '1',
+				createdAt: new Date()
+			});
 			sendMessage(message, domain, room);
 			message = '';
 		}
