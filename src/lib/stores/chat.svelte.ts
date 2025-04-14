@@ -1,6 +1,7 @@
+import type { Message } from '$lib/db/schema';
 import type { Room } from '$lib/types';
 
-export const messages = $state({list: []});
+export const messages = $state<{list: Message[]}>({list: []});
 export const selectedRoom = $state<{selected: Room | null}>({selected: null});
 export const searchRooms = $state<{ results: Room[] }>(
 	{results: []},

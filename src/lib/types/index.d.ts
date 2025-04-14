@@ -49,4 +49,5 @@ export interface WSData {
 	domain: string;
 	room: string;
 	user: string;
+	otk?: string;
 }

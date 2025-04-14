@@ -1,9 +1,9 @@
 // src/lib/components/utils/auth.ts
 import { get } from 'svelte/store';
-import { accessToken } from '$lib/stores/auth';
+import { access } from '$lib/stores/auth.svelte';
 
 export async function fetchRefresh(url: string, options: RequestInit = {}): Promise<Response> {
-	let token = get(accessToken);
+	let {token} = access;
 	let res = await fetch(url, {
 		...options,
 		headers: {
@@ -17,7 +17,7 @@ export async function fetchRefresh(url: string, options: RequestInit = {}): Prom
 
 		if (refreshRes.ok) {
 			const { accessToken: newToken } = await refreshRes.json();
-			accessToken.set(newToken);
+			access.token = newToken;
 			token = newToken;
 
 			res = await fetch(url, {
@@ -35,5 +35,5 @@ export async function fetchRefresh(url: string, options: RequestInit = {}): Prom
 
 export async function logout() {
 	await fetch('/api/auth/logout', { method: 'POST', credentials: 'include' });
-	accessToken.set(null);
+	access.token = null;
 }

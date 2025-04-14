@@ -10,28 +10,26 @@ const server = serve({
 		return new Response('WebSocket server', { status: 426 });
 	},
 	websocket: {
-		open(ws) {
+		open() {
 			console.log('Cliente conectado');
-			ws.data = { userId: '', domain: '', room: '' };
 		},
 		async message(ws: ServerWebSocket<WSData>, message) {
-			console.log('Mensaje recibido:', message.toString());
-			let data;
+			
 			try {
-				data = JSON.parse(message.toString());
+				ws.data = JSON.parse(message.toString());
 			} catch (error) {
 				console.error('Error al parsear mensaje:', error);
 				return;
 			}
 
 			// Manejo de autenticación
-			if (data.type === 'authenticate') {
-				await authenticateUser(ws, data.otk);
+			if (ws.data.type === 'authenticate' && ws.data.otk) {
+				await authenticateUser(ws, ws.data.otk);
 			}
 
 			// Manejo de salas y mensajes
-			if (data.type === 'join' || data.type === 'message') {
-				await handleConnection(ws, data);
+			if (ws.data.type === 'join' || ws.data.type === 'message') {
+				await handleConnection(ws);
 			}
 		}
 		// close(ws) {

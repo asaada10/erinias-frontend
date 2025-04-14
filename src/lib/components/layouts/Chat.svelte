@@ -1,45 +1,45 @@
 <script lang="ts">
 	import type { Message } from '$lib/db/schema';
-	import { writable } from 'svelte/store';
+	import { messages } from '$lib/stores/chat.svelte';
 
-	let { messages }: { messages: Message[] } = $props();
+	let messagesByDate = $derived.by(() => {
+		const grouped: { [date: string]: Message[] } = {};
 
-	// Agrupar mensajes por fecha
-	let messagesByDate = writable<{ [date: string]: Message[] }>({});
+		for (const msg of messages.list) {
+			const date = new Date(msg.createdAt!).toLocaleDateString();
+			if (!grouped[date]) grouped[date] = [];
+			grouped[date].push(msg);
+		}
 
-	// Función para formatear la hora
+		return grouped;
+	});
+
 	function formatTime(date: Date) {
 		return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 	}
-
-	// Agrupar mensajes cuando cambian
-	$messagesByDate = messages.reduce((acc, msg) => {
-		const date = new Date(msg.createdAt!).toLocaleDateString();
-		if (!acc[date]) acc[date] = [];
-		acc[date].push(msg);
-		return acc;
-	}, {} as { [date: string]: Message[] });
 </script>
 
-{#each Object.entries($messagesByDate) as [date, messages]}
+{#each Object.entries(messagesByDate) as [date, messages]}
 	<!-- Separador de Fecha -->
 	<div id={date} class="my-4 flex items-center justify-center">
 		<span class="text-xs text-gray-500 dark:text-gray-400">{date}</span>
 	</div>
 
-	{#each messages as message}
+	{#each messages as message, i}
 		<div id={message.id}>
 			{#if message.authorId === '1'}
 				<!-- Mensaje Enviado -->
 				<div class="mb-4 flex items-start justify-end space-x-2">
 					<div class="max-w-[70%]">
 						<div class="mb-1 flex flex-col items-end">
-							<span class="text-xs font-medium text-gray-700 dark:text-gray-300">{message.id}</span>
+							<span class="text-xs font-medium text-gray-700 dark:text-gray-300"
+								>{message.id}Test</span
+							>
 							<span class="text-xs text-gray-500 dark:text-gray-400"
 								>{formatTime(new Date(message.createdAt!))}</span
 							>
 						</div>
-						<div class="rounded-lg bg-teal-100 p-3 dark:bg-teal-900">
+						<div class="rounded-lg bg-teal-100 p-3 dark:bg-[#db324d]">
 							<p class="text-gray-800 dark:text-gray-200">{message.content}</p>
 						</div>
 					</div>
