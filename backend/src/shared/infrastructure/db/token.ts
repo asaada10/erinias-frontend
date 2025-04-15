@@ -12,9 +12,9 @@ class Token {
   // Genera ambos tokens y almacena el refresh token en la base de datos
   static async generate(
     userId: string,
-    req: Request
+    headers: Record<string, string | undefined>
   ): Promise<{ accessToken: string; refreshToken: string }> {
-    const deviceId = this.generateDeviceId(req);
+    const deviceId = this.generateDeviceId(headers);
 
     // Generar Access Token
     const accessToken = await new SignJWT({ userId })
@@ -71,7 +71,7 @@ class Token {
   // Renueva el access token usando el refresh token (rotación incluida)
   static async renewTokens(
     refreshToken: string,
-    req: Request
+    headers: Record<string, string | undefined>
   ): Promise<{ accessToken: string; refreshToken: string } | null> {
     try {
       const { payload } = (await jwtVerify(
@@ -84,7 +84,7 @@ class Token {
       if (!storedToken || storedToken.revoked) return null;
 
       // Verificar dispositivo
-      const currentDeviceId = this.generateDeviceId(req);
+      const currentDeviceId = this.generateDeviceId(headers);
       if (payload.deviceId !== currentDeviceId) {
         await Auth.revokeRefreshToken(refreshToken);
         return null;
@@ -145,12 +145,13 @@ class Token {
   }
 
   // Genera un ID único de dispositivo basado en la solicitud (sin incluir IP)
-  private static generateDeviceId(req: Request): string {
-    const headers = req.headers;
+  private static generateDeviceId(
+    headers: Record<string, string | undefined>
+  ): string {
     const fingerprint = [
-      headers.get("user-agent") || "",
-      headers.get("accept-language") || "",
-      headers.get("sec-ch-ua-platform") || "",
+      headers["user-agent"] || "",
+      headers["accept-language"] || "",
+      headers["sec-ch-ua-platform"] || "",
     ].join("|");
     return Bun.hash(fingerprint).toString();
   }
@@ -178,7 +179,7 @@ class Token {
   // Renueva solo el access token si el refresh token es válido
   static async renewAccessToken(
     refreshToken: string,
-    req: Request
+    headers: Record<string, string | undefined>
   ): Promise<string | null> {
     try {
       const { payload } = (await jwtVerify(
@@ -191,7 +192,7 @@ class Token {
       if (!storedToken || storedToken.revoked) return null;
 
       // Verificar que el dispositivo coincida
-      const currentDeviceId = this.generateDeviceId(req);
+      const currentDeviceId = this.generateDeviceId(headers);
       if (payload.deviceId !== currentDeviceId) {
         await Auth.revokeRefreshToken(refreshToken);
         return null;

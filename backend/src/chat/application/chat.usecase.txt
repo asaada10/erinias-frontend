@@ -1,9 +1,9 @@
 import { Elysia } from "elysia";
-import { db } from "../../lib/db";
-import * as table from "../../lib/db/schema";
+import { db } from "../../shared/infrastructure/db";
+import * as table from "../../shared/infrastructure/db/schema";
 import { eq, and, or, desc } from "drizzle-orm";
-import { redis } from "../../lib/db/redis";
-import Token from "../../lib/db/token";
+import { redis } from "../../shared/infrastructure/db/redis";
+import Token from "../../shared/infrastructure/db/token";
 import { authHook } from "../../hooks/auth";
 
 export const chat = new Elysia().get(

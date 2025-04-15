@@ -1,5 +1,5 @@
 import { Context } from "elysia";
-import Token from "../lib/db/token";
+import Token from "../shared/infrastructure/db/token";
 
 export async function authHook({ cookie, error }: Context) {
   const sessionToken = cookie.session;
