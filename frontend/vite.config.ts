@@ -2,12 +2,14 @@ import { paraglideVitePlugin } from '@inlang/paraglide-js';
 import { sveltekit } from '@sveltejs/kit/vite';
 import { defineConfig } from 'vite';
 import path from 'path';
+import { preprocess } from 'svelte/compiler';
 
 export default defineConfig({
 	plugins: [
 		paraglideVitePlugin({ project: './project.inlang', outdir: './src/paraglide' }),
 		sveltekit()
 	],
+	mode: 'production',
 	test: {
 		workspace: [
 			{
