@@ -9,11 +9,10 @@ import {
   serial,
   primaryKey,
 } from "drizzle-orm/pg-core";
-import Snowflake from "../utils/Snowflake";
 import { PermissionFlags } from "../utils/types.d";
 
 export const user = pgTable("user", {
-  id: text("id").primaryKey().default(Snowflake.generate(new Date())),
+  id: text("id").primaryKey(),
   dateOfBirth: date("date_of_birth"),
   username: text("username").notNull().unique(),
   email: text("email").notNull().unique(),
@@ -44,8 +43,8 @@ export const friends = pgTable(
 );
 
 export const domainMember = pgTable("domain_member", {
-  id: text("id").primaryKey().default(Snowflake.generate(new Date())),
-  guildId: text("guild_id")
+  id: text("id").primaryKey(),
+  domainId: text("domain_id")
     .notNull()
     .references(() => domain.id, { onDelete: "cascade" }),
   userId: text("user_id")
@@ -56,7 +55,7 @@ export const domainMember = pgTable("domain_member", {
 });
 
 export const domain = pgTable("domain", {
-  id: text("id").primaryKey().default(Snowflake.generate(new Date())),
+  id: text("id").primaryKey(),
   name: text("name").notNull(),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at")
@@ -68,15 +67,15 @@ export const domain = pgTable("domain", {
 });
 
 export const room = pgTable("room", {
-  id: text("id").primaryKey().default(Snowflake.generate(new Date())),
-  name: text("name").notNull(),
+  id: text("id").primaryKey(),
+  name: text("name"),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at")
     .defaultNow()
     .$onUpdate(() => new Date()),
-  guildId: text("guild_id")
-    .notNull()
-    .references(() => domain.id, { onDelete: "cascade" }),
+  domainId: text("domain_id").references(() => domain.id, {
+    onDelete: "cascade",
+  }),
 });
 
 export const refreshTokens = pgTable("refresh_tokens", {
@@ -93,7 +92,7 @@ export const refreshTokens = pgTable("refresh_tokens", {
 export const message = pgTable(
   "message",
   {
-    id: text("id").primaryKey().default(Snowflake.generate(new Date())),
+    id: text("id").primaryKey(),
     content: text("content").notNull(),
     authorId: text("author_id")
       .notNull()
@@ -114,7 +113,7 @@ export const message = pgTable(
 );
 
 export const messageRead = pgTable("message_read", {
-  id: text("id").primaryKey().default(Snowflake.generate(new Date())),
+  id: text("id").primaryKey(),
   messageId: text("message_id")
     .notNull()
     .references(() => message.id, { onDelete: "cascade" }),
@@ -125,11 +124,11 @@ export const messageRead = pgTable("message_read", {
 });
 
 export const permissions = pgTable("permissions", {
-  id: text("id").primaryKey().default(Snowflake.generate(new Date())),
-  guildId: text("guild_id")
+  id: text("id").primaryKey(),
+  domainId: text("domain_id")
     .notNull()
     .references(() => domain.id, { onDelete: "cascade" }),
-  guildMemberId: text("guild_member_id")
+  domainMemberId: text("domain_member_id")
     .notNull()
     .references(() => domainMember.id, { onDelete: "cascade" }),
   permission: integer("permission")
