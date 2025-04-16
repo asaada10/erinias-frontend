@@ -33,14 +33,12 @@ export class UserRepository {
     return user[0];
   }
 
-  static async getByUsername(
-    username: string
-  ): Promise<table.User | undefined> {
+  static async getByUsername(username: string): Promise<table.User[]> {
     const user = await db
       .select()
       .from(table.user)
       .where(eq(table.user.username, username));
-    return user[0];
+    return user;
   }
   static async getById(id: string): Promise<table.User | undefined> {
     const user = await db

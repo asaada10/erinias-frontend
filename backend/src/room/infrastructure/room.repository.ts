@@ -21,11 +21,18 @@ export class RoomRepository {
     return newRoom[0];
   }
 
-  static async getByName(name: string): Promise<table.Room | undefined> {
+  static async getByName(name: string): Promise<table.Room[]> {
     const room = await db
       .select()
       .from(table.room)
       .where(eq(table.room.name, name));
+    return room;
+  }
+  static async getById(id: string): Promise<table.Room | undefined> {
+    const room = await db
+      .select()
+      .from(table.room)
+      .where(eq(table.room.id, id));
     return room[0];
   }
 }

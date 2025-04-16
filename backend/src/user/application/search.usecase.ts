@@ -26,7 +26,7 @@ export const searchUseCase = async (user: SearchUserRequest) => {
   if (user.username) {
     const results = await UserRepository.getByUsername(user.username);
     if (results) {
-      users.push(results);
+      users.push(...results);
     }
   }
   if (user.id) {
