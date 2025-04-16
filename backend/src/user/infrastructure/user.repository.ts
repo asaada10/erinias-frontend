@@ -1,14 +1,6 @@
 import { db } from "../../shared/infrastructure/db";
 import { eq } from "drizzle-orm";
 import * as table from "../../shared/infrastructure/db/schema";
-export interface UserRecord {
-  id: number;
-  username: string;
-  email: string;
-  password_hash?: string;
-  created_at: Date;
-  updated_at: Date;
-}
 
 export interface CreateUserParms {
   username: string;
@@ -36,6 +28,23 @@ export class UserRepository {
       .select()
       .from(table.user)
       .where(eq(table.user.email, email));
+    return user[0];
+  }
+
+  static async getByUsername(
+    username: string
+  ): Promise<table.User | undefined> {
+    const user = await db
+      .select()
+      .from(table.user)
+      .where(eq(table.user.username, username));
+    return user[0];
+  }
+  static async getById(id: string): Promise<table.User | undefined> {
+    const user = await db
+      .select()
+      .from(table.user)
+      .where(eq(table.user.id, id));
     return user[0];
   }
 }

@@ -1,6 +1,7 @@
 import { SignJWT, jwtVerify } from "jose";
 import { Auth } from "./auth"; // Ajusta según tu implementación de ORM
 import type { TokenPayload } from "../utils/types";
+import { InternalServerError } from "../errors";
 class Token {
   // Claves y configuraciones
   private static readonly JWT_SECRET: string = Bun.env.JWT_SECRET!;
@@ -43,7 +44,7 @@ class Token {
       });
     } catch (error) {
       console.error("Error al guardar el refresh token:", error);
-      throw new Error("Error interno");
+      throw new InternalServerError();
     }
 
     return { accessToken, refreshToken };
@@ -63,7 +64,7 @@ class Token {
       );
       return payload as TokenPayload;
     } catch (error) {
-      console.error("Access token inválido:", error);
+      console.error(type + " token inválido.");
       return null;
     }
   }

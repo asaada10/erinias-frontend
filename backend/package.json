@@ -6,6 +6,7 @@
     "dev": "bun run --watch src/app.ts"
   },
   "dependencies": {
+    "@elysiajs/swagger": "^1.2.2",
     "@node-rs/argon2": "^2.0.2",
     "@node-rs/argon2-wasm32-wasi": "^2.0.2",
     "@oslojs/crypto": "^1.0.1",

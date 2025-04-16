@@ -26,7 +26,7 @@
 		<div class="mr-3 h-10 w-10 flex-shrink-0 overflow-hidden rounded-full">
 			<img
 				src={room.image || '/placeholder.svg'}
-				alt={room.name}
+				alt={room.username}
 				class="h-full w-full object-cover"
 			/>
 		</div>

@@ -8,6 +8,7 @@
 	let showPassword = false;
 
 	const login = async () => {
+		console.log({ email, password });
 		const response = await fetch('/api/v1/auth/login', {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },

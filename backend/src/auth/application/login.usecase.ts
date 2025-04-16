@@ -1,5 +1,5 @@
 import { Context, CookieOptions, Static, t } from "elysia";
-import { UserRepository } from "../../users/infrastructure/user.repository";
+import { UserRepository } from "../../user/infrastructure/user.repository";
 import Token from "../../shared/infrastructure/db/token";
 
 export const LoginUserRequestSchema = t.Object({

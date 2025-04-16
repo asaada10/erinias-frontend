@@ -14,7 +14,11 @@ export function handleSearch(inputSearch: string) {
 			}
 
 			const results = await fetchRooms(inputSearch);
-			searchRooms.results = results;
+			searchRooms.results = results.map((room: any) => ({
+				id: room.id,
+				name: room.username,
+				image: room.avatar
+			}));
 			return results;
 		} catch (error) {
 			console.error('Error al buscar salas:', error);
@@ -23,19 +27,25 @@ export function handleSearch(inputSearch: string) {
 }
 
 export async function fetchRooms(input: String) {
-	const result = await fetchRefresh('/api/v1/users', {
+	const result = await fetchRefresh('/api/v1/user/search', {
 		method: 'POST',
 		credentials: 'include',
-		body: JSON.stringify({ search: input })
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify({ username: input })
 	}).then((res) => res.json());
-	return result.rooms ?? [];
+	return result.data.users;
 }
 
 export async function fetchRoomsbyId(id: String): Promise<Room> {
-	const result = await fetchRefresh('/api/v1/users', {
+	const result = await fetchRefresh('/api/v1/user/search', {
 		method: 'POST',
 		credentials: 'include',
+		headers: {
+			'Content-Type': 'application/json'
+		},
 		body: JSON.stringify({ id })
 	}).then((res) => res.json());
-	return result.rooms[0];
+	return result.data.users[0];
 }

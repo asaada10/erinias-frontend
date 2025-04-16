@@ -15,6 +15,7 @@ import {
   RefreshUserResponseSchema,
 } from "../application/refresh.usecase";
 import { otkUseCase, OtkUserResponseSchema } from "../application/otk.usecase";
+import { AppError } from "../../shared/infrastructure/errors";
 
 export const AuthController = new Elysia().group("/auth", (app) =>
   app
@@ -26,7 +27,7 @@ export const AuthController = new Elysia().group("/auth", (app) =>
           set.status = 201;
           return { status: "success", data: newUser };
         } catch (error) {
-          set.status = 400;
+          set.status = error instanceof AppError ? error.statusCode : 400;
           return {
             status: "error",
             message:
@@ -59,15 +60,15 @@ export const AuthController = new Elysia().group("/auth", (app) =>
         try {
           const { user } = await loginUseCase(
             {
+              email: body.email,
               password: body.password,
-              email: body.password,
             },
             headers,
             cookie
           );
           return { status: "success", data: { user } };
         } catch (error) {
-          set.status = 401;
+          set.status = error instanceof AppError ? error.statusCode : 401;
           return {
             status: "error",
             message:
@@ -101,7 +102,7 @@ export const AuthController = new Elysia().group("/auth", (app) =>
           const { otk } = await otkUseCase(headers, cookie);
           return { status: "success", data: { otk } };
         } catch (error) {
-          set.status = 401;
+          set.status = error instanceof AppError ? error.statusCode : 401;
           return {
             status: "error",
             message:
@@ -134,7 +135,7 @@ export const AuthController = new Elysia().group("/auth", (app) =>
           const { message } = await refreshUseCase(headers, cookie);
           return { status: "success", data: { message } };
         } catch (error) {
-          set.status = 401;
+          set.status = error instanceof AppError ? error.statusCode : 400;
           return {
             status: "error",
             message:

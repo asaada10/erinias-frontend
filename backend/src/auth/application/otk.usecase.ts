@@ -12,7 +12,8 @@ export const otkUseCase = async (
   headers: Context["headers"],
   cookie: Context["cookie"]
 ): Promise<OtkUserResponse> => {
-  const otk = await Token.generate(cookie["refreshToken"].value!, headers);
+  const data = await Token.validate(cookie["refresh_token"].value!, "refresh");
+  const otk = await Token.generate(data?.userId!, headers);
   await redis.set(
     otk.accessToken,
     cookie["accessToken"].value!,

@@ -1,6 +1,6 @@
 import { Static, t } from "elysia";
 
-import { UserRepository } from "../../users/infrastructure/user.repository";
+import { UserRepository } from "../../user/infrastructure/user.repository";
 
 export const RegisterUserRequestSchema = t.Object({
   username: t.String(),

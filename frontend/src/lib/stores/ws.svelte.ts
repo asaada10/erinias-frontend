@@ -1,4 +1,5 @@
 // ws.ts (archivo de tienda) - sin onMount
+import { goto } from '$app/navigation';
 import { fetchRefresh } from '$lib/components/helpers/auth';
 import { messages } from './chat.svelte';
 
@@ -13,7 +14,7 @@ async function fetchOTK() {
 		credentials: 'include'
 	});
 	if (response.status === 200) {
-		const data = await response.json();
+		const { data } = await response.json();
 		return data.otk;
 	}
 	return null;
@@ -21,14 +22,14 @@ async function fetchOTK() {
 
 // Función para conectar el WebSocket
 export async function connect(id: string) {
-	const otk = await fetchOTK();
-	if (!otk) return; // Si no se obtuvo el OTK, no hacemos nada
+	// const otk = await fetchOTK();
+	// if (!otk) return; // Si no se obtuvo el OTK, no hacemos nada
 
-	const socket = new WebSocket('ws://localhost:4343');
+	const socket = new WebSocket('ws://localhost:8888/v1/ws');
 
 	socket.addEventListener('open', () => {
 		console.log('WebSocket conectado');
-		socket.send(JSON.stringify({ type: 'authenticate', otk }));
+		// socket.send(JSON.stringify({ type: 'authenticate', otk }));
 	});
 
 	socket.addEventListener('message', (event) => {
@@ -41,9 +42,13 @@ export async function connect(id: string) {
 		// 		messages.list.push(data);
 		// 	}
 	});
-	socket.addEventListener('close', async () => {
+	socket.addEventListener('close', async (e) => {
 		console.log('WebSocket desconectado');
 		ws.socket = null;
+		if (e.code === 1008) {
+			goto('/login');
+			return;
+		}
 		await reconnect(id); // Intenta reconectar cuando se cierra el WebSocket
 	});
 	ws.socket = socket;
