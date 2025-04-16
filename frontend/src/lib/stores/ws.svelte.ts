@@ -7,7 +7,6 @@ export const ws = $state<{ socket: WebSocket | null }>({
 	socket: null
 });
 
-// Función para obtener un nuevo OTK
 async function fetchOTK() {
 	const response = await fetchRefresh('/api/v1/auth/otk', {
 		method: 'POST',
@@ -20,16 +19,11 @@ async function fetchOTK() {
 	return null;
 }
 
-// Función para conectar el WebSocket
 export async function connect(id: string) {
-	// const otk = await fetchOTK();
-	// if (!otk) return; // Si no se obtuvo el OTK, no hacemos nada
-
 	const socket = new WebSocket('ws://localhost:8888/v1/ws');
 
 	socket.addEventListener('open', () => {
 		console.log('WebSocket conectado');
-		// socket.send(JSON.stringify({ type: 'authenticate', otk }));
 	});
 
 	socket.addEventListener('message', (event) => {
@@ -37,10 +31,7 @@ export async function connect(id: string) {
 		console.log('Mensaje recibido:', data);
 		console.log(`[${data.domain}/${data.room}]: ${data.content}`);
 
-		// if (data.type === 'message') {
-		// 		// if(data.room === )
-		// 		messages.list.push(data);
-		// 	}
+		messages.list.push({ ...data, createdAt: new Date() });
 	});
 	socket.addEventListener('close', async (e) => {
 		console.log('WebSocket desconectado');
@@ -49,19 +40,11 @@ export async function connect(id: string) {
 			goto('/login');
 			return;
 		}
-		await reconnect(id); // Intenta reconectar cuando se cierra el WebSocket
+		await connect(id);
 	});
 	ws.socket = socket;
 }
 
-// Función para reconectar el WebSocket
-async function reconnect(id: string) {
-	const otk = await fetchOTK();
-	if (!otk) return; // Si no se pudo obtener un nuevo OTK, no hacemos nada
-	connect(id); // Vuelve a conectar el WebSocket con el nuevo OTK
-}
-
-// Enviar mensajes a través del WebSocket
 export function sendMessage(content: string, domain: string, room: string) {
 	if (ws.socket && ws.socket.readyState === WebSocket.OPEN) {
 		console.log('Enviando mensaje:', content);

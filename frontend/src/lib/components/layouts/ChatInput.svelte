@@ -14,7 +14,7 @@
 				channelId: '1',
 				createdAt: new Date()
 			});
-			sendMessage(message, domain, room);
+			sendMessage(message, domain, ':' + room);
 			message = '';
 		}
 	}

@@ -37,6 +37,7 @@ export const loginUseCase = async (
   }
 
   const { id, username } = user;
+  console.log(username);
   const token = await Token.generate(id, headers);
   const secure = Bun.env.NODE_ENV === "production";
 

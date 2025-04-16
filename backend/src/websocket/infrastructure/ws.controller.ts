@@ -1,10 +1,11 @@
 import Elysia, { t } from "elysia";
 import { authenticateUser } from "../application/auth";
-import { handleConnection } from "../application/rooms";
+import { joinRoom, sendMessage } from "../application/rooms";
 import { WS } from "../../shared/infrastructure/utils/types";
-import Token from "../../shared/infrastructure/db/token";
 
-// Creamos el controlador de WebSocket para el chat
+// Mapa para gestionar las suscripciones de los WebSockets a las salas
+const roomSubscriptions: Record<string, Set<WS>> = {};
+
 export const WsController = new Elysia().group("/ws", (app) =>
   app.ws("/", {
     body: t.Object({
@@ -21,9 +22,14 @@ export const WsController = new Elysia().group("/ws", (app) =>
       try {
         await authenticateUser(ws);
 
-        // Manejo de salas y mensajes
-        if (data.type === "join" || data.type === "message") {
-          await handleConnection(ws);
+        await joinRoom(ws, data.room);
+
+        if (data.type === "join") {
+          await joinRoom(ws, data.room);
+        }
+
+        if (data.type === "message") {
+          await sendMessage(ws, data.room, data.content, data.domain);
         }
       } catch (error) {
         console.log("Error al procesar el mensaje:", error);
@@ -35,9 +41,13 @@ export const WsController = new Elysia().group("/ws", (app) =>
         );
       }
     },
+
     close(ws) {
       console.log("Usuario desconectado");
-      // Clear session perhaps?
+      // Eliminar al usuario de todas las salas a las que está suscrito
+      Object.keys(roomSubscriptions).forEach((roomId) => {
+        roomSubscriptions[roomId].delete(ws);
+      });
     },
   })
 );

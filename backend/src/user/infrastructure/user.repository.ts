@@ -1,6 +1,7 @@
 import { db } from "../../shared/infrastructure/db";
 import { eq } from "drizzle-orm";
 import * as table from "../../shared/infrastructure/db/schema";
+import Snowflake from "../../shared/infrastructure/utils/Snowflake";
 
 export interface CreateUserParms {
   username: string;
@@ -14,6 +15,7 @@ export class UserRepository {
     const newUser = await db
       .insert(table.user)
       .values({
+        id: Snowflake.generate(new Date()),
         username: user.username,
         email: user.email,
         passwordHash: user.password,

@@ -25,7 +25,7 @@ export const registerUseCase = async (
     throw new Error("Username already exists");
   }
 
-  userData.password = await await Bun.password.hash(userData.password);
+  userData.password = await Bun.password.hash(userData.password);
   const { id, username } = await UserRepository.create(userData);
 
   return {

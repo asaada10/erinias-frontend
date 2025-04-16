@@ -16,6 +16,8 @@ import {
 } from "../application/refresh.usecase";
 import { otkUseCase, OtkUserResponseSchema } from "../application/otk.usecase";
 import { AppError } from "../../shared/infrastructure/errors";
+import Base62 from "../../shared/infrastructure/utils/Base62";
+import Snowflake from "../../shared/infrastructure/utils/Snowflake";
 
 export const AuthController = new Elysia().group("/auth", (app) =>
   app
@@ -28,6 +30,8 @@ export const AuthController = new Elysia().group("/auth", (app) =>
           return { status: "success", data: newUser };
         } catch (error) {
           set.status = error instanceof AppError ? error.statusCode : 400;
+          console.log(error, Snowflake.recoverTimestamp("VYRo00"));
+
           return {
             status: "error",
             message:
