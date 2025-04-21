@@ -20,7 +20,7 @@ async function fetchOTK() {
 }
 
 export async function connect(id: string) {
-	const socket = new WebSocket('ws://localhost:8888/v1/ws');
+	const socket = new WebSocket('wss://localhost:8888/v1/ws');
 
 	socket.addEventListener('open', () => {
 		console.log('WebSocket conectado');

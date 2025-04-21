@@ -9,9 +9,26 @@
 		return rooms;
 	});
 
-	function goToRoom(room: any) {
+	async function goToRoom(room: any) {
 		selectedRoom.selected = room;
-		goto(`/chat/${room.id}`);
+		const response = await fetch(`/api/v1/room/create`, {
+			method: 'POST',
+			credentials: 'include',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+				isPrivate: true,
+				userIds: [selectedRoom.selected.id, room.id]
+			}),
+		});
+
+		if (response.ok) {
+			const data = await response.json();
+			goto(`/chat/${data.data.room.id}`);
+		} else {
+			console.error('Error creating private chat:', response.statusText);
+		}
 	}
 </script>
 
