@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { page } from '$app/state';
-	import { fetchRefresh } from '$lib/components/helpers/auth';
 	import { setLayoutComponent, cleanLayoutContext } from '$lib/components/helpers/layout.svelte';
 	import { fetchRoomsbyId } from '$lib/components/helpers/search.svelte';
 	import {
@@ -15,6 +14,7 @@
 	import { messages, searchRooms, selectedRoom } from '$lib/stores/chat.svelte';
 	import { connect } from '$lib/stores/ws.svelte';
 	import { onMount } from 'svelte';
+	import { useApi } from '$lib/composables/api';
 
 	// Asigna los componentes al contexto
 	setLayoutComponent({
@@ -50,13 +50,13 @@
 
 	// Obtener los mensajes del chat
 	async function fetchChatMessages(roomId: string) {
+		const api = useApi();
 		try {
-			const res = await fetchRefresh(`/api/v1/chat/${roomId}`, {
-				credentials: 'include'
-			});
-			const data = await res.json();
-			if (data.messages) {
-				messages.list = data.messages;
+			const res = await api.getChatMessages(roomId);
+			if (res.status === 'success') {
+				messages.list = res.data.messages;
+			} else {
+				console.error('Error fetching messages:', res.error);
 			}
 		} catch (error) {
 			console.error('Error fetching messages:', error);

@@ -1,26 +1,21 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
+	import { useApi } from '$lib/composables/api';
 	import { Input, Button, Icon } from '$lib/components/ui/';
 	import { access } from '$lib/stores/auth.svelte';
+	const api = useApi();
 	let email = '';
 	let password = '';
 	let errorMessage = '';
 	let showPassword = false;
 
 	const login = async () => {
-		console.log({ email, password });
-		const response = await fetch('/api/v1/auth/login', {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({ email, password })
-		});
-
-		if (!response.ok) {
-			const data = await response.json();
-			errorMessage = data.message || 'An error occurred';
-		} else {
-			access.token = (await response.json()).accessToken;
+		const { status, data, error: apiError } = await api.login(email, password);
+		if (status === 'success' && data) {
+			access.token = data.accessToken;
 			goto('/chat');
+		} else {
+			errorMessage = apiError || 'An error occurred';
 		}
 	};
 </script>

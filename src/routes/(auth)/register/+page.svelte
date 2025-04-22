@@ -1,6 +1,9 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { Input, Button, Icon } from '$lib/components/ui/';
+	import { useApi } from '$lib/composables/api';
+
+	const api = useApi();
 
 	let username = '';
 	let email = '';
@@ -16,15 +19,10 @@
 			return;
 		}
 
-		const response = await fetch('/api/v1/auth/register', {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({ username, email, password, date })
-		});
+		const { status, data, error: apiError } = await api.register(username, email, password, date);
 
-		if (!response.ok) {
-			const data = await response.json();
-			errorMessage = data.message || 'An error occurred';
+		if (status !== 'success') {
+			errorMessage = apiError || 'An error occurred';
 		} else {
 			goto('/');
 		}

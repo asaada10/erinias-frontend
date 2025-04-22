@@ -1,26 +1,16 @@
 // ws.ts (archivo de tienda) - sin onMount
 import { goto } from '$app/navigation';
-import { fetchRefresh } from '$lib/components/helpers/auth';
+import { useApi } from '$lib/composables/api';
 import { messages } from './chat.svelte';
+
+const api = useApi();
 
 export const ws = $state<{ socket: WebSocket | null }>({
 	socket: null
 });
 
-async function fetchOTK() {
-	const response = await fetchRefresh('/api/v1/auth/otk', {
-		method: 'POST',
-		credentials: 'include'
-	});
-	if (response.status === 200) {
-		const { data } = await response.json();
-		return data.otk;
-	}
-	return null;
-}
-
 export async function connect(id: string) {
-	const socket = new WebSocket('wss://localhost:8888/v1/ws');
+	const socket = new WebSocket('ws://localhost:8888/v1/ws');
 
 	socket.addEventListener('open', () => {
 		console.log('WebSocket conectado');

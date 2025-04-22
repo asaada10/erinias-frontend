@@ -1,8 +1,12 @@
 import { paraglideVitePlugin } from '@inlang/paraglide-js';
 import { sveltekit } from '@sveltejs/kit/vite';
 import { defineConfig } from 'vite';
+import fs from 'fs';
 import path from 'path';
-import { preprocess } from 'svelte/compiler';
+
+const isHttps = process.env.VITE_HTTPS === 'true';
+const sslKeyPath = process.env.VITE_SSL_KEY_PATH || './ssl/localhost-key.pem';
+const sslCertPath = process.env.VITE_SSL_CERT_PATH || './ssl/localhost.pem';
 
 export default defineConfig({
 	plugins: [
@@ -40,6 +44,12 @@ export default defineConfig({
 		}
 	},
 	server: {
+		https: isHttps
+			? {
+					key: fs.readFileSync(path.resolve(__dirname, sslKeyPath)),
+					cert: fs.readFileSync(path.resolve(__dirname, sslCertPath))
+				}
+			: undefined,
 		proxy: {
 			'/api': {
 				target: 'http://localhost:8888',
