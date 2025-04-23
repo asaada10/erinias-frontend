@@ -53,7 +53,7 @@
 		const api = useApi();
 		try {
 			const res = await api.getChatMessages(roomId);
-			if (res.status === 'success') {
+			if (res.status === 'success' && res.data?.messages) {
 				messages.list = res.data.messages;
 			} else {
 				console.error('Error fetching messages:', res.error);

@@ -36,6 +36,7 @@ export async function connect(id: string) {
 }
 
 export function sendMessage(content: string, domain: string, room: string) {
+	console.log(api.getProfile('5AYwp100'));
 	if (ws.socket && ws.socket.readyState === WebSocket.OPEN) {
 		console.log('Enviando mensaje:', content);
 		ws.socket.send(JSON.stringify({ type: 'message', content, domain, room }));

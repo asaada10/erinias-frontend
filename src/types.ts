@@ -1,25 +1,38 @@
-export type ApiResponse<T = any> = {
-  status: 'success' | 'error';
-  data: T | null;
-  error: string | null;
-};
-
 // Tipos para las respuestas de la API
-export interface LoginResponse {
-  accessToken: string;
-  refreshToken: string;
-  user: {
-    id: string;
-    email: string;
-    name: string;
-  };
+export interface User {
+  id: string;
+  username: string;
+  avatar?: string;
+  createdAt: string;
+  isActive: boolean;
+  role?: string;
+}
+
+export interface ProfileResponse {
+  username: string;
+  id: string;
+  avatar: string | null;
+  createdAt: Date;
+  isActive: boolean;
+  role: string;
 }
 
 export interface Room {
   id: string;
   name: string;
+  image?: string;
   createdAt: string;
 }
+
+export type UserSearchResponse = ApiResponse<{ users: User[] }>;
+
+export type ApiResponse<T> = {
+  status: 'success' | 'error';
+  data?: T;
+  error?: any;
+};
+
+export type LoginResponse = ApiResponse<{ accessToken: string; refreshToken: string; user: User }>;
 
 export interface ChatMessage {
   id: string;

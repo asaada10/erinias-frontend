@@ -23,6 +23,15 @@ export interface Room {
 	unreadCount?: number;
 }
 
+export interface ProfileResponse {
+	username: string;
+	id: string;
+	avatar: string | null;
+	createdAt: Date;
+	isActive: boolean;
+	role: string;
+}
+
 export interface TokenPayload {
 	userId: string;
 	deviceId?: string;

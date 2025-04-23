@@ -1,4 +1,5 @@
-import type { ApiResponse, LoginResponse, Room } from '../../types';
+import type { LoginResponse, Room, UserSearchResponse, ProfileResponse, ApiResponse, ChatMessage } from '../../types';
+import { goto } from '$app/navigation';
 
 export const useApi = () => {
 	const baseUrl = '/api/v1';
@@ -6,7 +7,7 @@ export const useApi = () => {
 	const handleRequest = async <T>(
 		endpoint: string,
 		options: RequestInit = {}
-	): Promise<ApiResponse<T>> => {
+	): Promise<T> => {
 		try {
 			const response = await fetch(`${baseUrl}${endpoint}`, {
 				...options,
@@ -14,30 +15,17 @@ export const useApi = () => {
 					'Content-Type': 'application/json',
 					...options.headers
 				},
-				credentials: 'include'
+				credentials: 'include' // Necesario para enviar cookies
 			});
 
 			if (response.status === 401) {
-				// Clear cookies and redirect to login on unauthorized
-				document.cookie = 'accessToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-				document.cookie = 'refreshToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-				window.location.href = '/login';
-				return { status: 'error', data: null, error: 'Unauthorized' };
+				// Redirigir a login en caso de autenticación fallida
+				goto('/login');
 			}
 
-			if (!response.ok) {
-				const error = await response.json();
-				return { status: 'error', data: null, error: error.message || 'Request failed' };
-			}
-
-			const data = await response.json();
-			return { status: 'success', data, error: null };
+			return await response.json();
 		} catch (error: unknown) {
-			return {
-				status: 'error',
-				data: null,
-				error: error instanceof Error ? error.message : 'Unknown error'
-			};
+			throw error instanceof Error ? error : new Error('Unknown error');
 		}
 	};
 
@@ -46,45 +34,69 @@ export const useApi = () => {
 		login: (email: string, password: string) =>
 			handleRequest<LoginResponse>('/auth/login', {
 				method: 'POST',
-				body: JSON.stringify({ email, password })
+				body: JSON.stringify({ email, password }),
+				credentials: 'include'
 			}),
 
 		register: (name: string, email: string, password: string, date?: string) =>
 			handleRequest<LoginResponse>('/auth/register', {
 				method: 'POST',
-				body: JSON.stringify({ name, email, password, date })
+				body: JSON.stringify({ name, email, password, date }),
+				credentials: 'include'
 			}),
 
 		refreshToken: () =>
-			handleRequest<{ accessToken: string }>('/auth/refresh', {
+			handleRequest<LoginResponse>('/auth/refresh', {
 				method: 'POST',
 				credentials: 'include'
 			}),
 
-		logout: () => handleRequest('/auth/logout', { method: 'POST' }),
+		logout: () => handleRequest<ApiResponse<void>>('/auth/logout', { method: 'POST', credentials: 'include' }),
 
 		// Rooms
 		createRoom: (name: string) =>
 			handleRequest<Room>('/room/create', {
 				method: 'POST',
-				body: JSON.stringify({ name })
+				body: JSON.stringify({ name }),
+				credentials: 'include'
 			}),
 
-		getUserSearch: (params: { username?: string; id?: string }) =>
-			handleRequest<{ users: Array<{ id: string; username: string; avatar?: string }> }>(
-				'/user/search',
-				{
-					method: 'POST',
-					body: JSON.stringify(params),
-					credentials: 'include'
-				}
-			),
+		getUserSearch: async (params: { username?: string; id?: string }) => {
+			const endpoint = '/user/search';
+			const options = {
+				method: 'POST',
+				body: JSON.stringify(params)
+			};
+			return handleRequest<UserSearchResponse>(endpoint, options);
+		},
 
 		getChatMessages: (roomId: string) =>
-			handleRequest<{
-				messages: Array<{ id: string; content: string; sender: string; timestamp: string }>;
-			}>(`/chat/${roomId}`, {
+			handleRequest<ApiResponse<Array<ChatMessage>>>(`/chat/${roomId}`, {
 				credentials: 'include'
-			})
+			}),
+
+		// User
+		getProfile: async (userId: string) => {
+			const endpoint = `/user/profile`;
+			const options = {
+				method: 'GET',
+				headers: {
+					'x-user-id': userId,
+				},
+			};
+			return handleRequest<ProfileResponse>(endpoint, options);
+		},
+
+		updateProfile: async (userId: string, updates: Partial<ProfileResponse>) => {
+			const endpoint = `/user/update`;
+			const options = {
+				method: 'PUT',
+				headers: {
+					'x-user-id': userId,
+				},
+				body: JSON.stringify(updates),
+			};
+			return handleRequest<ProfileResponse>(endpoint, options);
+		},
 	};
 };
