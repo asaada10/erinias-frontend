@@ -54,12 +54,28 @@ export const useApi = () => {
 		logout: () => handleRequest<ApiResponse<void>>('/auth/logout', { method: 'POST', credentials: 'include' }),
 
 		// Rooms
-		createRoom: (name: string) =>
-			handleRequest<Room>('/room/create', {
+		createRoom: (name: string | null) =>
+			handleRequest<{status: 'success'; data: { room: Room }}>('/room/create', {
 				method: 'POST',
 				body: JSON.stringify({ name }),
 				credentials: 'include'
 			}),
+
+		getRoom: (roomId: string) =>
+			handleRequest<{status: 'success'; data: { room: Room }}>(`/room/${roomId}`, {
+				method: 'GET',
+				credentials: 'include'
+			}),
+
+		searchRooms: (params: { name?: string; id?: string }) =>
+			handleRequest<{ status: 'success'; data: { rooms: Room[] } }>(
+				'/room/search',
+				{
+					method: 'POST',
+					body: JSON.stringify(params),
+					credentials: 'include'
+				}
+			),
 
 		getUserSearch: async (params: { username?: string; id?: string }) => {
 			const endpoint = '/user/search';

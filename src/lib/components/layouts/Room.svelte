@@ -3,6 +3,8 @@
 	let { rooms } = $props();
 	const active = true;
 	import { selectedRoom } from '$lib/stores/chat.svelte';
+	import { useApi } from '$lib/composables/api';
+	const api = useApi();
 
 	// Incluir una función para dar clic a una sala.
 	let resultRooms = $derived.by(() => {
@@ -11,23 +13,12 @@
 
 	async function goToRoom(room: any) {
 		selectedRoom.selected = room;
-		const response = await fetch(`/api/v1/room/create`, {
-			method: 'POST',
-			credentials: 'include',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify({
-				isPrivate: true,
-				userIds: [selectedRoom.selected.id, room.id]
-			}),
-		});
+		const { status, data } = await api.createRoom(null);
 
-		if (response.ok) {
-			const data = await response.json();
-			goto(`/chat/${data.data.room.id}`);
+		if (status === 'success' && data) {
+			goto(`/chat/${data.room.id}`);
 		} else {
-			console.error('Error creating private chat:', response.statusText);
+			console.error('Error creating private chat');
 		}
 	}
 </script>

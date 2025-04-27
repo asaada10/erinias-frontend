@@ -9,7 +9,7 @@ export const ws = $state<{ socket: WebSocket | null }>({
 	socket: null
 });
 
-export async function connect(id: string) {
+export async function connect() {
 	const socket = new WebSocket('ws://localhost:8888/v1/ws');
 
 	socket.addEventListener('open', () => {
@@ -30,7 +30,7 @@ export async function connect(id: string) {
 			goto('/login');
 			return;
 		}
-		await connect(id);
+		await connect();
 	});
 	ws.socket = socket;
 }
