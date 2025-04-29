@@ -1,14 +1,22 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	let { rooms } = $props();
-	const active = true;
-	import { selectedRoom } from '$lib/stores/chat.svelte';
 	import { useApi } from '$lib/composables/api';
+	import { selectedRoom, userRooms } from '$lib/stores/chat.svelte';
+	import { onMount } from 'svelte';
 	const api = useApi();
+	const active = true;
+	let { rooms } = $props();
 
 	// Incluir una función para dar clic a una sala.
 	let resultRooms = $derived.by(() => {
 		return rooms;
+	});
+
+	// Cargar las salas del usuario autenticado
+	onMount(() => {
+		api.getAllRooms().then((data) => {
+			userRooms.rooms = data.data?.rooms ?? [];
+		});
 	});
 
 	async function goToRoom(room: any) {

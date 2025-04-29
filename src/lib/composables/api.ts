@@ -4,6 +4,13 @@ import { goto } from '$app/navigation';
 export const useApi = () => {
 	const baseUrl = '/api/v1';
 
+	/**
+	 * Realiza una petición HTTP genérica a la API.
+	 * @template T Tipo de la respuesta esperada
+	 * @param endpoint Endpoint relativo a la API
+	 * @param options Opciones de la petición fetch
+	 * @returns Una promesa con la respuesta parseada
+	 */
 	const handleRequest = async <T>(
 		endpoint: string,
 		options: RequestInit = {}
@@ -30,7 +37,12 @@ export const useApi = () => {
 	};
 
 	return {
-		// Auth
+		/**
+		 * Inicia sesión con email y contraseña.
+		 * @param email Email del usuario
+		 * @param password Contraseña del usuario
+		 * @returns LoginResponse
+		 */
 		login: (email: string, password: string) =>
 			handleRequest<LoginResponse>('/auth/login', {
 				method: 'POST',
@@ -38,6 +50,14 @@ export const useApi = () => {
 				credentials: 'include'
 			}),
 
+		/**
+		 * Registra un nuevo usuario.
+		 * @param name Nombre del usuario
+		 * @param email Email del usuario
+		 * @param password Contraseña
+		 * @param date Fecha de nacimiento (opcional)
+		 * @returns LoginResponse
+		 */
 		register: (name: string, email: string, password: string, date?: string) =>
 			handleRequest<LoginResponse>('/auth/register', {
 				method: 'POST',
@@ -45,15 +65,28 @@ export const useApi = () => {
 				credentials: 'include'
 			}),
 
+		/**
+		 * Refresca el token de autenticación.
+		 * @returns LoginResponse
+		 */
 		refreshToken: () =>
 			handleRequest<LoginResponse>('/auth/refresh', {
 				method: 'POST',
 				credentials: 'include'
 			}),
 
+		/**
+		 * Cierra la sesión del usuario.
+		 * @returns ApiResponse<void>
+		 */
 		logout: () => handleRequest<ApiResponse<void>>('/auth/logout', { method: 'POST', credentials: 'include' }),
 
 		// Rooms
+		/**
+		 * Crea una nueva sala.
+		 * @param name Nombre de la sala o null para privada
+		 * @returns { status: 'success'; data: { room: Room } }
+		 */
 		createRoom: (name: string | null) =>
 			handleRequest<{status: 'success'; data: { room: Room }}>('/room/create', {
 				method: 'POST',
@@ -61,12 +94,32 @@ export const useApi = () => {
 				credentials: 'include'
 			}),
 
+		/**
+		 * Obtiene todas las salas del usuario autenticado.
+		 * @returns ApiResponse<{ rooms: Room[] }>
+		 */
+		getAllRooms: () =>
+			handleRequest<ApiResponse<{ rooms: Room[] }>>('/room/all', {
+				method: 'GET',
+				credentials: 'include'
+			}),
+
+		/**
+		 * Obtiene los detalles de una sala por ID.
+		 * @param roomId ID de la sala
+		 * @returns { status: 'success'; data: { room: Room } }
+		 */
 		getRoom: (roomId: string) =>
 			handleRequest<{status: 'success'; data: { room: Room }}>(`/room/${roomId}`, {
 				method: 'GET',
 				credentials: 'include'
 			}),
 
+		/**
+		 * Busca salas por nombre o ID.
+		 * @param params Parámetros de búsqueda (name, id)
+		 * @returns { status: 'success'; data: { rooms: Room[] } }
+		 */
 		searchRooms: (params: { name?: string; id?: string }) =>
 			handleRequest<{ status: 'success'; data: { rooms: Room[] } }>(
 				'/room/search',
@@ -77,6 +130,11 @@ export const useApi = () => {
 				}
 			),
 
+		/**
+		 * Busca usuarios por username o id.
+		 * @param params username o id
+		 * @returns UserSearchResponse
+		 */
 		getUserSearch: async (params: { username?: string; id?: string }) => {
 			const endpoint = '/user/search';
 			const options = {
@@ -86,12 +144,22 @@ export const useApi = () => {
 			return handleRequest<UserSearchResponse>(endpoint, options);
 		},
 
+		/**
+		 * Obtiene los mensajes de un chat por ID de sala.
+		 * @param roomId ID de la sala
+		 * @returns ApiResponse<Array<ChatMessage>>
+		 */
 		getChatMessages: (roomId: string) =>
 			handleRequest<ApiResponse<Array<ChatMessage>>>(`/chat/${roomId}`, {
 				credentials: 'include'
 			}),
 
 		// User
+		/**
+		 * Obtiene el perfil de un usuario por ID.
+		 * @param userId ID del usuario
+		 * @returns ProfileResponse
+		 */
 		getProfile: async (userId: string) => {
 			const endpoint = `/user/profile`;
 			const options = {
@@ -103,6 +171,12 @@ export const useApi = () => {
 			return handleRequest<ProfileResponse>(endpoint, options);
 		},
 
+		/**
+		 * Actualiza el perfil de un usuario.
+		 * @param userId ID del usuario
+		 * @param updates Campos a actualizar
+		 * @returns ProfileResponse
+		 */
 		updateProfile: async (userId: string, updates: Partial<ProfileResponse>) => {
 			const endpoint = `/user/update`;
 			const options = {
