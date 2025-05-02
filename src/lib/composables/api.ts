@@ -52,16 +52,16 @@ export const useApi = () => {
 
 		/**
 		 * Registra un nuevo usuario.
-		 * @param name Nombre del usuario
+		 * @param username Nombre del usuario
 		 * @param email Email del usuario
 		 * @param password Contraseña
 		 * @param date Fecha de nacimiento (opcional)
 		 * @returns LoginResponse
 		 */
-		register: (name: string, email: string, password: string, date?: string) =>
+		register: (username: string, email: string, password: string, date?: string) =>
 			handleRequest<LoginResponse>('/auth/register', {
 				method: 'POST',
-				body: JSON.stringify({ name, email, password, date }),
+				body: JSON.stringify({ username, email, password, date }),
 				credentials: 'include'
 			}),
 
@@ -87,10 +87,10 @@ export const useApi = () => {
 		 * @param name Nombre de la sala o null para privada
 		 * @returns { status: 'success'; data: { room: Room } }
 		 */
-		createRoom: (name: string | null) =>
+		createRoom: (userIds: string[], name: string | null) =>
 			handleRequest<{status: 'success'; data: { room: Room }}>('/room/create', {
 				method: 'POST',
-				body: JSON.stringify({ name }),
+				body: JSON.stringify({ name, userIds }),
 				credentials: 'include'
 			}),
 
@@ -160,13 +160,10 @@ export const useApi = () => {
 		 * @param userId ID del usuario
 		 * @returns ProfileResponse
 		 */
-		getProfile: async (userId: string) => {
+		getProfile: async () => {
 			const endpoint = `/user/profile`;
 			const options = {
 				method: 'GET',
-				headers: {
-					'x-user-id': userId,
-				},
 			};
 			return handleRequest<ProfileResponse>(endpoint, options);
 		},

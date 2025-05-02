@@ -11,7 +11,7 @@ export const ws = $state<{ socket: WebSocket | null }>({
 
 export async function connect() {
 	const socket = new WebSocket('ws://localhost:8888/v1/ws');
-
+	console.log('Conectando a WebSocket...');
 	socket.addEventListener('open', () => {
 		console.log('WebSocket conectado');
 	});
@@ -36,7 +36,6 @@ export async function connect() {
 }
 
 export function sendMessage(content: string, domain: string, room: string) {
-	console.log(api.getProfile('5AYwp100'));
 	if (ws.socket && ws.socket.readyState === WebSocket.OPEN) {
 		console.log('Enviando mensaje:', content);
 		ws.socket.send(JSON.stringify({ type: 'message', content, domain, room }));
