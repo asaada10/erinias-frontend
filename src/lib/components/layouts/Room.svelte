@@ -21,7 +21,7 @@
 
 	async function goToRoom(room: any) {
 		selectedRoom.selected = room;
-		const { status, data } = await api.createRoom(null);
+		const { status, data } = await api.createRoom([room.id], null);
 
 		if (status === 'success' && data) {
 			goto(`/chat/${data.room.id}`);
