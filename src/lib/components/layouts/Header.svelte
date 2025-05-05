@@ -54,46 +54,6 @@
 			</svg>
 			<span class="text-sm font-medium">Groups</span>
 		</button>
-		<button class="flex items-center space-x-1 p-1 md:flex">
-			<svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-				<path
-					d="M12 3C7.02944 3 3 7.02944 3 12C3 16.9706 7.02944 21 12 21C16.9706 21 21 16.9706 21 12C21 7.02944 16.9706 3 12 3Z"
-					stroke="currentColor"
-					stroke-width="2"
-					stroke-linecap="round"
-					stroke-linejoin="round"
-				/>
-				<path
-					d="M3.6001 9H20.4001"
-					stroke="currentColor"
-					stroke-width="2"
-					stroke-linecap="round"
-					stroke-linejoin="round"
-				/>
-				<path
-					d="M3.6001 15H20.4001"
-					stroke="currentColor"
-					stroke-width="2"
-					stroke-linecap="round"
-					stroke-linejoin="round"
-				/>
-				<path
-					d="M11.5 3C9.29087 7.94288 9.29087 16.0571 11.5 21"
-					stroke="currentColor"
-					stroke-width="2"
-					stroke-linecap="round"
-					stroke-linejoin="round"
-				/>
-				<path
-					d="M12.5 3C14.7091 7.94288 14.7091 16.0571 12.5 21"
-					stroke="currentColor"
-					stroke-width="2"
-					stroke-linecap="round"
-					stroke-linejoin="round"
-				/>
-			</svg>
-			<span class="text-sm font-medium">Server</span>
-		</button>
 	</div>
 	<div class="flex items-center space-x-2">
 		<button class="hidden p-1 md:block" aria-label="Menu">
