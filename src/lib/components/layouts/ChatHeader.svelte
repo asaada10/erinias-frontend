@@ -1,12 +1,4 @@
 <script lang="ts">
-	// let { toggleSidebar } = $props();
-	let exampleRoom = {
-		id: 'room-1',
-		name: 'John Doe',
-		message: 'How you doing?',
-		createdAt: '10 mins ago',
-		image: 'https://randomuser.me/api/portraits/men/1.jpg'
-	};
 	let { selectedRoom } = $props();
 	import { MoreVertical } from 'lucide-svelte';
 </script>

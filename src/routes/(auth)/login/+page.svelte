@@ -2,7 +2,7 @@
 	import { goto } from '$app/navigation';
 	import { useApi } from '$lib/composables/api';
 	import { Input, Button, Icon } from '$lib/components/ui/';
-	import { access } from '$lib/stores/auth.svelte';
+	import { access } from '$lib/states/auth.svelte';
 	const api = useApi();
 	let email = '';
 	let password = '';

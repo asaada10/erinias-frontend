@@ -1,5 +1,5 @@
 import { useApi } from '$lib/composables/api';
-import { searchRooms } from '$lib/stores/chat.svelte';
+import { searchRooms } from '$lib/states/chat.svelte';
 import type { Room, User } from '$lib/types/index.d';
 
 const api = useApi();

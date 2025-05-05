@@ -1,6 +1,5 @@
 // src/lib/components/utils/auth.ts
-import { get } from 'svelte/store';
-import { access } from '$lib/stores/auth.svelte';
+import { access } from '$lib/states/auth.svelte';
 
 // Esta función ha sido reemplazada por el composable API
 // Usar useApi().refreshToken() en su lugar

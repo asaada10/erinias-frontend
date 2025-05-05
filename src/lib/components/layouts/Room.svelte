@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { useApi } from '$lib/composables/api';
-	import { selectedRoom, userRooms } from '$lib/stores/chat.svelte';
+	import { selectedRoom, userRooms } from '$lib/states/chat.svelte';
 	import { onMount } from 'svelte';
 	const api = useApi();
 	const active = true;

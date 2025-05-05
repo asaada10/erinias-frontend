@@ -1,14 +1,9 @@
 <script>
+	import { setDarkMode, getDarkMode } from '$lib/states/themes.svelte';
 	import { onMount } from 'svelte';
 
-	// Mobile menu state
 	let isMenuOpen = false;
-
-	// Navbar transparency state
 	let isScrolled = false;
-
-	// Dark mode state
-	let isDarkMode = false;
 
 	onMount(() => {
 		// Handle scroll for navbar transparency
@@ -23,10 +18,10 @@
 		const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
 
 		if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
-			isDarkMode = true;
+			setDarkMode(true);
 			document.documentElement.classList.add('dark');
 		} else {
-			isDarkMode = false;
+			setDarkMode(false);
 			document.documentElement.classList.remove('dark');
 		}
 
@@ -41,17 +36,6 @@
 	}
 
 	// Toggle dark mode
-	function toggleDarkMode() {
-		isDarkMode = !isDarkMode;
-
-		if (isDarkMode) {
-			document.documentElement.classList.add('dark');
-			localStorage.setItem('theme', 'dark');
-		} else {
-			document.documentElement.classList.remove('dark');
-			localStorage.setItem('theme', 'light');
-		}
-	}
 </script>
 
 <div
@@ -92,11 +76,11 @@
 
 					<!-- Dark Mode Toggle -->
 					<button
-						on:click={toggleDarkMode}
+						on:click={() => setDarkMode()}
 						class="rounded-full bg-gray-200 p-2 text-gray-700 transition-colors hover:bg-gray-300 focus:outline-none dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
 						aria-label="Toggle Dark Mode"
 					>
-						{#if isDarkMode}
+						{#if getDarkMode()}
 							<!-- Sun icon for light mode -->
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
@@ -138,11 +122,11 @@
 				<div class="flex items-center space-x-2 md:hidden">
 					<!-- Dark Mode Toggle (Mobile) -->
 					<button
-						on:click={toggleDarkMode}
+						on:click={() => setDarkMode()}
 						class="rounded-full bg-gray-200 p-2 text-gray-700 transition-colors hover:bg-gray-300 focus:outline-none dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
 						aria-label="Toggle Dark Mode"
 					>
-						{#if isDarkMode}
+						{#if getDarkMode()}
 							<!-- Sun icon for light mode -->
 							<svg
 								xmlns="http://www.w3.org/2000/svg"

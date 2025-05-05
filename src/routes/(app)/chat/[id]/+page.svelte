@@ -11,8 +11,8 @@
 		ChatInput,
 		Search
 	} from '$lib/components/layouts';
-	import { messages, searchRooms, selectedRoom } from '$lib/stores/chat.svelte';
-	import { connect } from '$lib/stores/ws.svelte';
+	import { messages, searchRooms, selectedRoom } from '$lib/states/chat.svelte';
+	import { connect } from '$lib/states/ws.svelte';
 	import { onMount } from 'svelte';
 	import { useApi } from '$lib/composables/api';
 

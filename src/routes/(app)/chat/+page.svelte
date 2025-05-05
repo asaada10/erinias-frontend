@@ -15,8 +15,8 @@
 
 	import { onMount } from 'svelte';
 	// import { darkMode, toggleDarkMode } from '$lib/stores/theme';
-	import { connect } from '$lib/stores/ws.svelte';
-	import { searchRooms } from '$lib/stores/chat.svelte';
+	import { connect } from '$lib/states/ws.svelte';
+	import { searchRooms } from '$lib/states/chat.svelte';
 
 	// Search state
 

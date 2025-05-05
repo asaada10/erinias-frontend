@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { sendMessage } from '$lib/stores/ws.svelte';
+	import { sendMessage } from '$lib/states/ws.svelte';
 	import { Paperclip, Send, Smile } from 'lucide-svelte';
-	import { messages } from '$lib/stores/chat.svelte';
+	import { messages } from '$lib/states/chat.svelte';
 
 	let message = $state('');
 	let { domain, room } = $props();
