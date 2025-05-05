@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { Menu, X } from 'lucide-svelte';
 	let { sidebarOpen, toggleSidebar } = $props();
+	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 </script>
 
 <header class="flex items-center justify-between bg-[#db324d] p-3 text-white">
@@ -13,7 +14,7 @@
 			{/if}
 		</button>
 
-		<button class="hidden p-1 md:block" aria-label="Toggle dark mode">
+		<button class="hidden p-1 md:block" aria-label="Logo">
 			<img src="erinias.svg" alt="Icon" class="h-6 w-6" />
 		</button>
 		<button class="flex items-center space-x-1 p-1 md:flex">
@@ -67,8 +68,16 @@
 				/>
 			</svg>
 		</button>
-		<div class="h-8 w-8 overflow-hidden rounded-full bg-gray-300">
-			<img src="/erinias.svg?height=32&width=32" alt="Profile" class="h-full w-full object-cover" />
-		</div>
+		<DropdownMenu.Root>
+			<DropdownMenu.Trigger>Profile</DropdownMenu.Trigger>
+			<DropdownMenu.Content>
+				<DropdownMenu.Group>
+					<DropdownMenu.GroupHeading>My Account</DropdownMenu.GroupHeading>
+					<DropdownMenu.Separator />
+					<DropdownMenu.Item>Logout</DropdownMenu.Item>
+					<DropdownMenu.Item>Settings</DropdownMenu.Item>
+				</DropdownMenu.Group>
+			</DropdownMenu.Content>
+		</DropdownMenu.Root>
 	</div>
 </header>
