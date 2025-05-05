@@ -1,5 +1,5 @@
 <script>
-	import { setDarkMode, getDarkMode } from '$lib/states/themes.svelte';
+	import { mode, toggleMode } from 'mode-watcher';
 	import { onMount } from 'svelte';
 
 	let isMenuOpen = false;
@@ -12,18 +12,6 @@
 		};
 
 		window.addEventListener('scroll', handleScroll);
-
-		// Initialize dark mode from localStorage or system preference
-		const savedTheme = localStorage.getItem('theme');
-		const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-
-		if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
-			setDarkMode(true);
-			document.documentElement.classList.add('dark');
-		} else {
-			setDarkMode(false);
-			document.documentElement.classList.remove('dark');
-		}
 
 		return () => {
 			window.removeEventListener('scroll', handleScroll);
@@ -76,11 +64,11 @@
 
 					<!-- Dark Mode Toggle -->
 					<button
-						on:click={() => setDarkMode()}
+						on:click={() => toggleMode()}
 						class="rounded-full bg-gray-200 p-2 text-gray-700 transition-colors hover:bg-gray-300 focus:outline-none dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
 						aria-label="Toggle Dark Mode"
 					>
-						{#if getDarkMode()}
+						{#if mode.current === 'dark'}
 							<!-- Sun icon for light mode -->
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
@@ -122,11 +110,11 @@
 				<div class="flex items-center space-x-2 md:hidden">
 					<!-- Dark Mode Toggle (Mobile) -->
 					<button
-						on:click={() => setDarkMode()}
+						on:click={toggleMode}
 						class="rounded-full bg-gray-200 p-2 text-gray-700 transition-colors hover:bg-gray-300 focus:outline-none dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
 						aria-label="Toggle Dark Mode"
 					>
-						{#if getDarkMode()}
+						{#if mode.current === 'dark'}
 							<!-- Sun icon for light mode -->
 							<svg
 								xmlns="http://www.w3.org/2000/svg"

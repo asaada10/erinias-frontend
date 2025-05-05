@@ -2,27 +2,12 @@
 	import * as Resizable from '$lib/components/ui/resizable/index.js';
 	import { initLayoutContext } from '$lib/components/helpers/layout.svelte';
 	import { Header, Sidebar } from '$lib/components/layouts';
-	import { setDarkMode } from '$lib/states/themes.svelte';
-	import { onMount } from 'svelte';
-	import { toast } from 'svelte-sonner';
 	const layout = initLayoutContext();
 	let { children } = $props();
 	let sidebarOpen = $state(false);
 	function toggleSidebar(): void {
 		sidebarOpen = !sidebarOpen;
 	}
-	onMount(() => {
-		const savedTheme = localStorage.getItem('theme');
-		const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-
-		if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
-			setDarkMode(true);
-			document.documentElement.classList.add('dark');
-		} else {
-			setDarkMode(false);
-			document.documentElement.classList.remove('dark');
-		}
-	});
 </script>
 
 <div
