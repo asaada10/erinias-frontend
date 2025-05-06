@@ -2,6 +2,7 @@
 	import { goto } from '$app/navigation';
 	import { Input, Button, Icon } from '$lib/components/ui/';
 	import { useApi } from '$lib/composables/api';
+	import { toast } from 'svelte-sonner';
 
 	const api = useApi();
 
@@ -9,20 +10,19 @@
 	let email = '';
 	let password = '';
 	let passwordConfirm = '';
-	let errorMessage = '';
 	let date = '';
 	let showPassword = false;
 
 	const register = async () => {
 		if (password !== passwordConfirm) {
-			errorMessage = 'Passwords do not match';
+			toast.error('Passwords do not match');
 			return;
 		}
 
 		const { status, data, error: apiError } = await api.register(username, email, password, date);
 
 		if (status !== 'success') {
-			errorMessage = apiError || 'An error occurred';
+			toast.error(apiError || 'An error occurred');
 		} else {
 			goto('/');
 		}
@@ -79,7 +79,4 @@
 			</div>
 		</div>
 	</div>
-	{#if errorMessage}
-		<p class="text-red-500">{errorMessage}</p>
-	{/if}
 </div>

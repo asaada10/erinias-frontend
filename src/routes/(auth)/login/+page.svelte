@@ -3,10 +3,10 @@
 	import { useApi } from '$lib/composables/api';
 	import { Input, Button, Icon } from '$lib/components/ui/';
 	import { access } from '$lib/states/auth.svelte';
+	import { toast } from 'svelte-sonner';
 	const api = useApi();
 	let email = '';
 	let password = '';
-	let errorMessage = '';
 	let showPassword = false;
 
 	const login = async () => {
@@ -15,7 +15,7 @@
 			access.token = data.accessToken;
 			goto('/chat');
 		} else {
-			errorMessage = apiError || 'An error occurred';
+			toast.error(apiError || 'An error occurred');
 		}
 	};
 </script>
@@ -59,7 +59,3 @@
 		</div>
 	</div>
 </div>
-
-{#if errorMessage}
-	<p style="color: red" class="text-center">{errorMessage}</p>
-{/if}

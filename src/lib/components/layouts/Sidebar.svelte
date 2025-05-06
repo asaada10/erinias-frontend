@@ -17,9 +17,7 @@
 	{/if}
 
 	<!-- Sidebar Header -->
-	<div class="border-b">
-		{@render layout.sidebarHeader?.()}
-	</div>
+	{@render layout.sidebarHeader?.()}
 
 	<!-- Search -->
 	{@render layout.search?.()}

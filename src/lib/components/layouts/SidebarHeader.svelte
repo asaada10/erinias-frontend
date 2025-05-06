@@ -4,7 +4,7 @@
 	// toggleOptions = "TODO";
 </script>
 
-<div class="flex items-center justify-between border-b border-gray-200 p-3 dark:border-gray-700">
+<div class="flex items-center justify-between p-3">
 	<div class="flex items-center">
 		<span class="font-medium text-gray-800 dark:text-gray-200">{title}</span>
 		<svg
