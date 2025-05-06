@@ -10,12 +10,12 @@
 	let showPassword = false;
 
 	const login = async () => {
-		const { status, data, error: apiError } = await api.login(email, password);
+		const { status, data, message } = await api.login(email, password);
 		if (status === 'success' && data) {
 			access.token = data.accessToken;
 			goto('/chat');
 		} else {
-			toast.error(apiError || 'An error occurred');
+			toast.error(message || 'An error occurred');
 		}
 	};
 </script>
