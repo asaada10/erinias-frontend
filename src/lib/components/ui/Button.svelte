@@ -10,7 +10,7 @@
 <button
 	{type}
 	{onclick}
-	class="w-full rounded-full bg-gray-700/80 py-3 text-white transition-colors hover:bg-gray-600/80"
+	class="w-full rounded-lg bg-[#db324d] px-4 py-3 font-medium text-white transition-colors hover:bg-[#c02843]"
 >
 	{@render children()}
 </button>

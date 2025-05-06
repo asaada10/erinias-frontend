@@ -151,30 +151,3 @@
 		</div>
 	{/if}
 </div>
-
-<style>
-	.search-dropdown {
-		@apply absolute left-0 right-0 z-50 mt-1 max-h-80 overflow-hidden rounded-lg border border-gray-200 bg-white shadow-lg dark:border-gray-700 dark:bg-gray-800;
-		animation: fadeIn 0.2s ease-out;
-	}
-
-	@keyframes fadeIn {
-		from {
-			opacity: 0;
-			transform: translateY(-10px);
-		}
-		to {
-			opacity: 1;
-			transform: translateY(0);
-		}
-	}
-
-	/* Ensure dark mode styles are applied */
-	:global(.dark) .search-dropdown {
-		@apply border-gray-700 bg-gray-800;
-	}
-
-	:global(.dark) input {
-		@apply border-gray-700 bg-gray-800 text-gray-200;
-	}
-</style>
