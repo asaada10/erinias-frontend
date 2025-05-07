@@ -10,7 +10,15 @@ export const ws = $state<{ socket: WebSocket | null }>({
 });
 
 export async function connect() {
-	const socket = new WebSocket('ws://localhost:8888/v1/ws');
+	try {
+	const {data} = await api.otk();
+	if (!data.otk) {
+		console.error('No se pudo obtener el token de acceso');
+		return;
+	}
+
+	
+	const socket = new WebSocket('ws://localhost:8888/v1/ws?otk=' + data.otk);
 	console.log('Conectando a WebSocket...');
 	socket.addEventListener('open', () => {
 		console.log('WebSocket conectado');
@@ -33,6 +41,10 @@ export async function connect() {
 		await connect();
 	});
 	ws.socket = socket;
+	} catch (error) {
+		console.error('Error al conectar al WebSocket:', error);
+		goto('/login');
+	}
 }
 
 export function sendMessage(content: string, domain: string, room: string) {

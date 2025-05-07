@@ -75,6 +75,12 @@ export const useApi = () => {
 				credentials: 'include'
 			}),
 
+			otk: () =>
+			handleRequest<{ data:{otk: string}}>('/auth/otk', {
+				method: 'POST',
+				credentials: 'include'
+			}),
+
 		/**
 		 * Cierra la sesión del usuario.
 		 * @returns ApiResponse<void>
