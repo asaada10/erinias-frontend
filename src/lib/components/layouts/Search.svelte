@@ -17,7 +17,7 @@
 	async function goToRoom(room: any) {
 		selectedRoom.selected = room;
 		const { status, data } = await api.createRoom([room.id], null);
-
+		console.log("User room", room.id, "Room crated", data.room.id);
 		if (status === 'success' && data) {
 			goto(`/chat/${data.room.id}`);
 			showResults = false;
@@ -114,8 +114,8 @@
 			{:else if searchResults.length > 0}
 				<ul class="max-h-60 overflow-y-auto py-1">
 					{#each searchResults as room}
-						<a
-							href={`/chat/${room.id}`}
+						<button
+							onclick={() => goToRoom(room)}
 							class="cursor-pointer px-4 py-3 text-gray-700 transition-colors hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700"
 						>
 							<div class="flex items-center">
@@ -126,7 +126,7 @@
 								</div>
 								<span class="ml-3">{room.name}</span>
 							</div>
-						</a>
+						</button>
 					{/each}
 				</ul>
 			{:else if query}

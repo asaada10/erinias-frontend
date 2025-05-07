@@ -36,6 +36,7 @@
 	// Conectar WebSocket al montar el componente
 	onMount(async () => {
 		if (!selectedRoom.selected) {
+			console.log("Roomid", roomId);
 			const fetchRoom = await fetchRoomsbyId(roomId);
 			console.log('fetchRoom', fetchRoom);
 			selectedRoom.selected = fetchRoom;

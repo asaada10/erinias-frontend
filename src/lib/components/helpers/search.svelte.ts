@@ -47,19 +47,18 @@ export async function fetchRooms(input: string): Promise<any> {
 }
 
 export async function fetchRoomsbyId(id: string): Promise<Room> {
-	const params = { id };
-	const result = await api.getUserSearch(params);
+	const result = await api.getRoom(id);
 	if (
 		result.status === 'success' &&
 		result.data &&
-		'users' in result.data &&
-		result.data.users[0]
+	
+		result.data.room
 	) {
-		const user = result.data.users[0];
+		const user = result.data.room;
 		return {
 			id: user.id,
-			name: user.username,
-			image: user.avatar
+			name: user.name,
+			image: user.image,
 		};
 	} else {
 		throw new Error(result.error?.message || 'No user data found');
