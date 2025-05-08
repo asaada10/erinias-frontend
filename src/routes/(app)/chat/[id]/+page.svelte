@@ -35,8 +35,8 @@
 
 	// Conectar WebSocket al montar el componente
 	onMount(async () => {
+		console.log("RM", selectedRoom.selected);
 		if (!selectedRoom.selected) {
-			console.log("Roomid", roomId);
 			const fetchRoom = await fetchRoomsbyId(roomId);
 			console.log('fetchRoom', fetchRoom);
 			selectedRoom.selected = fetchRoom;
@@ -54,10 +54,11 @@
 		const api = useApi();
 		try {
 			const res = await api.getChatMessages(roomId);
+			console.log('res', res);
 			if (res.status === 'success' && res.data) {
-				messages.list = res.data;
+				messages.list = res.data.messages;
 			} else {
-				console.error('Error fetching messages:', res.error);
+				console.error('Error fetching messages:', res.message);
 			}
 		} catch (error) {
 			console.error('Error fetching messages:', error);

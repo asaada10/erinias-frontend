@@ -35,8 +35,14 @@ export type ApiResponse<T> = {
 export type LoginResponse = ApiResponse<{ accessToken: string; refreshToken: string; user: User }>;
 
 export interface ChatMessage {
+	messages: Message[];
+}
+
+export interface Message {
 	id: string;
+	roomId: string;
+	userId: string;
 	content: string;
-	sender: string;
-	timestamp: string;
+	createdAt: Date;
+	updatedAt: Date;
 }

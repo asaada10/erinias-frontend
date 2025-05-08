@@ -1,7 +1,6 @@
-import { useApi } from '$lib/composables/api';
-import { searchRooms } from '$lib/states/chat.svelte';
-import type { Room, User } from '$lib/types/index.d';
-
+import { useApi } from "$lib/composables/api";
+import { searchRooms } from "$lib/states/chat.svelte";
+import type { Room } from "$lib/types";
 const api = useApi();
 let debounceTimer: NodeJS.Timeout;
 
@@ -26,7 +25,6 @@ export function handleSearch(inputSearch: string) {
 				}));
 				return result.data.users;
 			} else {
-				console.log(result);
 				console.error(
 					'Error al buscar salas:',
 					result?.error?.message || 'No se recibieron resultados'
@@ -61,6 +59,6 @@ export async function fetchRoomsbyId(id: string): Promise<Room> {
 			image: user.image,
 		};
 	} else {
-		throw new Error(result.error?.message || 'No user data found');
+		throw new Error(result.message || 'No user data found');
 	}
 }

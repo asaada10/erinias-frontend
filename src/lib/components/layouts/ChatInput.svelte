@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { sendMessage } from '$lib/states/ws.svelte';
 	import { Paperclip, Send, Smile } from 'lucide-svelte';
-	import { messages } from '$lib/states/chat.svelte';
+	import { messages, profile } from '$lib/states/chat.svelte';
 
 	let message = $state('');
 	let { domain, room } = $props();
@@ -10,8 +10,8 @@
 		if (message.trim() !== '') {
 			messages.list.push({
 				content: message,
-				authorId: '1',
-				channelId: '1',
+				authorId: profile.user.id,
+				channelId: room.id,
 				createdAt: new Date()
 			});
 			sendMessage(message, domain, room); // @TODO

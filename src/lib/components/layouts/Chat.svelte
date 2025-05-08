@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { messages } from '$lib/states/chat.svelte';
+	import { messages, profile } from '$lib/states/chat.svelte';
 
 	let messagesByDate = $derived.by(() => {
 		const grouped: { [date: string]: any[] } = {};
@@ -27,8 +27,9 @@
 	</div>
 
 	{#each dateMessages as message, i}
+	{$inspect(message.authorId, profile.user.id)}
 		<div id={message.id}>
-			{#if message.authorId === '1'}
+			{#if message.authorId === profile.user.id}
 				<!-- Sent Message -->
 				<div class="mb-4 flex items-start justify-end space-x-2">
 					<div class="max-w-[70%]">

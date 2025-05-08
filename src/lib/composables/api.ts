@@ -116,7 +116,7 @@ export const useApi = () => {
 		 * @returns { status: 'success'; data: { room: Room } }
 		 */
 		getRoom: (roomId: string) =>
-			handleRequest<{status: 'success'; data: { room: Room }}>(`/room/${roomId}`, {
+			handleRequest<ApiResponse<{room: Room}>>(`/room/${roomId}`, {
 				method: 'GET',
 				credentials: 'include'
 			}),
@@ -156,7 +156,7 @@ export const useApi = () => {
 		 * @returns ApiResponse<Array<ChatMessage>>
 		 */
 		getChatMessages: (roomId: string) =>
-			handleRequest<ApiResponse<Array<ChatMessage>>>(`/chat/${roomId}`, {
+			handleRequest<ApiResponse<ChatMessage>>(`/room/${roomId}/message`, {
 				credentials: 'include'
 			}),
 
@@ -171,7 +171,7 @@ export const useApi = () => {
 			const options = {
 				method: 'GET',
 			};
-			return handleRequest<ProfileResponse>(endpoint, options);
+			return handleRequest<ApiResponse<ProfileResponse>>(endpoint, options);
 		},
 
 		/**
