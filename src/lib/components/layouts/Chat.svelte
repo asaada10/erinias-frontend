@@ -4,7 +4,10 @@
 	let messagesByDate = $derived.by(() => {
 		const grouped: { [date: string]: any[] } = {};
 
-		for (const msg of messages.list) {
+		const sortedMessages = [...messages.list].sort(
+			(a, b) => new Date(a.createdAt!).getTime() - new Date(b.createdAt!).getTime()
+		);
+		for (const msg of sortedMessages) {
 			const date = new Date(msg.createdAt!).toLocaleDateString();
 			if (!grouped[date]) grouped[date] = [];
 			grouped[date].push(msg);
@@ -27,7 +30,6 @@
 	</div>
 
 	{#each dateMessages as message, i}
-	{$inspect(message.authorId, profile.user.id)}
 		<div id={message.id}>
 			{#if message.authorId === profile.user.id}
 				<!-- Sent Message -->

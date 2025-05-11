@@ -31,7 +31,7 @@
 {/snippet}
 
 {#snippet room()}
-	<Room rooms={searchRooms.results} />
+	<Room />
 {/snippet}
 
 {#snippet chatHeader()}

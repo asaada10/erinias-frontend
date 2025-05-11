@@ -30,6 +30,9 @@ export function setLayoutComponent(component: Partial<LayoutContext>) {
 
 export function cleanLayoutContext() {
 	const context = getContext<LayoutContext>(key);
+	if (!context) {
+		return;
+	}
 	Object.assign(context, {
 		header: undefined,
 		sidebarHeader: undefined,

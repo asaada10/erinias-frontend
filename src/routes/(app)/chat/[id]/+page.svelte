@@ -35,7 +35,6 @@
 
 	// Conectar WebSocket al montar el componente
 	onMount(async () => {
-		console.log("RM", selectedRoom.selected);
 		if (!selectedRoom.selected) {
 			const fetchRoom = await fetchRoomsbyId(roomId);
 			console.log('fetchRoom', fetchRoom);
@@ -73,7 +72,7 @@
 
 {#snippet room()}
 	<!-- Esto cambia según /chat (lista de chats) /party (lista de grupos) /domain (lista de dominios) -->
-	<Room rooms={searchRooms.results} />
+	<Room />
 {/snippet}
 
 {#snippet chatHeader()}

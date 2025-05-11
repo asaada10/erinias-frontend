@@ -4,6 +4,7 @@
 	import { Input, Button, Icon } from '$lib/components/ui/';
 	import { access } from '$lib/states/auth.svelte';
 	import { toast } from 'svelte-sonner';
+	import { profile } from '$lib/states/chat.svelte';
 	const api = useApi();
 	let email = '';
 	let password = '';
@@ -13,6 +14,7 @@
 		const { status, data, message } = await api.login(email, password);
 		if (status === 'success' && data) {
 			access.token = data.accessToken;
+			profile.user = (await api.getProfile()).data;
 			goto('/chat');
 		} else {
 			toast.error(message || 'An error occurred');

@@ -99,7 +99,7 @@
 				<!-- CTA Button -->
 				<div class="hidden md:flex">
 					<a
-						href="#"
+						href="/chat"
 						class="rounded-lg bg-[#db324d] px-4 py-2 font-medium text-white transition-colors hover:bg-[#c02843]"
 					>
 						Enter App

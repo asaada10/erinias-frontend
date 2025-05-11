@@ -9,6 +9,7 @@
 	import { buttonVariants } from '$lib/components/ui/button';
 	import { Calendar } from '$lib/components/ui/calendar';
 	import * as Popover from '$lib/components/ui/popover';
+	import { profile } from '$lib/states/chat.svelte';
 
 	const df = new DateFormatter('en-US', {
 		dateStyle: 'long'
@@ -44,7 +45,9 @@
 		if (status !== 'success') {
 			toast.error(message || 'An error occurred');
 		} else {
-			goto('/');
+			access.token = data.accessToken;
+			profile.user = (await api.getProfile()).data;
+			goto('/chat');
 		}
 	};
 </script>
