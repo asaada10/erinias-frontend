@@ -19,11 +19,11 @@ export interface ProfileResponse {
 
 export interface Room {
 	id: string;
-	name: string;
-	image?: string;
+	name: string | null;
 	createdAt: string;
+	updatedAt: string;
+	users: RoomUser[];
 }
-
 export type UserSearchResponse = ApiResponse<{ users: User[] }>;
 
 export type ApiResponse<T> = {
@@ -46,3 +46,15 @@ export interface Message {
 	createdAt: Date;
 	updatedAt: Date;
 }
+
+export interface RoomUser {
+	id: string;
+	name: string | null;
+	email: string | null;
+	createdAt: string;
+	updatedAt: string;
+}
+
+
+
+export type CreateRoomResponse = ApiResponse<{ room: Room }>;

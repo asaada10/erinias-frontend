@@ -1,35 +1,20 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { Input, Button, Icon } from '$lib/components/ui/';
+	import { Input, Button } from '$lib/components/ui/';
 	import { useApi } from '$lib/composables/api';
 	import { toast } from 'svelte-sonner';
-	import CalendarIcon from '@lucide/svelte/icons/calendar';
-	import { DateFormatter, type DateValue, getLocalTimeZone } from '@internationalized/date';
-	import { cn } from '$lib/utils.js';
-	import { buttonVariants } from '$lib/components/ui/button';
-	import { Calendar } from '$lib/components/ui/calendar';
-	import * as Popover from '$lib/components/ui/popover';
 	import { profile } from '$lib/states/chat.svelte';
+	import { access } from '$lib/states/auth.svelte';
 
-	const df = new DateFormatter('en-US', {
-		dateStyle: 'long'
-	});
-
-	let contentRef = $state<HTMLElement | null>(null);
 	const api = useApi();
 
 	let username = $state<string>('');
 	let email = $state<string>('');
 	let password = $state<string>('');
 	let passwordConfirm = $state<string>('');
-	let date = $state<DateValue | undefined>();
 	let showPassword = $state<boolean>(false);
 
 	const register = async () => {
-		if (!date) {
-			toast.error('Please select a date');
-			return;
-		}
 		if (password !== passwordConfirm) {
 			toast.error('Passwords do not match');
 			return;
@@ -39,10 +24,9 @@
 			username,
 			email,
 			password,
-			date.toDate(getLocalTimeZone()).toISOString()
 		);
 
-		if (status !== 'success') {
+		if (status !== 'success' || !data) {
 			toast.error(message || 'An error occurred');
 		} else {
 			access.token = data.accessToken;
@@ -87,25 +71,6 @@
 					<Input type="text" placeholder="Username" bind:value={username} />
 				</div>
 
-				<div>
-					<Popover.Root>
-						<Popover.Trigger
-							class={cn(
-								buttonVariants({
-									variant: 'outline',
-									class: 'w-[280px] justify-start text-left font-normal'
-								}),
-								!date && 'text-muted-foreground'
-							)}
-						>
-							<CalendarIcon />
-							{date ? df.format(date.toDate(getLocalTimeZone())) : 'Pick a date'}
-						</Popover.Trigger>
-						<Popover.Content bind:ref={contentRef} class="w-auto p-0">
-							<Calendar type="single" bind:value={date} />
-						</Popover.Content>
-					</Popover.Root>
-				</div>
 
 				<div class="relative">
 					<Input
@@ -115,7 +80,7 @@
 					/>
 					<button
 						type="button"
-						on:click={() => (showPassword = !showPassword)}
+						onclick={() => (showPassword = !showPassword)}
 						class="absolute right-3 top-1/2 -translate-y-1/2 rounded-md px-2 py-1 text-sm text-gray-400 transition-colors hover:text-pink-100"
 					>
 						{showPassword ? 'Hide' : 'Show'}
@@ -130,7 +95,7 @@
 					/>
 					<button
 						type="button"
-						on:click={() => (showPassword = !showPassword)}
+						onclick={() => (showPassword = !showPassword)}
 						class="absolute right-3 top-1/2 -translate-y-1/2 rounded-md px-2 py-1 text-sm text-gray-400 transition-colors hover:text-pink-100"
 					>
 						{showPassword ? 'Hide' : 'Show'}

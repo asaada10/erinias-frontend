@@ -6,9 +6,9 @@
 	import { toast } from 'svelte-sonner';
 	import { profile } from '$lib/states/chat.svelte';
 	const api = useApi();
-	let email = '';
-	let password = '';
-	let showPassword = false;
+	let email = $state('');
+	let password = $state('');
+	let showPassword = $state(false);
 
 	const login = async () => {
 		const { status, data, message } = await api.login(email, password);

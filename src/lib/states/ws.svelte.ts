@@ -9,38 +9,47 @@ export const ws = $state<{ socket: WebSocket | null }>({
 	socket: null
 });
 
+let reconnectAttempts = 0;
+const maxReconnectAttempts = 5;
+
 export async function connect() {
 	try {
-	const {data} = await api.otk();
-	if (!data.otk) {
-		console.error('No se pudo obtener el token de acceso');
-		return;
-	}
-
-	
-	const socket = new WebSocket('ws://localhost:8888/v1/ws?otk=' + data.otk);
-	console.log('Conectando a WebSocket...');
-	socket.addEventListener('open', () => {
-		console.log('WebSocket conectado');
-	});
-
-	socket.addEventListener('message', (event) => {
-		const data = JSON.parse(event.data);
-		console.log('Mensaje recibido:', data);
-		console.log(`[${data.domain}/${data.room}]: ${data.content}`);
-
-		messages.list.push({ ...data, createdAt: new Date() });
-	});
-	socket.addEventListener('close', async (e) => {
-		console.log('WebSocket desconectado');
-		ws.socket = null;
-		if (e.code === 1008) {
-			goto('/login');
+		const {data} = await api.otk();
+		if (!data.otk) {
+			console.error('No se pudo obtener el token de acceso');
 			return;
 		}
-		await connect();
-	});
-	ws.socket = socket;
+
+		const socket = new WebSocket('ws://localhost:8888/v1/ws?otk=' + data.otk);
+		console.log('Conectando a WebSocket...');
+		socket.addEventListener('open', () => {
+			console.log('WebSocket conectado');
+			reconnectAttempts = 0; // Reiniciar el contador de intentos al conectar exitosamente
+		});
+
+		socket.addEventListener('message', (event) => {
+			const data = JSON.parse(event.data);
+			console.log('Mensaje recibido:', data);
+			console.log(`[${data.domain}/${data.room}]: ${data.content}`);
+
+			messages.list.push({ ...data, createdAt: new Date() });
+		});
+		socket.addEventListener('close', async (e) => {
+			console.log('WebSocket desconectado');
+			ws.socket = null;
+			if (e.code === 1008) {
+				goto('/login');
+				return;
+			}
+			if (reconnectAttempts < maxReconnectAttempts) {
+				reconnectAttempts++;
+				console.log(`Intentando reconectar... (${reconnectAttempts}/${maxReconnectAttempts})`);
+				await connect();
+			} else {
+				console.error('Se alcanzó el número máximo de intentos de reconexión');
+			}
+		});
+		ws.socket = socket;
 	} catch (error) {
 		console.error('Error al conectar al WebSocket:', error);
 		goto('/login');

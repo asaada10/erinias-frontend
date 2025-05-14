@@ -37,14 +37,13 @@
 	onMount(async () => {
 		if (!selectedRoom.selected) {
 			const fetchRoom = await fetchRoomsbyId(roomId);
-			console.log('fetchRoom', fetchRoom);
 			selectedRoom.selected = fetchRoom;
 		}
 		// Obtener el roomId desde la URL o contexto
 
 		if (roomId) {
 			await fetchChatMessages(roomId);
-			connect();
+			await connect();
 		}
 	});
 

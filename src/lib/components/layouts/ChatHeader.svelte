@@ -19,7 +19,6 @@
 		</div>
 		<div>
 			<h3 class="font-medium text-gray-800 dark:text-gray-200">{selectedRoom.name}</h3>
-			<p class="text-xs text-gray-500 dark:text-gray-400">Online</p>
 		</div>
 	</div>
 	<button class="p-1 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">

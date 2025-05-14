@@ -2,11 +2,15 @@
 	import { sendMessage } from '$lib/states/ws.svelte';
 	import { Paperclip, Send, Smile } from 'lucide-svelte';
 	import { messages, profile } from '$lib/states/chat.svelte';
-
+	import { useApi } from '$lib/composables/api';
+	const api = useApi();
 	let message = $state('');
 	let { domain, room } = $props();
 
-	function send() {
+	async function send() {
+		if(!profile.user) {
+			profile.user = (await api.getProfile()).data;
+		}
 		if (message.trim() !== '') {
 			messages.list.push({
 				content: message,

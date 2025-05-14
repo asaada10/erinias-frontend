@@ -1,22 +1,33 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { useApi } from '$lib/composables/api';
-	import { selectedRoom, userRooms } from '$lib/states/chat.svelte';
+	import { profile, selectedRoom, userRooms } from '$lib/states/chat.svelte';
 	import { onMount } from 'svelte';
 	const api = useApi();
 
 	
 	// Cargar las salas del usuario autenticado
 	onMount(() => {
-		api.getAllRooms().then((data) => {
-			console.log('data', data);
-			userRooms.rooms = data.data?.rooms ?? [];
+		api.getAllRooms().then(async(data) => {
+			if(!profile.user) {
+				profile.user = (await api.getProfile()).data;
+			}
+			userRooms.rooms = data.data?.rooms.map((room: any) => ({
+				...room,
+				name: room.users.length === 2
+					? room.users.find((user: any) => user.id !== profile.user.id)?.name
+					: room.users.length === 1
+					? 'You'
+					: room.users.map((user: any) => user.name).join(', '),
+			})) ?? [];
 		});
+		console.log('userRooms', userRooms.rooms);
 	});
 
 	async function goToRoom(room: any) {
 		selectedRoom.selected = room;
-		const { status, data } = await api.createRoom([room.id], null);
+		console.log('room', room.users.map((user: any) => user.id));
+		const { status, data } = await api.createRoom(room.users.map((user: any) => user.id), null);
 
 		if (status === 'success' && data) {
 			goto(`/chat/${data.room.id}`);

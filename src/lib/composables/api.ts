@@ -1,4 +1,4 @@
-import type { LoginResponse, Room, UserSearchResponse, ProfileResponse, ApiResponse, ChatMessage } from '../../types';
+import type { LoginResponse, Room, UserSearchResponse, ProfileResponse, ApiResponse, ChatMessage, CreateRoomResponse } from '../../types';
 import { goto } from '$app/navigation';
 
 export const useApi = () => {
@@ -91,10 +91,10 @@ export const useApi = () => {
 		/**
 		 * Crea una nueva sala.
 		 * @param name Nombre de la sala o null para privada
-		 * @returns { status: 'success'; data: { room: Room } }
+		 * @returns CreateRoomResponse
 		 */
 		createRoom: (userIds: string[], name: string | null) =>
-			handleRequest<{status: 'success'; data: { room: Room }}>('/room/create', {
+			handleRequest<CreateRoomResponse>('/room/create', {
 				method: 'POST',
 				body: JSON.stringify({ name, userIds }),
 				credentials: 'include'

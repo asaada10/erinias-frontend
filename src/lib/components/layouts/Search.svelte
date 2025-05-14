@@ -2,7 +2,7 @@
 	import { Search } from 'lucide-svelte';
 	import { onMount } from 'svelte';
 	import { useApi } from '$lib/composables/api';
-	import { selectedRoom, userRooms } from '$lib/states/chat.svelte';
+	import { profile, selectedRoom, userRooms } from '$lib/states/chat.svelte';
 	import { goto } from '$app/navigation';
 
 	const api = useApi();
@@ -15,8 +15,8 @@
 	let showResults = $state(false);
 
 	async function goToRoom(room: any) {
-		const { status, data } = await api.createRoom([room.id], null);
-		selectedRoom.selected = data.room;
+		const { status, data } = await api.createRoom([profile.user.id, room.id], null);
+		selectedRoom.selected = { ...data?.room, id: data?.room?.id ?? '', name: data?.room?.name ?? '' };
 		if (status === 'success' && data) {
 			goto(`/chat/${data.room.id}`);
 			showResults = false;
@@ -51,7 +51,10 @@
 
 	onMount(async () => {
 		const data = await api.getAllRooms();
-		userRooms.rooms = data.data?.rooms ?? [];
+		userRooms.rooms = data.data?.rooms.map(room => ({
+			...room,
+			name: room.name ?? ''
+		})) ?? [];
 	});
 </script>
 
