@@ -8,7 +8,7 @@
 	let { domain, room } = $props();
 
 	async function send() {
-		if(!profile.user) {
+		if (!profile.user) {
 			profile.user = (await api.getProfile()).data;
 		}
 		if (message.trim() !== '') {

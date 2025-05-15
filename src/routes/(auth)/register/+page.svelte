@@ -20,11 +20,7 @@
 			return;
 		}
 
-		const { status, data, message } = await api.register(
-			username,
-			email,
-			password,
-		);
+		const { status, data, message } = await api.register(username, email, password);
 
 		if (status !== 'success' || !data) {
 			toast.error(message || 'An error occurred');
@@ -70,7 +66,6 @@
 				<div>
 					<Input type="text" placeholder="Username" bind:value={username} />
 				</div>
-
 
 				<div class="relative">
 					<Input

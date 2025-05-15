@@ -55,6 +55,4 @@ export interface RoomUser {
 	updatedAt: string;
 }
 
-
-
 export type CreateRoomResponse = ApiResponse<{ room: Room }>;

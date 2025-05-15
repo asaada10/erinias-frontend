@@ -14,7 +14,7 @@ const maxReconnectAttempts = 5;
 
 export async function connect() {
 	try {
-		const {data} = await api.otk();
+		const { data } = await api.otk();
 		if (!data.otk) {
 			console.error('No se pudo obtener el token de acceso');
 			return;

@@ -9,22 +9,26 @@ Se recomienda realizar la instalación en una distribución de **GNU/Linux** o e
 Para instalar PostgreSQL, sigue las instrucciones según tu distribución.
 
 #### ArchLinux:
+
 ```bash
 pacman -S postgresql
 ```
 
 #### Ubuntu/Debian:
+
 ```bash
 sudo apt update
 sudo apt install postgresql postgresql-contrib
 ```
 
 #### Fedora:
+
 ```bash
 sudo dnf install postgresql-server postgresql-contrib
 ```
 
 #### CentOS/RHEL:
+
 ```bash
 sudo yum install postgresql-server postgresql-contrib
 ```
@@ -32,6 +36,7 @@ sudo yum install postgresql-server postgresql-contrib
 ### Inicializar la base de datos:
 
 #### **Ubuntu/Debian**:
+
 En estas distribuciones, PostgreSQL se inicializa automáticamente al instalarlo.
 
 ```bash
@@ -55,6 +60,7 @@ GRANT ALL PRIVILEGES ON DATABASE erinias TO root;
 ```
 
 #### **ArchLinux, Fedora, CentOS/RHEL**:
+
 Para estas distribuciones, es necesario inicializar PostgreSQL manualmente si no lo has hecho aún:
 
 ```bash
@@ -92,21 +98,25 @@ Consulta la [documentación de PostgreSQL](https://www.postgresql.org/docs/) par
 Para instalar Redis, sigue las instrucciones según tu distribución.
 
 #### ArchLinux:
+
 ```bash
 sudo pacman -S redis
 ```
 
 #### Ubuntu/Debian:
+
 ```bash
 sudo apt install redis-server
 ```
 
 #### Fedora:
+
 ```bash
 sudo dnf install redis
 ```
 
 #### CentOS/RHEL:
+
 ```bash
 sudo yum install redis
 ```
@@ -116,6 +126,7 @@ sudo yum install redis
 ### Bun
 
 #### Linux (todas las distribuciones):
+
 ```bash
 # Instalar Bun
 curl -fsSL https://bun.sh/install | bash
@@ -172,6 +183,7 @@ bun run db:push
 
 Para iniciar el proyecto en modo desarrollo, ejecuta el siguiente comando:
 https://github.com/FiloSottile/mkcert
+
 ```bash
 bun dev
 ```

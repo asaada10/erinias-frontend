@@ -1,3 +1,3 @@
-export const access = $state<{token: string | null}>({
-    token: null
+export const access = $state<{ token: string | null }>({
+	token: null
 });

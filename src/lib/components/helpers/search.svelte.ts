@@ -1,6 +1,6 @@
-import { useApi } from "$lib/composables/api";
-import { searchRooms } from "$lib/states/chat.svelte";
-import type { Room } from "$lib/types";
+import { useApi } from '$lib/composables/api';
+import { searchRooms } from '$lib/states/chat.svelte';
+import type { Room } from '$lib/types';
 const api = useApi();
 let debounceTimer: NodeJS.Timeout;
 
@@ -46,16 +46,11 @@ export async function fetchRooms(input: string): Promise<any> {
 
 export async function fetchRoomsbyId(id: string): Promise<Room> {
 	const result = await api.getRoom(id);
-	if (
-		result.status === 'success' &&
-		result.data &&
-	
-		result.data.room
-	) {
+	if (result.status === 'success' && result.data && result.data.room) {
 		const user = result.data.room;
 		return {
 			id: user.id,
-			name: user.name || "",
+			name: user.name || '',
 			createdAt: user.createdAt,
 			updatedAt: user.updatedAt,
 			users: user.users.map((user: any) => ({

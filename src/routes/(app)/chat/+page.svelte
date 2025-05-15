@@ -20,7 +20,7 @@
 	// Search state
 
 	// Connect to WebSocket on mount
-	onMount(async() => {
+	onMount(async () => {
 		await connect();
 	});
 </script>

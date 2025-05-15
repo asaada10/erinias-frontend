@@ -1,4 +1,12 @@
-import type { LoginResponse, Room, UserSearchResponse, ProfileResponse, ApiResponse, ChatMessage, CreateRoomResponse } from '../../types';
+import type {
+	LoginResponse,
+	Room,
+	UserSearchResponse,
+	ProfileResponse,
+	ApiResponse,
+	ChatMessage,
+	CreateRoomResponse
+} from '../../types';
 import { goto } from '$app/navigation';
 
 export const useApi = () => {
@@ -11,10 +19,7 @@ export const useApi = () => {
 	 * @param options Opciones de la petición fetch
 	 * @returns Una promesa con la respuesta parseada
 	 */
-	const handleRequest = async <T>(
-		endpoint: string,
-		options: RequestInit = {}
-	): Promise<T> => {
+	const handleRequest = async <T>(endpoint: string, options: RequestInit = {}): Promise<T> => {
 		try {
 			const response = await fetch(`${baseUrl}${endpoint}`, {
 				...options,
@@ -75,8 +80,8 @@ export const useApi = () => {
 				credentials: 'include'
 			}),
 
-			otk: () =>
-			handleRequest<{ data:{otk: string}}>('/auth/otk', {
+		otk: () =>
+			handleRequest<{ data: { otk: string } }>('/auth/otk', {
 				method: 'POST',
 				credentials: 'include'
 			}),
@@ -85,7 +90,8 @@ export const useApi = () => {
 		 * Cierra la sesión del usuario.
 		 * @returns ApiResponse<void>
 		 */
-		logout: () => handleRequest<ApiResponse<void>>('/auth/logout', { method: 'POST', credentials: 'include' }),
+		logout: () =>
+			handleRequest<ApiResponse<void>>('/auth/logout', { method: 'POST', credentials: 'include' }),
 
 		// Rooms
 		/**
@@ -116,7 +122,7 @@ export const useApi = () => {
 		 * @returns { status: 'success'; data: { room: Room } }
 		 */
 		getRoom: (roomId: string) =>
-			handleRequest<ApiResponse<{room: Room}>>(`/room/${roomId}`, {
+			handleRequest<ApiResponse<{ room: Room }>>(`/room/${roomId}`, {
 				method: 'GET',
 				credentials: 'include'
 			}),
@@ -127,14 +133,11 @@ export const useApi = () => {
 		 * @returns { status: 'success'; data: { rooms: Room[] } }
 		 */
 		searchRooms: (params: { name?: string; id?: string }) =>
-			handleRequest<{ status: 'success'; data: { rooms: Room[] } }>(
-				'/room/search',
-				{
-					method: 'POST',
-					body: JSON.stringify(params),
-					credentials: 'include'
-				}
-			),
+			handleRequest<{ status: 'success'; data: { rooms: Room[] } }>('/room/search', {
+				method: 'POST',
+				body: JSON.stringify(params),
+				credentials: 'include'
+			}),
 
 		/**
 		 * Busca usuarios por username o id.
@@ -169,7 +172,7 @@ export const useApi = () => {
 		getProfile: async () => {
 			const endpoint = `/user/profile`;
 			const options = {
-				method: 'GET',
+				method: 'GET'
 			};
 			return handleRequest<ApiResponse<ProfileResponse>>(endpoint, options);
 		},
@@ -185,11 +188,11 @@ export const useApi = () => {
 			const options = {
 				method: 'PUT',
 				headers: {
-					'x-user-id': userId,
+					'x-user-id': userId
 				},
-				body: JSON.stringify(updates),
+				body: JSON.stringify(updates)
 			};
 			return handleRequest<ProfileResponse>(endpoint, options);
-		},
+		}
 	};
 };

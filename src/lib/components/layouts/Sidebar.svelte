@@ -8,7 +8,7 @@
 >
 	<!-- Back button for mobile -->
 	{#if sidebarOpen}
-		<div class="flex items-center border-b border-gray-200 p-3 md:hidden dark:border-gray-700">
+		<div class="flex items-center border-b border-gray-200 p-3 dark:border-gray-700 md:hidden">
 			<button class="mr-2 p-1" onclick={toggleSidebar}>
 				<ArrowLeft class="h-5 w-5 text-gray-500 dark:text-gray-400" />
 			</button>

@@ -170,7 +170,7 @@
 
 		<!-- Mobile menu -->
 		{#if isMenuOpen}
-			<div class="bg-white shadow-lg md:hidden dark:bg-gray-900">
+			<div class="bg-white shadow-lg dark:bg-gray-900 md:hidden">
 				<div class="space-y-1 px-2 pb-3 pt-2 sm:px-3">
 					<a
 						href="#features"
@@ -206,7 +206,7 @@
 						Built for <span class="text-[#db324d]">speed</span>. Designed for
 						<span class="text-[#db324d]">connection</span>
 					</h1>
-					<p class="mb-8 text-lg text-gray-600 md:text-xl dark:text-gray-400">
+					<p class="mb-8 text-lg text-gray-600 dark:text-gray-400 md:text-xl">
 						Erinias brings your conversations together in a seamless experience. Chat directly or in
 						groups with a modern, intuitive interface.
 					</p>

@@ -16,7 +16,11 @@
 
 	async function goToRoom(room: any) {
 		const { status, data } = await api.createRoom([profile.user.id, room.id], null);
-		selectedRoom.selected = { ...data?.room, id: data?.room?.id ?? '', name: data?.room?.name ?? '' };
+		selectedRoom.selected = {
+			...data?.room,
+			id: data?.room?.id ?? '',
+			name: data?.room?.name ?? ''
+		};
 		if (status === 'success' && data) {
 			goto(`/chat/${data.room.id}`);
 			showResults = false;
@@ -51,10 +55,11 @@
 
 	onMount(async () => {
 		const data = await api.getAllRooms();
-		userRooms.rooms = data.data?.rooms.map(room => ({
-			...room,
-			name: room.name ?? ''
-		})) ?? [];
+		userRooms.rooms =
+			data.data?.rooms.map((room) => ({
+				...room,
+				name: room.name ?? ''
+			})) ?? [];
 	});
 </script>
 
