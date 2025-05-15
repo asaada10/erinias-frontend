@@ -1,4 +1,5 @@
 <script>
+	import { Send } from 'lucide-svelte';
 	import { mode, toggleMode } from 'mode-watcher';
 	import { onMount } from 'svelte';
 
@@ -212,7 +213,7 @@
 					</p>
 					<div class="flex flex-col space-y-4 sm:flex-row sm:space-x-4 sm:space-y-0">
 						<a
-							href="#"
+							href="/chat"
 							class="rounded-lg bg-[#db324d] px-8 py-3 text-center font-medium text-white transition-colors hover:bg-[#c02843]"
 						>
 							Get Started — It's Free
@@ -295,16 +296,8 @@
 										aria-label="Send message"
 										class="rounded-r-lg bg-[#db324d] px-4 py-2 text-white"
 									>
-										<svg
-											xmlns="http://www.w3.org/2000/svg"
-											class="h-5 w-5"
-											viewBox="0 0 20 20"
-											fill="currentColor"
-										>
-											<path
-												d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"
-											/>
-										</svg>
+									<Send class="h-5 w-5 sm:h-6 sm:w-6" />
+
 									</button>
 								</div>
 							</div>
