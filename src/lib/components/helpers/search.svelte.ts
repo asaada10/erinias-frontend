@@ -55,8 +55,16 @@ export async function fetchRoomsbyId(id: string): Promise<Room> {
 		const user = result.data.room;
 		return {
 			id: user.id,
-			name: user.name,
-			image: user.image,
+			name: user.name || "",
+			createdAt: user.createdAt,
+			updatedAt: user.updatedAt,
+			users: user.users.map((user: any) => ({
+				id: user.id,
+				name: user.name,
+				email: user.email,
+				createdAt: user.createdAt,
+				updatedAt: user.updatedAt
+			}))
 		};
 	} else {
 		throw new Error(result.message || 'No user data found');

@@ -16,13 +16,12 @@
 	import { onMount } from 'svelte';
 	// import { darkMode, toggleDarkMode } from '$lib/stores/theme';
 	import { connect } from '$lib/states/ws.svelte';
-	import { searchRooms } from '$lib/states/chat.svelte';
 
 	// Search state
 
 	// Connect to WebSocket on mount
-	onMount(() => {
-		connect();
+	onMount(async() => {
+		await connect();
 	});
 </script>
 

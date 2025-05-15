@@ -60,7 +60,7 @@
 					/>
 					<button
 						type="button"
-						on:click={() => (showPassword = !showPassword)}
+						onclick={() => (showPassword = !showPassword)}
 						class="absolute right-3 top-1/2 -translate-y-1/2 rounded-md px-2 py-1 text-sm text-gray-400 transition-colors hover:text-pink-100"
 					>
 						{showPassword ? 'Hide' : 'Show'}

@@ -1,5 +1,8 @@
 <script lang="ts">
-	import { messages, profile } from '$lib/states/chat.svelte';
+	import { messages, profile, selectedRoom } from '$lib/states/chat.svelte';
+	import { onMount } from 'svelte';
+	import { useApi } from '$lib/composables/api';
+	const api = useApi();
 
 	let messagesByDate = $derived.by(() => {
 		const grouped: { [date: string]: any[] } = {};
@@ -19,6 +22,12 @@
 	function formatTime(date: Date) {
 		return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 	}
+
+	onMount(async() => {
+		profile.user = (await api.getProfile()).data;
+	
+		
+	});
 </script>
 
 {#each Object.entries(messagesByDate) as [date, dateMessages]}
@@ -49,7 +58,7 @@
 					</div>
 					<div class="h-10 w-10 flex-shrink-0 overflow-hidden rounded-full">
 						<img
-							src="https://randomuser.me/api/portraits/women/2.jpg"
+							src="/erinias.svg"
 							alt="Your Avatar"
 							class="h-full w-full object-cover"
 						/>
@@ -60,14 +69,14 @@
 				<div class="mb-4 flex items-start space-x-2">
 					<div class="h-10 w-10 flex-shrink-0 overflow-hidden rounded-full">
 						<img
-							src="https://randomuser.me/api/portraits/men/1.jpg"
-							alt="John Doe"
+							src="/erinias.svg"
+							alt="User Avatar"
 							class="h-full w-full object-cover"
 						/>
 					</div>
 					<div class="max-w-[70%]">
 						<div class="mb-1 flex flex-col">
-							<span class="text-xs font-medium text-gray-700 dark:text-gray-300">John Doe</span>
+							<span class="text-xs font-medium text-gray-700 dark:text-gray-300">{selectedRoom.selected?.users?.find((user) => user.id !== profile.user.id)?.name ?? selectedRoom.selected?.name}</span>
 							<span class="text-xs text-gray-500 dark:text-gray-400">
 								{formatTime(new Date(message.createdAt))}
 							</span>

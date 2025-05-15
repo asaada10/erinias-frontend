@@ -19,8 +19,8 @@ export interface Room {
 	message?: string;
 	createdAt?: string;
 	image?: string;
-	participants?: User[];
-	unreadCount?: number;
+	updatedAt?: string;
+	users?: User[];
 }
 
 export interface ProfileResponse {

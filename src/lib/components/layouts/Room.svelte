@@ -47,7 +47,7 @@
 	>
 		<div class="mr-3 h-10 w-10 flex-shrink-0 overflow-hidden rounded-full">
 			<img
-				src={room.image || '/placeholder.svg'}
+				src={room.image || '/erinias.svg'}
 				alt={room.name}
 				class="h-full w-full object-cover"
 			/>
