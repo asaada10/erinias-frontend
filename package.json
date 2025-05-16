@@ -34,7 +34,7 @@
 		"@types/bun": "^1.2.8",
 		"@types/scrollmagic": "^2.0.8",
 		"autoprefixer": "^10.4.20",
-		"bits-ui": "^1.4.6",
+		"bits-ui": "^1.4.8",
 		"clsx": "^2.1.1",
 		"cssnano": "^7.0.6",
 		"eslint": "^9.24.0",

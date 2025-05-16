@@ -25,6 +25,6 @@
 
 	<!-- Room List -->
 	<div class="flex-1 overflow-y-auto">
-		<Room {toggleSidebar} />
+		<Room {toggleSidebar} {sidebarOpen} />
 	</div>
 </div>

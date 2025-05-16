@@ -4,7 +4,8 @@
 	import { profile, selectedRoom, userRooms } from '$lib/states/chat.svelte';
 	import { onMount } from 'svelte';
 	const api = useApi();
-	const { toggleSidebar } = $props();
+	const { sidebarOpen, toggleSidebar } = $props();
+	import * as Avatar from "$lib/components/ui/avatar/index.js";
 
 	// Cargar las salas del usuario autenticado
 	onMount(() => {
@@ -35,7 +36,7 @@
 
 		if (status === 'success' && data) {
 			goto(`/chat/${data.room.id}`);
-			toggleSidebar();
+			if(sidebarOpen) toggleSidebar();
 		} else {
 			console.error('Error creating private chat');
 		}
@@ -53,8 +54,10 @@
 		type="button"
 	>
 		<div class="mr-3 h-10 w-10 flex-shrink-0 overflow-hidden rounded-full">
-			<img src={room.image || '/erinias.svg'} alt={room.name} class="h-full w-full object-cover" />
-		</div>
+		
+			<Avatar.Root>
+				<Avatar.Fallback>{room.name.slice(0, 2)}</Avatar.Fallback>
+			  </Avatar.Root>		</div>
 		<div class="flex-1">
 			<div class="flex justify-between">
 				<h3 class="font-medium text-gray-800 dark:text-gray-200">{room.name}</h3>

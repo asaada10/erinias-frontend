@@ -25,12 +25,6 @@
 </script>
 
 <div class="flex items-center border-t border-gray-200 p-3 dark:border-gray-700">
-	<button class="p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
-		<Smile class="h-5 w-5 sm:h-6 sm:w-6" />
-	</button>
-	<button class="p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
-		<Paperclip class="h-5 w-5 sm:h-6 sm:w-6" />
-	</button>
 	<input
 		type="text"
 		bind:value={message}
