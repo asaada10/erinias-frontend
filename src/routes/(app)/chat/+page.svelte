@@ -4,7 +4,6 @@
 	// Asigna los componentes al contexto
 	setLayoutComponent({
 		sidebarHeader,
-		room,
 		search,
 		chatHeader
 	});
@@ -29,9 +28,6 @@
 	<SidebarHeader title="All Chats" />
 {/snippet}
 
-{#snippet room()}
-	<Room />
-{/snippet}
 
 {#snippet chatHeader()}
 	<div class="flex h-full items-center justify-center">

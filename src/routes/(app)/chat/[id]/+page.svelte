@@ -19,7 +19,6 @@
 	// Asigna los componentes al contexto
 	setLayoutComponent({
 		sidebarHeader,
-		room,
 		chatHeader,
 		chat,
 		chatInput,
@@ -67,11 +66,6 @@
 {#snippet sidebarHeader()}
 	<!-- Esto cambia según /chat (nombre usuario) /party (nombre del grupo) /domain (nombre del dominio) -->
 	<SidebarHeader title="All Chats" />
-{/snippet}
-
-{#snippet room()}
-	<!-- Esto cambia según /chat (lista de chats) /party (lista de grupos) /domain (lista de dominios) -->
-	<Room />
 {/snippet}
 
 {#snippet chatHeader()}

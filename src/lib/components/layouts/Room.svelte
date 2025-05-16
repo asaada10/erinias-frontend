@@ -4,6 +4,7 @@
 	import { profile, selectedRoom, userRooms } from '$lib/states/chat.svelte';
 	import { onMount } from 'svelte';
 	const api = useApi();
+	const { toggleSidebar } = $props();
 
 	// Cargar las salas del usuario autenticado
 	onMount(() => {
@@ -22,15 +23,11 @@
 								: room.users.map((user: any) => user.name).join(', ')
 				})) ?? [];
 		});
-		console.log('userRooms', userRooms.rooms);
 	});
 
 	async function goToRoom(room: any) {
 		selectedRoom.selected = room;
-		console.log(
-			'room',
-			room.users.map((user: any) => user.id)
-		);
+	
 		const { status, data } = await api.createRoom(
 			room.users.map((user: any) => user.id),
 			null
@@ -38,6 +35,7 @@
 
 		if (status === 'success' && data) {
 			goto(`/chat/${data.room.id}`);
+			toggleSidebar();
 		} else {
 			console.error('Error creating private chat');
 		}

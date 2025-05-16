@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { ArrowLeft } from 'lucide-svelte';
+	import Room from './Room.svelte';
 	let { layout, sidebarOpen, toggleSidebar } = $props();
 </script>
 
@@ -24,6 +25,6 @@
 
 	<!-- Room List -->
 	<div class="flex-1 overflow-y-auto">
-		{@render layout.room?.()}
+		<Room {toggleSidebar} />
 	</div>
 </div>
