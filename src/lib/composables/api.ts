@@ -10,7 +10,7 @@ import type {
 import { goto } from '$app/navigation';
 
 export const useApi = () => {
-	const baseUrl = import.meta.env.DEV ? '/api/v1' : import.meta.env.VITE_API_URL + '/v1';
+	const baseUrl = import.meta.env.DEV ? '/api/v1' : 'https://' + import.meta.env.VITE_API_URL + '/v1';
 
 	/**
 	 * Realiza una petición HTTP genérica a la API.

@@ -20,7 +20,7 @@ export async function connect() {
 			return;
 		}
 
-		const socket = new WebSocket('ws://localhost:8888/v1/ws?otk=' + data.otk);
+		const socket = new WebSocket('ws://'+ (import.meta.env.DEV ? 'localhost:8888' : import.meta.env.VITE_BASE_URL) +'/v1/ws?otk=' + data.otk);
 		console.log('Conectando a WebSocket...');
 		socket.addEventListener('open', () => {
 			console.log('WebSocket conectado');
